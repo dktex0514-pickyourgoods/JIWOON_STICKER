@@ -84,9 +84,9 @@
     .canvas-color-dot {
       width: 22px; height: 22px; border-radius: 50%;
       border: 2px solid #d0d0d0;
-      background: repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%) 0 0 / 8px 8px;
+      background: #ffffff;
       margin: 0 auto 2px;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, background 0.15s;
     }
     .canvas-color-popup {
       display: none;
@@ -100,7 +100,7 @@
     }
     .canvas-color-popup.visible { display: block; }
     .ccp-title {
-      font-size: 11px; font-weight: 700; color: #bbb;
+      font-size: 11px; font-weight: 700; color: #222;
       text-align: center; margin-bottom: 10px; letter-spacing: 0.5px;
     }
     .ccp-swatches {
@@ -116,8 +116,8 @@
     .color-swatch:hover { transform: scale(1.18); }
     .color-swatch.selected { border-color: #222; }
     .swatch-none {
-      background: repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%) 0 0 / 8px 8px;
-      border-color: #ddd;
+      background: #ffffff;
+      border-color: #d0d0d0;
     }
     .swatch-none.selected { border-color: #222; }
 
@@ -1231,15 +1231,12 @@
   <div class="canvas-color-wrap" id="canvas-color-wrap">
     <button class="tool-btn" id="btn-canvas-color" title="캔버스 배경색 선택" style="position:relative;">
       <div class="canvas-color-dot" id="canvas-color-dot"></div>
-      배경색
+      캔버스 배경색
     </button>
     <div class="canvas-color-popup" id="canvas-color-popup">
-      <div class="ccp-title">배경색 선택</div>
+      <div class="ccp-title">캔버스 배경색 선택</div>
       <div class="ccp-swatches">
-        <div class="color-swatch swatch-none selected" data-color="none" title="색상 없음">
-          <svg viewBox="0 0 20 20" width="13" height="13" fill="none"><line x1="3" y1="3" x2="17" y2="17" stroke="#aaa" stroke-width="2.5" stroke-linecap="round"/></svg>
-        </div>
-        <div class="color-swatch" data-color="#FFFFFF" style="background:#FFFFFF;border-color:#e0e0e0" title="흰색"></div>
+        <div class="color-swatch swatch-none selected" data-color="none" title="색상 없음"></div>
         <div class="color-swatch" data-color="#F5F5F5" style="background:#F5F5F5;border-color:#e0e0e0" title="연회색"></div>
         <div class="color-swatch" data-color="#9E9E9E" style="background:#9E9E9E" title="회색"></div>
         <div class="color-swatch" data-color="#424242" style="background:#424242" title="진회색"></div>
@@ -2509,8 +2506,10 @@ document.getElementById('close-img').addEventListener('click', () => closePanel(
   function showPopup() {
     clearTimeout(hideTimer);
     const rect = wrap.getBoundingClientRect();
+    const popupW = 214;
+    const left   = rect.left + rect.width / 2 - popupW / 2;
     popup.style.top  = (rect.bottom + 6) + 'px';
-    popup.style.left = Math.max(4, rect.left + rect.width / 2 - 107) + 'px';
+    popup.style.left = Math.min(Math.max(4, left), window.innerWidth - popupW - 8) + 'px';
     popup.classList.add('visible');
   }
   function hidePopup() {
