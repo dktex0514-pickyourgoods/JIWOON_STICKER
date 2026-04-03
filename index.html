@@ -4378,12 +4378,18 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
 
       if (!result.success) {
         alert('누끼따기 실패:\n\n' + result.error);
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
         return;
       }
 
       // ⑤ 새 이미지 먼저 로드 확인 → 성공 시에만 기존 이미지 제거
+      // fabric.Image.fromURL은 data URL에서 CORS 간섭 문제가 있으므로
+      // 네이티브 Image 요소로 로드 후 fabric.Image로 감싸는 방식 사용
       const dataUrl = 'data:image/png;base64,' + result.imageData;
-      fabric.Image.fromURL(dataUrl, newImg => {
+      const htmlImg = new Image();
+      htmlImg.onload = function() {
+        const newImg = new fabric.Image(htmlImg);
         if (!newImg || !newImg.width || !newImg.height) {
           alert('누끼따기 결과를 불러오지 못했습니다. 다시 시도해주세요.');
           btn.disabled = false;
@@ -4413,7 +4419,13 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
         syncSelBtns(true);
         btn.disabled = false;
         btn.innerHTML = originalHTML;
-      });
+      };
+      htmlImg.onerror = function() {
+        alert('누끼따기 결과를 불러오지 못했습니다. 다시 시도해주세요.');
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      };
+      htmlImg.src = dataUrl;
     } catch(e) {
       alert('누끼따기 중 오류가 발생했습니다:\n' + e.message);
       btn.disabled = false;
