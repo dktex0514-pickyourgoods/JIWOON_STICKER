@@ -36,7 +36,8 @@
       "WebFetch(domain:www.recraft.ai)",
       "WebFetch(domain:claid.ai)",
       "WebFetch(domain:www.pixazo.ai)",
-      "WebFetch(domain:replicate.com)"
+      "WebFetch(domain:replicate.com)",
+      "WebFetch(domain:vrew.ai)"
     ]
   }
 }
