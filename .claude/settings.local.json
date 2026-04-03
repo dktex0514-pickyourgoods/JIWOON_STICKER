@@ -26,7 +26,17 @@
       "WebFetch(domain:blog.laozhang.ai)",
       "WebFetch(domain:www.aifreeapi.com)",
       "WebFetch(domain:help.apiyi.com)",
-      "WebFetch(domain:9to5google.com)"
+      "WebFetch(domain:9to5google.com)",
+      "WebFetch(domain:platform.stability.ai)",
+      "WebFetch(domain:pixian.ai)",
+      "WebFetch(domain:removal.ai)",
+      "WebFetch(domain:www.banuba.com)",
+      "WebFetch(domain:www.remove.bg)",
+      "WebFetch(domain:www.photoroom.com)",
+      "WebFetch(domain:www.recraft.ai)",
+      "WebFetch(domain:claid.ai)",
+      "WebFetch(domain:www.pixazo.ai)",
+      "WebFetch(domain:replicate.com)"
     ]
   }
 }
