@@ -90,16 +90,15 @@
     }
     .canvas-color-popup {
       display: none;
-      position: absolute; top: calc(100% + 6px); left: 50%;
-      transform: translateX(-50%);
+      position: fixed;
       background: #fff;
       border-radius: 16px;
       padding: 14px 14px 12px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      z-index: 300; width: 214px;
+      z-index: 9999; width: 214px;
       border: 1px solid #ebebeb;
     }
-    .canvas-color-wrap:hover .canvas-color-popup { display: block; }
+    .canvas-color-popup.visible { display: block; }
     .ccp-title {
       font-size: 11px; font-weight: 700; color: #bbb;
       text-align: center; margin-bottom: 10px; letter-spacing: 0.5px;
@@ -2501,26 +2500,50 @@ imgWrap.addEventListener('mouseenter', () => {
 document.getElementById('close-img').addEventListener('click', () => closePanel('panel-img'));
 
 // ─────────── 캔버스 배경색 선택 ───────────
-document.querySelectorAll('.color-swatch').forEach(swatch => {
-  swatch.addEventListener('click', function(e) {
-    e.stopPropagation();
-    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
-    this.classList.add('selected');
-    const color = this.dataset.color;
-    const dot = document.getElementById('canvas-color-dot');
-    if (color === 'none') {
-      canvas.backgroundColor = '#ffffff';
-      dot.style.background = '';
-      dot.style.removeProperty('background');
-    } else {
-      canvas.backgroundColor = color;
-      dot.style.background = color;
-      dot.style.borderColor = color === '#FFFFFF' || color === '#F5F5F5' || color === '#FFF8E1' || color === '#FCE4EC' || color === '#FFF9C4' || color === '#E3F2FD' ? '#e0e0e0' : color;
-    }
-    canvas.renderAll();
-    snap();
+(function() {
+  const wrap    = document.getElementById('canvas-color-wrap');
+  const popup   = document.getElementById('canvas-color-popup');
+  const dot     = document.getElementById('canvas-color-dot');
+  let hideTimer = null;
+
+  function showPopup() {
+    clearTimeout(hideTimer);
+    const rect = wrap.getBoundingClientRect();
+    popup.style.top  = (rect.bottom + 6) + 'px';
+    popup.style.left = Math.max(4, rect.left + rect.width / 2 - 107) + 'px';
+    popup.classList.add('visible');
+  }
+  function hidePopup() {
+    hideTimer = setTimeout(() => popup.classList.remove('visible'), 120);
+  }
+
+  wrap.addEventListener('mouseenter', showPopup);
+  wrap.addEventListener('mouseleave', hidePopup);
+  popup.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  popup.addEventListener('mouseleave', hidePopup);
+
+  const lightColors = new Set(['#FFFFFF','#F5F5F5','#FFF8E1','#FCE4EC','#FFF9C4','#E3F2FD']);
+
+  document.querySelectorAll('.color-swatch').forEach(swatch => {
+    swatch.addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      this.classList.add('selected');
+      const color = this.dataset.color;
+      if (color === 'none') {
+        canvas.backgroundColor = '#ffffff';
+        dot.style.cssText = '';
+      } else {
+        canvas.backgroundColor = color;
+        dot.style.background   = color;
+        dot.style.borderColor  = lightColors.has(color) ? '#e0e0e0' : color;
+      }
+      canvas.renderAll();
+      snap();
+      setTimeout(() => popup.classList.remove('visible'), 200);
+    });
   });
-});
+})();
 
 // ─────────── 우측 사이드바 사이즈 선택 ───────────
 document.querySelectorAll('.size-option').forEach(opt => {
