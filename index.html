@@ -93,9 +93,9 @@
       position: fixed;
       background: #fff;
       border-radius: 16px;
-      padding: 14px 14px 12px;
+      padding: 14px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      z-index: 9999; width: 214px;
+      z-index: 9999; width: auto;
       border: 1px solid #ebebeb;
     }
     .canvas-color-popup.visible { display: block; }
@@ -104,7 +104,7 @@
       text-align: center; margin-bottom: 10px; letter-spacing: 0.5px;
     }
     .ccp-swatches {
-      display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px;
+      display: grid; grid-template-columns: repeat(6, 28px); gap: 7px;
     }
     .color-swatch {
       width: 28px; height: 28px; border-radius: 50%;
@@ -1236,7 +1236,9 @@
     <div class="canvas-color-popup" id="canvas-color-popup">
       <div class="ccp-title">캔버스 배경색 선택</div>
       <div class="ccp-swatches">
-        <div class="color-swatch swatch-none selected" data-color="none" title="색상 없음"></div>
+        <div class="color-swatch swatch-none selected" data-color="none" title="색상 없음">
+          <svg viewBox="0 0 22 16" width="15" height="11" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="1" width="20" height="14" rx="2"/><line x1="1" y1="4" x2="21" y2="4"/><line x1="8" y1="1" x2="8" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
         <div class="color-swatch" data-color="#F5F5F5" style="background:#F5F5F5;border-color:#e0e0e0" title="연회색"></div>
         <div class="color-swatch" data-color="#9E9E9E" style="background:#9E9E9E" title="회색"></div>
         <div class="color-swatch" data-color="#424242" style="background:#424242" title="진회색"></div>
@@ -2506,8 +2508,14 @@ document.getElementById('close-img').addEventListener('click', () => closePanel(
   function showPopup() {
     clearTimeout(hideTimer);
     const rect = wrap.getBoundingClientRect();
-    const popupW = 214;
-    const left   = rect.left + rect.width / 2 - popupW / 2;
+    popup.style.top  = (rect.bottom + 6) + 'px';
+    popup.style.left = '0px';
+    popup.style.visibility = 'hidden';
+    popup.classList.add('visible');
+    const popupW = popup.offsetWidth;
+    popup.classList.remove('visible');
+    popup.style.visibility = '';
+    const left = rect.left + rect.width / 2 - popupW / 2;
     popup.style.top  = (rect.bottom + 6) + 'px';
     popup.style.left = Math.min(Math.max(4, left), window.innerWidth - popupW - 8) + 'px';
     popup.classList.add('visible');
