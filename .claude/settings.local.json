@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "WebFetch(domain:pickyourgoods.netlify.app)",
+      "WebFetch(domain:www.marpple.com)",
+      "WebFetch(domain:app.netlify.com)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:marpple.shop)",
+      "WebFetch(domain:m.dcinside.com)",
+      "WebFetch(domain:gall.dcinside.com)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:en.marppleshop.help)",
+      "WebFetch(domain:www.marppleshop.help)",
+      "WebFetch(domain:www.tiktok.com)",
+      "WebFetch(domain:developers.cloudflare.com)",
+      "WebFetch(domain:ai.google.dev)",
+      "WebFetch(domain:discuss.ai.google.dev)",
+      "WebFetch(domain:blog.google)",
+      "WebFetch(domain:developers.googleblog.com)",
+      "WebFetch(domain:www.raymondcamden.com)",
+      "WebFetch(domain:gemini.google)",
+      "WebFetch(domain:support.google.com)",
+      "WebFetch(domain:deepmind.google)",
+      "WebFetch(domain:blog.laozhang.ai)",
+      "WebFetch(domain:www.aifreeapi.com)",
+      "WebFetch(domain:help.apiyi.com)",
+      "WebFetch(domain:9to5google.com)"
+    ]
+  }
+}

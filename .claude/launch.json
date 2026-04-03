@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pickyourgoodz",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3388", "."],
+      "port": 3388
+    }
+  ]
+}
