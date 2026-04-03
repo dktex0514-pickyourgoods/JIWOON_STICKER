@@ -1230,7 +1230,10 @@
   <!-- 캔버스 배경색 선택 -->
   <div class="canvas-color-wrap" id="canvas-color-wrap">
     <button class="tool-btn" id="btn-canvas-color" title="캔버스 배경색 선택" style="position:relative;">
-      <div class="canvas-color-dot" id="canvas-color-dot"></div>
+      <svg id="canvas-color-dot" viewBox="0 0 26 18" width="26" height="18" style="margin:0 auto 2px;display:block;">
+        <rect x="0" y="0" width="26" height="18" rx="2" fill="#C4A47C"/>
+        <rect id="canvas-color-inner" x="2.5" y="2.5" width="21" height="13" fill="#FFFFFF"/>
+      </svg>
       캔버스 배경색
     </button>
     <div class="canvas-color-popup" id="canvas-color-popup">
@@ -2529,21 +2532,19 @@ document.getElementById('close-img').addEventListener('click', () => closePanel(
   popup.addEventListener('mouseenter', () => clearTimeout(hideTimer));
   popup.addEventListener('mouseleave', hidePopup);
 
-  const lightColors = new Set(['#FFFFFF','#F5F5F5','#FFF8E1','#FCE4EC','#FFF9C4','#E3F2FD']);
-
   document.querySelectorAll('.color-swatch').forEach(swatch => {
     swatch.addEventListener('click', function(e) {
       e.stopPropagation();
       document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
       this.classList.add('selected');
       const color = this.dataset.color;
+      const inner = document.getElementById('canvas-color-inner');
       if (color === 'none') {
         canvas.backgroundColor = '#ffffff';
-        dot.style.cssText = '';
+        inner.setAttribute('fill', '#FFFFFF');
       } else {
         canvas.backgroundColor = color;
-        dot.style.background   = color;
-        dot.style.borderColor  = lightColors.has(color) ? '#e0e0e0' : color;
+        inner.setAttribute('fill', color);
       }
       canvas.renderAll();
       snap();
