@@ -459,71 +459,47 @@
     .product-tag { font-size: 11px; color: #999; margin-bottom: 5px; }
     .product-title { font-size: 17px; font-weight: 700; color: #111; line-height: 1.3; }
 
+    .size-cat-label {
+      font-size: 11px; font-weight: 700; color: #aaa;
+      letter-spacing: 0.5px; margin: 14px 0 6px 2px;
+    }
+    .size-cat-label:first-child { margin-top: 0; }
+
     .sidebar-label {
       font-size: 12px; font-weight: 700; color: #777;
       margin-bottom: 10px; letter-spacing: 0.3px;
     }
 
-    /* ── 카테고리 탭 ── */
-    .size-cat-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
-    .size-cat-tab {
-      flex: 1; padding: 8px 0;
-      border: 1.5px solid #e0e0e0; border-radius: 9px;
-      background: #fff; font-size: 12px; font-weight: 700; color: #999;
-      cursor: pointer; transition: all 0.15s;
-      font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.2px;
-    }
-    .size-cat-tab:hover { border-color: #bbb; color: #555; background: #fafafa; }
-    .size-cat-tab.active { border-color: #222; background: #222; color: #fff; }
-
-    /* ── 드롭다운 ── */
-    .size-dropdown-wrap { position: relative; }
-    .size-dropdown-trigger {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 11px 14px;
-      border: 1.5px solid #e0e0e0; border-radius: 10px;
-      cursor: pointer; background: #fff;
-      transition: border-color 0.15s, border-radius 0.15s;
-      user-select: none;
-    }
-    .size-dropdown-trigger:hover { border-color: #bbb; }
-    .size-dropdown-trigger.open { border-color: #222; border-radius: 10px 10px 0 0; }
-    .size-dd-selected { display: flex; align-items: center; gap: 8px; }
-    .size-dd-name { font-size: 13px; font-weight: 700; color: #222; }
-    .size-dd-dim  { font-size: 11px; color: #999; }
-    .size-dd-arrow { transition: transform 0.2s; flex-shrink: 0; color: #aaa; }
-    .size-dropdown-trigger.open .size-dd-arrow { transform: rotate(180deg); }
-
-    .size-dropdown-menu {
-      display: none; position: absolute; left: 0; right: 0; top: 100%;
-      background: #fff;
-      border: 1.5px solid #222; border-top: none;
-      border-radius: 0 0 10px 10px;
-      z-index: 50;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
-      max-height: 260px; overflow-y: auto;
-    }
-    .size-dropdown-menu.open { display: block; }
-    .size-dd-group { padding: 6px; }
+    .size-option-list { display: flex; flex-direction: column; gap: 7px; }
 
     .size-option {
       display: flex; align-items: center; gap: 8px;
-      padding: 9px 12px; border-radius: 8px;
-      cursor: pointer; transition: background 0.12s;
+      padding: 7px 12px;
+      border: 1.5px solid #e8e8e8; border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
     }
-    .size-option:hover { background: #f5f5f5; }
-    .size-option.selected { background: #f0f0f0; }
+    .size-option:hover { border-color: #aaa; background: #fafafa; }
+    .size-option.selected { border-color: #222; background: #f5f5f5; }
+
+    .size-opt-thumb { display: none; }
 
     .size-opt-info { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .size-opt-name { font-size: 13px; font-weight: 700; color: #222; }
-    .size-opt-dim  { font-size: 11px; color: #999; }
+    .size-opt-dim  { font-size: 11px; color: #222; }
     .size-opt-badge {
       font-size: 10px; font-weight: 700;
       padding: 2px 7px; border-radius: 20px;
       line-height: 1.6; white-space: nowrap;
     }
-    .size-opt-badge.badge-desk { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
-    .size-opt-badge.badge-wall { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+    .size-opt-badge.badge-desk {
+      background: #fff3cd; color: #856404;
+      border: 1px solid #ffc107;
+    }
+    .size-opt-badge.badge-wall {
+      background: #fff3cd; color: #856404;
+      border: 1px solid #ffc107;
+    }
 
     .sidebar-bottom { margin-top: auto; padding-top: 20px; }
 
@@ -1340,82 +1316,65 @@
     </div>
 
     <div class="sidebar-label">사이즈</div>
-    <!-- 카테고리 탭 -->
-    <div class="size-cat-tabs">
-      <button class="size-cat-tab active" data-cat="가로">가로</button>
-      <button class="size-cat-tab" data-cat="세로">세로</button>
-      <button class="size-cat-tab" data-cat="정사각형">정사각형</button>
-    </div>
+    <div class="size-option-list">
 
-    <!-- 드롭다운 -->
-    <div class="size-dropdown-wrap" id="size-dropdown-wrap">
-      <div class="size-dropdown-trigger" id="size-dropdown-trigger">
-        <div class="size-dd-selected">
-          <span class="size-dd-name" id="size-dd-name">A4 가로</span>
-          <span class="size-dd-dim" id="size-dd-dim">29.7 × 21 cm</span>
-        </div>
-        <svg class="size-dd-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <div class="size-cat-label">가로</div>
+
+      <div class="size-option selected" data-w="29.7" data-h="21" data-scale="0.88" data-name="A4 가로 (29.7 × 21 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A4 가로</span><span class="size-opt-dim">29.7 × 21 cm</span></span>
       </div>
-      <div class="size-dropdown-menu" id="size-dropdown-menu">
-
-        <div class="size-dd-group" data-cat="가로">
-          <div class="size-option selected" data-w="29.7" data-h="21" data-scale="0.88" data-name="A4 가로 (29.7 × 21 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A4 가로</span><span class="size-opt-dim">29.7 × 21 cm</span></span>
-          </div>
-          <div class="size-option" data-w="42" data-h="29.7" data-scale="1.0" data-name="A3 가로 (42 × 29.7 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A3 가로</span><span class="size-opt-dim">42 × 29.7 cm</span><span class="size-opt-badge badge-desk">탁상인기</span></span>
-          </div>
-          <div class="size-option" data-w="60" data-h="40" data-scale="1.1" data-name="60 × 40 cm">
-            <span class="size-opt-info"><span class="size-opt-name">60×40 cm</span><span class="size-opt-dim">60 × 40 cm</span></span>
-          </div>
-          <div class="size-option" data-w="59.4" data-h="42" data-scale="1.15" data-name="A2 가로 (59.4 × 42 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A2 가로</span><span class="size-opt-dim">59.4 × 42 cm</span><span class="size-opt-badge badge-wall">벽걸이 인기</span></span>
-          </div>
-          <div class="size-option" data-w="84.1" data-h="59.4" data-scale="1.2" data-name="A1 가로 (84.1 × 59.4 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A1 가로</span><span class="size-opt-dim">84.1 × 59.4 cm</span></span>
-          </div>
-          <div class="size-option" data-w="90" data-h="60" data-scale="1.2" data-name="90 × 60 cm">
-            <span class="size-opt-info"><span class="size-opt-name">90×60 cm</span><span class="size-opt-dim">90 × 60 cm</span></span>
-          </div>
-        </div>
-
-        <div class="size-dd-group" data-cat="세로" style="display:none">
-          <div class="size-option" data-w="21" data-h="29.7" data-scale="0.72" data-name="A4 세로 (21 × 29.7 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A4 세로</span><span class="size-opt-dim">21 × 29.7 cm</span><span class="size-opt-badge badge-desk">탁상인기</span></span>
-          </div>
-          <div class="size-option" data-w="29.7" data-h="42" data-scale="0.86" data-name="A3 세로 (29.7 × 42 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A3 세로</span><span class="size-opt-dim">29.7 × 42 cm</span></span>
-          </div>
-          <div class="size-option" data-w="40" data-h="60" data-scale="1.0" data-name="40 × 60 cm">
-            <span class="size-opt-info"><span class="size-opt-name">40×60 cm</span><span class="size-opt-dim">40 × 60 cm</span></span>
-          </div>
-          <div class="size-option" data-w="42" data-h="59.4" data-scale="1.0" data-name="A2 세로 (42 × 59.4 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A2 세로</span><span class="size-opt-dim">42 × 59.4 cm</span></span>
-          </div>
-          <div class="size-option" data-w="50" data-h="70" data-scale="1.05" data-name="50 × 70 cm">
-            <span class="size-opt-info"><span class="size-opt-name">50×70 cm</span><span class="size-opt-dim">50 × 70 cm</span></span>
-          </div>
-          <div class="size-option" data-w="59.4" data-h="84.1" data-scale="1.1" data-name="A1 세로 (59.4 × 84.1 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">A1 세로</span><span class="size-opt-dim">59.4 × 84.1 cm</span><span class="size-opt-badge badge-wall">벽걸이 인기</span></span>
-          </div>
-        </div>
-
-        <div class="size-dd-group" data-cat="정사각형" style="display:none">
-          <div class="size-option" data-w="22" data-h="22" data-scale="0.88" data-name="정사각형 9&quot; (22 × 22 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">정사각형 9"</span><span class="size-opt-dim">22 × 22 cm</span></span>
-          </div>
-          <div class="size-option" data-w="32" data-h="32" data-scale="1.05" data-name="정사각형 13&quot; (32 × 32 cm)">
-            <span class="size-opt-info"><span class="size-opt-name">정사각형 13"</span><span class="size-opt-dim">32 × 32 cm</span></span>
-          </div>
-          <div class="size-option" data-w="40" data-h="40" data-scale="1.1" data-name="40 × 40 cm">
-            <span class="size-opt-info"><span class="size-opt-name">40×40 cm</span><span class="size-opt-dim">40 × 40 cm</span></span>
-          </div>
-          <div class="size-option" data-w="50" data-h="50" data-scale="1.15" data-name="50 × 50 cm">
-            <span class="size-opt-info"><span class="size-opt-name">50×50 cm</span><span class="size-opt-dim">50 × 50 cm</span></span>
-          </div>
-        </div>
-
+      <div class="size-option" data-w="42" data-h="29.7" data-scale="1.0" data-name="A3 가로 (42 × 29.7 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A3 가로</span><span class="size-opt-dim">42 × 29.7 cm</span><span class="size-opt-badge badge-desk">탁상인기</span></span>
       </div>
+      <div class="size-option" data-w="60" data-h="40" data-scale="1.1" data-name="60 × 40 cm">
+        <span class="size-opt-info"><span class="size-opt-name">60×40 cm</span><span class="size-opt-dim">60 × 40 cm</span></span>
+      </div>
+      <div class="size-option" data-w="59.4" data-h="42" data-scale="1.15" data-name="A2 가로 (59.4 × 42 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A2 가로</span><span class="size-opt-dim">59.4 × 42 cm</span><span class="size-opt-badge badge-wall">벽걸이 인기</span></span>
+      </div>
+      <div class="size-option" data-w="84.1" data-h="59.4" data-scale="1.2" data-name="A1 가로 (84.1 × 59.4 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A1 가로</span><span class="size-opt-dim">84.1 × 59.4 cm</span></span>
+      </div>
+      <div class="size-option" data-w="90" data-h="60" data-scale="1.2" data-name="90 × 60 cm">
+        <span class="size-opt-info"><span class="size-opt-name">90×60 cm</span><span class="size-opt-dim">90 × 60 cm</span></span>
+      </div>
+
+      <div class="size-cat-label">세로</div>
+
+      <div class="size-option" data-w="21" data-h="29.7" data-scale="0.72" data-name="A4 세로 (21 × 29.7 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A4 세로</span><span class="size-opt-dim">21 × 29.7 cm</span><span class="size-opt-badge badge-desk">탁상인기</span></span>
+      </div>
+      <div class="size-option" data-w="29.7" data-h="42" data-scale="0.86" data-name="A3 세로 (29.7 × 42 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A3 세로</span><span class="size-opt-dim">29.7 × 42 cm</span></span>
+      </div>
+      <div class="size-option" data-w="40" data-h="60" data-scale="1.0" data-name="40 × 60 cm">
+        <span class="size-opt-info"><span class="size-opt-name">40×60 cm</span><span class="size-opt-dim">40 × 60 cm</span></span>
+      </div>
+      <div class="size-option" data-w="42" data-h="59.4" data-scale="1.0" data-name="A2 세로 (42 × 59.4 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A2 세로</span><span class="size-opt-dim">42 × 59.4 cm</span></span>
+      </div>
+      <div class="size-option" data-w="50" data-h="70" data-scale="1.05" data-name="50 × 70 cm">
+        <span class="size-opt-info"><span class="size-opt-name">50×70 cm</span><span class="size-opt-dim">50 × 70 cm</span></span>
+      </div>
+      <div class="size-option" data-w="59.4" data-h="84.1" data-scale="1.1" data-name="A1 세로 (59.4 × 84.1 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">A1 세로</span><span class="size-opt-dim">59.4 × 84.1 cm</span><span class="size-opt-badge badge-wall">벽걸이 인기</span></span>
+      </div>
+
+      <div class="size-cat-label">정사각형</div>
+
+      <div class="size-option" data-w="22" data-h="22" data-scale="0.88" data-name="정사각형 9&quot; (22 × 22 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">정사각형 9"</span><span class="size-opt-dim">22 × 22 cm</span></span>
+      </div>
+      <div class="size-option" data-w="32" data-h="32" data-scale="1.05" data-name="정사각형 13&quot; (32 × 32 cm)">
+        <span class="size-opt-info"><span class="size-opt-name">정사각형 13"</span><span class="size-opt-dim">32 × 32 cm</span></span>
+      </div>
+      <div class="size-option" data-w="40" data-h="40" data-scale="1.1" data-name="40 × 40 cm">
+        <span class="size-opt-info"><span class="size-opt-name">40×40 cm</span><span class="size-opt-dim">40 × 40 cm</span></span>
+      </div>
+      <div class="size-option" data-w="50" data-h="50" data-scale="1.15" data-name="50 × 50 cm">
+        <span class="size-opt-info"><span class="size-opt-name">50×50 cm</span><span class="size-opt-dim">50 × 50 cm</span></span>
+      </div>
+
     </div>
 
     <div class="sidebar-bottom">
@@ -2455,51 +2414,19 @@ imgWrap.addEventListener('mouseenter', () => {
 document.getElementById('close-img').addEventListener('click', () => closePanel('panel-img'));
 
 // ─────────── 우측 사이드바 사이즈 선택 ───────────
-const sizeTrigger = document.getElementById('size-dropdown-trigger');
-const sizeMenu    = document.getElementById('size-dropdown-menu');
-
-function openSizeDropdown()  { sizeTrigger.classList.add('open'); sizeMenu.classList.add('open'); }
-function closeSizeDropdown() { sizeTrigger.classList.remove('open'); sizeMenu.classList.remove('open'); }
-
-// 트리거 클릭 → 열기/닫기
-sizeTrigger.addEventListener('click', e => {
-  e.stopPropagation();
-  sizeMenu.classList.contains('open') ? closeSizeDropdown() : openSizeDropdown();
-});
-// 메뉴 내부 클릭은 버블링 차단
-sizeMenu.addEventListener('click', e => e.stopPropagation());
-// 외부 클릭 시 닫기
-document.addEventListener('click', () => closeSizeDropdown());
-
-// 카테고리 탭 전환
-document.querySelectorAll('.size-cat-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.size-cat-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    const cat = tab.dataset.cat;
-    document.querySelectorAll('.size-dd-group').forEach(g => {
-      g.style.display = g.dataset.cat === cat ? 'block' : 'none';
-    });
-    openSizeDropdown();
-  });
-});
-
-// 사이즈 옵션 선택
 document.querySelectorAll('.size-option').forEach(opt => {
   opt.addEventListener('click', function() {
     document.querySelectorAll('.size-option').forEach(o => o.classList.remove('selected'));
     this.classList.add('selected');
-    // 트리거 텍스트 업데이트
-    document.getElementById('size-dd-name').textContent = this.querySelector('.size-opt-name').textContent;
-    document.getElementById('size-dd-dim').textContent  = this.querySelector('.size-opt-dim').textContent;
     document.getElementById('product-title').textContent = this.dataset.name;
-    closeSizeDropdown();
     resizeCanvas(parseFloat(this.dataset.w), parseFloat(this.dataset.h), parseFloat(this.dataset.scale || 1));
   });
   opt.addEventListener('mouseenter', function() {
     showSizePopup(parseFloat(this.dataset.w), parseFloat(this.dataset.h), this.dataset.name);
   });
-  opt.addEventListener('mouseleave', () => closeSizePopup());
+  opt.addEventListener('mouseleave', function() {
+    closeSizePopup();
+  });
 });
 
 // ─────────── 사이즈 비교 팝업 ───────────
