@@ -261,20 +261,22 @@ function handleGeminiTransform(data) {
 
 
 // ────────────────────────────────────────────────────────────────
-//  ✂️  누끼따기 (Remove.bg API)
+//  ✂️  누끼따기 (Pixian.AI API)
 //
 //  사용 전 설정 방법:
-//  1. https://www.remove.bg/api 에서 무료 API 키 발급 (월 50장 무료)
+//  1. https://pixian.ai/api 에서 API ID, API Secret 확인
 //  2. GAS 에디터 → 프로젝트 설정 → 스크립트 속성 → 속성 추가
-//     속성명: REMOVE_BG_API_KEY   값: 발급받은 키
+//     속성명: PIXIAN_API_ID     값: 발급받은 API ID
+//     속성명: PIXIAN_API_SECRET 값: 발급받은 API Secret
 // ────────────────────────────────────────────────────────────────
 function handleRemoveBg(data) {
   try {
-    const apiKey = PropertiesService.getScriptProperties().getProperty('REMOVE_BG_API_KEY');
-    if (!apiKey) {
+    const apiId     = PropertiesService.getScriptProperties().getProperty('PIXIAN_API_ID');
+    const apiSecret = PropertiesService.getScriptProperties().getProperty('PIXIAN_API_SECRET');
+    if (!apiId || !apiSecret) {
       return jsonResponse({
         success: false,
-        error: 'REMOVE_BG_API_KEY가 설정되지 않았습니다.\n\nGAS 에디터 → 프로젝트 설정 → 스크립트 속성에서\n"REMOVE_BG_API_KEY" 를 추가해주세요.\n\nhttps://www.remove.bg/api 에서 무료로 발급받을 수 있습니다.'
+        error: 'PIXIAN_API_ID 또는 PIXIAN_API_SECRET이 설정되지 않았습니다.\n\nGAS 에디터 → 프로젝트 설정 → 스크립트 속성에서\n"PIXIAN_API_ID" 와 "PIXIAN_API_SECRET" 을 추가해주세요.\n\nhttps://pixian.ai/api 에서 확인할 수 있습니다.'
       });
     }
 
@@ -282,13 +284,20 @@ function handleRemoveBg(data) {
       return jsonResponse({ success: false, error: '이미지 데이터가 없습니다.' });
     }
 
-    const response = UrlFetchApp.fetch('https://api.remove.bg/v1.0/removebg', {
+    // base64 → 바이트 → Blob
+    const imageBytes = Utilities.base64Decode(data.imageData);
+    const imageBlob  = Utilities.newBlob(imageBytes, 'image/png', 'image.png');
+
+    // HTTP Basic Auth 헤더 생성
+    const credentials = Utilities.base64Encode(apiId + ':' + apiSecret);
+
+    const response = UrlFetchApp.fetch('https://api.pixian.ai/api/v2/remove-background', {
       method: 'POST',
-      headers: { 'X-Api-Key': apiKey },
+      headers: {
+        'Authorization': 'Basic ' + credentials,
+      },
       payload: {
-        'image_file_b64': data.imageData,
-        'size': 'auto',
-        'format': 'png',
+        'image': imageBlob,
       },
       muteHttpExceptions: true,
     });
@@ -298,7 +307,7 @@ function handleRemoveBg(data) {
       const errText = response.getContentText();
       return jsonResponse({
         success: false,
-        error: 'Remove.bg 오류 (HTTP ' + code + '): ' + errText.substring(0, 400)
+        error: 'Pixian.AI 오류 (HTTP ' + code + '): ' + errText.substring(0, 400)
       });
     }
 
@@ -320,37 +329,38 @@ function handleRemoveBg(data) {
 //  3. 하단 [실행 로그] 에서 결과 확인
 // ────────────────────────────────────────────────────────────────
 function testRemoveBgSetup() {
-  const apiKey = PropertiesService.getScriptProperties().getProperty('REMOVE_BG_API_KEY');
-  if (!apiKey) {
-    Logger.log('❌ REMOVE_BG_API_KEY 가 스크립트 속성에 없습니다!');
+  const apiId     = PropertiesService.getScriptProperties().getProperty('PIXIAN_API_ID');
+  const apiSecret = PropertiesService.getScriptProperties().getProperty('PIXIAN_API_SECRET');
+  if (!apiId || !apiSecret) {
+    Logger.log('❌ PIXIAN_API_ID 또는 PIXIAN_API_SECRET 이 스크립트 속성에 없습니다!');
     Logger.log('   GAS 에디터 → 프로젝트 설정 → 스크립트 속성 → 속성 추가');
-    Logger.log('   속성명: REMOVE_BG_API_KEY   값: 발급받은 키');
+    Logger.log('   속성명: PIXIAN_API_ID     값: 발급받은 API ID');
+    Logger.log('   속성명: PIXIAN_API_SECRET 값: 발급받은 API Secret');
     return;
   }
-  Logger.log('✅ API 키 발견: ' + apiKey.substring(0, 8) + '...');
+  Logger.log('✅ API 키 발견: ' + apiId);
 
-  // 계정 크레딧 확인
-  const accRes = UrlFetchApp.fetch('https://api.remove.bg/v1.0/account', {
-    method: 'GET',
-    headers: { 'X-Api-Key': apiKey },
+  // 1x1 투명 PNG로 테스트 (test=true 파라미터 → 크레딧 소모 없음)
+  const minPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+  const imageBytes = Utilities.base64Decode(minPng);
+  const imageBlob  = Utilities.newBlob(imageBytes, 'image/png', 'test.png');
+  const credentials = Utilities.base64Encode(apiId + ':' + apiSecret);
+
+  const res = UrlFetchApp.fetch('https://api.pixian.ai/api/v2/remove-background', {
+    method: 'POST',
+    headers: { 'Authorization': 'Basic ' + credentials },
+    payload: { 'image': imageBlob, 'test': 'true' },
     muteHttpExceptions: true,
   });
-  const accCode = accRes.getResponseCode();
-  if (accCode !== 200) {
-    Logger.log('❌ API 키가 유효하지 않습니다. (HTTP ' + accCode + ')');
-    Logger.log('   응답: ' + accRes.getContentText().substring(0, 300));
-    Logger.log('   → https://www.remove.bg/api 에서 API 키를 확인하세요.');
-    return;
-  }
-  const accData = JSON.parse(accRes.getContentText());
-  const credits = accData.data && accData.data.attributes && accData.data.attributes.credits;
-  if (credits) {
-    Logger.log('✅ API 키 유효!');
-    Logger.log('   무료 크레딧 남은 횟수: ' + (credits.subscription || credits.total || JSON.stringify(credits)));
+
+  const code = res.getResponseCode();
+  Logger.log('Pixian.AI 응답 코드: ' + code);
+  if (code === 200) {
+    Logger.log('🎉 Pixian.AI 연결 성공! 누끼따기 기능을 사용할 수 있습니다.');
   } else {
-    Logger.log('✅ API 키 유효! (크레딧 정보: ' + JSON.stringify(accData).substring(0, 200) + ')');
+    Logger.log('❌ 오류: ' + res.getContentText().substring(0, 300));
+    Logger.log('   API ID/Secret 을 다시 확인해주세요.');
   }
-  Logger.log('🎉 누끼따기 기능을 사용할 수 있습니다!');
 }
 
 
