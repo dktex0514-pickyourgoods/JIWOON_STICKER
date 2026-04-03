@@ -312,6 +312,49 @@ function handleRemoveBg(data) {
 
 
 // ────────────────────────────────────────────────────────────────
+//  🔍 누끼따기 설정 테스트 함수 (GAS 에디터에서 직접 실행)
+//
+//  사용법:
+//  1. GAS 에디터 상단 함수 선택 드롭다운에서 [testRemoveBgSetup] 선택
+//  2. ▶ 실행 클릭
+//  3. 하단 [실행 로그] 에서 결과 확인
+// ────────────────────────────────────────────────────────────────
+function testRemoveBgSetup() {
+  const apiKey = PropertiesService.getScriptProperties().getProperty('REMOVE_BG_API_KEY');
+  if (!apiKey) {
+    Logger.log('❌ REMOVE_BG_API_KEY 가 스크립트 속성에 없습니다!');
+    Logger.log('   GAS 에디터 → 프로젝트 설정 → 스크립트 속성 → 속성 추가');
+    Logger.log('   속성명: REMOVE_BG_API_KEY   값: 발급받은 키');
+    return;
+  }
+  Logger.log('✅ API 키 발견: ' + apiKey.substring(0, 8) + '...');
+
+  // 계정 크레딧 확인
+  const accRes = UrlFetchApp.fetch('https://api.remove.bg/v1.0/account', {
+    method: 'GET',
+    headers: { 'X-Api-Key': apiKey },
+    muteHttpExceptions: true,
+  });
+  const accCode = accRes.getResponseCode();
+  if (accCode !== 200) {
+    Logger.log('❌ API 키가 유효하지 않습니다. (HTTP ' + accCode + ')');
+    Logger.log('   응답: ' + accRes.getContentText().substring(0, 300));
+    Logger.log('   → https://www.remove.bg/api 에서 API 키를 확인하세요.');
+    return;
+  }
+  const accData = JSON.parse(accRes.getContentText());
+  const credits = accData.data && accData.data.attributes && accData.data.attributes.credits;
+  if (credits) {
+    Logger.log('✅ API 키 유효!');
+    Logger.log('   무료 크레딧 남은 횟수: ' + (credits.subscription || credits.total || JSON.stringify(credits)));
+  } else {
+    Logger.log('✅ API 키 유효! (크레딧 정보: ' + JSON.stringify(accData).substring(0, 200) + ')');
+  }
+  Logger.log('🎉 누끼따기 기능을 사용할 수 있습니다!');
+}
+
+
+// ────────────────────────────────────────────────────────────────
 //  🔍 Gemini 설정 테스트 함수 (GAS 에디터에서 직접 실행)
 //
 //  사용법:
