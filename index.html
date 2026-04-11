@@ -605,9 +605,10 @@
       cursor: pointer;
       border: 2px solid transparent;
       transition: border-color 0.15s;
-      overflow: hidden;
+      overflow: visible;
       min-width: 0;
       min-height: 0;
+      margin-bottom: 44px;
     }
     .canvas-grid-cell.active {
       border-color: #222;
@@ -1587,7 +1588,7 @@
     /* ── 셀 매수 선택기 ── */
     .cell-qty-wrap {
       position: absolute;
-      bottom: 10px;
+      bottom: -44px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 50;
@@ -2006,7 +2007,7 @@
     </div><!-- /canvas-outer -->
         <div class="cell-qty-wrap" onmousedown="event.stopPropagation()">
           <button class="cell-qty-btn" data-dir="-1" title="감소" onclick="event.stopPropagation();cellQtyChange(this,-1)">−</button>
-          <span class="cell-qty-val" data-qty="2">2매</span>
+          <span class="cell-qty-val" data-qty="1">1매</span>
           <button class="cell-qty-btn" data-dir="1" title="증가" onclick="event.stopPropagation();cellQtyChange(this,1)">+</button>
         </div>
       </div><!-- /cell 1 -->
@@ -2021,7 +2022,7 @@
 
     <!-- 전체 매수 표시 바 -->
     <div class="total-qty-bar" id="total-qty-bar">
-      총 <span class="tq-count" id="tq-count">2</span>매 <span class="tq-max">/ 10매</span>
+      총 <span class="tq-count" id="tq-count">1</span>매 <span class="tq-max">/ 10매</span>
     </div>
 
     <!-- ════════ 텍스트 속성 플로팅 패널 ════════ -->
@@ -6246,7 +6247,7 @@ function cellQtyChange(btn, dir) {
           if (!node.querySelector('.cell-qty-wrap')) {
             // 합계 체크: 추가 가능한지
             const remaining = MAX_TOTAL - getTotalQty();
-            const defaultQty = Math.max(1, Math.min(2, remaining));
+            const defaultQty = 1;
             if (remaining < 1) {
               alert('총 매수가 10매를 초과할 수 없습니다. 기존 스티커의 매수를 줄여주세요.');
               node.remove();
