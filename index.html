@@ -6221,38 +6221,36 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
 })();
 
 // ─────────── 4. 매수 선택기 시스템 (합계 최대 10매) ───────────
-var QTY_MAX_TOTAL = 10;
-
 function cellQtyGetTotal() {
-  let sum = 0;
-  document.querySelectorAll('.cell-qty-val').forEach(el => {
+  var sum = 0;
+  document.querySelectorAll('.cell-qty-val').forEach(function(el) {
     sum += parseInt(el.dataset.qty) || 0;
   });
   return sum;
 }
 
 function cellQtyUpdateAll() {
-  const total = cellQtyGetTotal();
-  const tqEl = document.getElementById('tq-count');
+  var total = cellQtyGetTotal();
+  var tqEl = document.getElementById('tq-count');
   if (tqEl) tqEl.textContent = total;
-  document.querySelectorAll('.cell-qty-btn[data-dir="1"]').forEach(btn => {
-    btn.disabled = total >= QTY_MAX_TOTAL;
+  document.querySelectorAll('.cell-qty-btn[data-dir="1"]').forEach(function(btn) {
+    btn.disabled = total >= 10;
   });
-  document.querySelectorAll('.cell-qty-btn[data-dir="-1"]').forEach(btn => {
-    const wrap = btn.closest('.cell-qty-wrap');
-    const val = parseInt(wrap.querySelector('.cell-qty-val').dataset.qty) || 0;
+  document.querySelectorAll('.cell-qty-btn[data-dir="-1"]').forEach(function(btn) {
+    var wrap = btn.closest('.cell-qty-wrap');
+    var val = parseInt(wrap.querySelector('.cell-qty-val').dataset.qty) || 0;
     btn.disabled = val <= 1;
   });
 }
 
 function cellQtyChange(btn, dir) {
   if (btn.disabled) return;
-  const wrap = btn.closest('.cell-qty-wrap');
-  const valEl = wrap.querySelector('.cell-qty-val');
-  let qty = parseInt(valEl.dataset.qty) || 1;
-  const newQty = qty + dir;
+  var wrap = btn.closest('.cell-qty-wrap');
+  var valEl = wrap.querySelector('.cell-qty-val');
+  var qty = parseInt(valEl.dataset.qty) || 1;
+  var newQty = qty + dir;
   if (newQty < 1 || newQty > 10) return;
-  if (dir > 0 && cellQtyGetTotal() >= QTY_MAX_TOTAL) return;
+  if (dir > 0 && cellQtyGetTotal() >= 10) return;
   valEl.dataset.qty = newQty;
   valEl.textContent = newQty + '매';
   cellQtyUpdateAll();
