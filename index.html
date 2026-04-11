@@ -600,10 +600,10 @@
       position: relative;
       aspect-ratio: 1;
       background: #fff;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-      border-radius: 4px;
+      box-shadow: none;
+      border-radius: 8px;
       cursor: pointer;
-      border: 2px solid transparent;
+      border: 2px dashed #ccc;
       transition: border-color 0.15s;
       overflow: visible;
       min-width: 0;
@@ -611,10 +611,10 @@
       margin-bottom: 44px;
     }
     .canvas-grid-cell.active {
-      border-color: #222;
+      border-color: #ccc;
     }
     .canvas-grid-cell:hover:not(.active) {
-      border-color: #ccc;
+      border-color: #999;
     }
     .canvas-grid-cell .cell-label {
       position: absolute;
