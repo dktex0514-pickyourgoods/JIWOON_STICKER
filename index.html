@@ -79,47 +79,6 @@
 
     .tb-divider { width: 1px; height: 36px; background: #e0e0e0; margin: 0 4px; flex-shrink: 0; }
 
-    /* ── 캔버스 배경색 선택 ── */
-    .canvas-color-wrap { position: relative; flex-shrink: 0; }
-    .canvas-color-dot {
-      width: 22px; height: 22px; border-radius: 50%;
-      border: 2px solid #d0d0d0;
-      background: #ffffff;
-      margin: 0 auto 2px;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .canvas-color-popup {
-      display: none;
-      position: fixed;
-      background: #fff;
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      z-index: 9999; width: auto;
-      border: 1px solid #ebebeb;
-    }
-    .canvas-color-popup.visible { display: block; }
-    .ccp-title {
-      font-size: 11px; font-weight: 700; color: #222;
-      text-align: center; margin-bottom: 10px; letter-spacing: 0.5px;
-    }
-    .ccp-swatches {
-      display: grid; grid-template-columns: repeat(6, 28px); gap: 7px;
-    }
-    .color-swatch {
-      width: 28px; height: 28px; border-radius: 50%;
-      cursor: pointer; border: 2.5px solid transparent;
-      transition: transform 0.12s, border-color 0.12s;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .color-swatch:hover { transform: scale(1.18); }
-    .color-swatch.selected { border-color: #222; }
-    .swatch-none {
-      background: #ffffff;
-      border-color: #d0d0d0;
-    }
-    .swatch-none.selected { border-color: #222; }
 
     /* ── 크롭 오버레이 ── */
     #crop-overlay {
@@ -258,6 +217,41 @@
       font-size: 12px; color: #666; line-height: 1.7;
     }
 
+    /* ── 왼쪽 사이드바 ── */
+    .left-sidebar {
+      width: 64px;
+      background: #fff;
+      border-right: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 4px;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+    .left-sidebar-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      width: 56px;
+      padding: 8px 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 8px;
+      color: #444;
+      font-size: 10px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .left-sidebar-btn:hover { background: #f0f0f0; color: #111; }
+    .left-sidebar-btn svg { width: 24px; height: 24px; }
+
     /* ── 메인 레이아웃 ── */
     .main-content {
       display: flex;
@@ -293,11 +287,387 @@
       position: relative;
     }
 
+    .canvas-grid {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      align-items: stretch;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .canvas-grid-cell {
+      width: 400px;
+      flex-shrink: 0;
+    }
+    .add-cell-btn {
+      width: 400px;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      background: #fafafa;
+      color: #bbb;
+      font-size: 12px;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+    .add-cell-btn:hover {
+      border-color: #999;
+      color: #888;
+      background: #f0f0f0;
+    }
+
+    /* ── 겹침 경고 ── */
+    .overlap-warning {
+      display: none;
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'Noto Sans KR', sans-serif;
+      padding: 6px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+      z-index: 30;
+      box-shadow: 0 2px 8px rgba(255,0,0,0.25);
+      animation: overlapPulse 0.4s ease;
+    }
+    .overlap-warning.visible { display: block; }
+    @keyframes overlapPulse {
+      0% { transform: translateX(-50%) scale(0.9); opacity: 0; }
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    }
+
+    /* ── 타이틀 색상 변경 팝업 ── */
+    .title-color-popup {
+      display: none;
+      position: fixed;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+      z-index: 9999;
+    }
+    .title-color-popup.visible { display: block; }
+    .title-color-popup-title {
+      font-size: 11px; font-weight: 700; color: #222;
+      margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif;
+    }
+    .title-color-swatches {
+      display: grid;
+      grid-template-columns: repeat(6, 26px);
+      gap: 6px;
+    }
+    .title-swatch {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.1s;
+    }
+    .title-swatch:hover { transform: scale(1.15); }
+    .title-swatch.active { border-color: #222; }
+
+    /* ── 누끼따기 툴팁 ── */
+    .nukki-wrap { position: relative; flex-shrink: 0; z-index: 200; }
+    .nukki-tooltip {
+      display: none;
+      position: fixed;
+      width: 220px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+      z-index: 9999;
+    }
+    .nukki-tooltip::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 10px; height: 10px;
+      background: #fff;
+      border-left: 1px solid #e0e0e0;
+      border-top: 1px solid #e0e0e0;
+    }
+    .nukki-tooltip-title {
+      font-size: 12px; font-weight: 700; color: #222;
+      margin-bottom: 10px; text-align: center;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .nukki-tooltip-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .nukki-before, .nukki-after {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      color: #999;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .nukki-img-box {
+      width: 52px; height: 52px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .nukki-margin-label {
+      position: absolute;
+      bottom: -2px; right: -2px;
+      font-size: 7px;
+      background: #e74c3c;
+      color: #fff;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .nukki-arrow { flex-shrink: 0; }
+    .nukki-tooltip-desc {
+      font-size: 10px;
+      color: #666;
+      line-height: 1.6;
+      text-align: center;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .nukki-tooltip-desc strong { color: #e74c3c; }
+
+    /* ── 안내 사항 섹션 ── */
+    .guide-section {
+      display: none;
+      width: 100%;
+      max-width: 340px;
+      margin: 20px auto 24px;
+      padding: 0 12px;
+    }
+    .guide-section.visible {
+      display: block;
+    }
+    .guide-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid #222;
+    }
+    .guide-header-icon {
+      width: 16px; height: 16px;
+      background: #222;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: serif;
+      flex-shrink: 0;
+    }
+    .guide-header-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #222;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .guide-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .guide-card-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 2px;
+      padding: 2px 7px;
+      background: #f5f5f5;
+      border-radius: 3px;
+      display: inline-block;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .guide-card-body {
+      margin-top: 6px;
+      font-size: 9px;
+      color: #555;
+      line-height: 1.7;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .guide-card-body ul {
+      padding-left: 14px;
+      margin: 0;
+    }
+    .guide-card-body li {
+      margin-bottom: 1px;
+    }
+    .guide-card-body strong {
+      color: #222;
+    }
+    .guide-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0 4px;
+      gap: 10px;
+    }
+    .guide-visual-box {
+      width: 48px; height: 48px;
+      border: 1px dashed #ccc;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 7px;
+      color: #999;
+      font-family: 'Noto Sans KR', sans-serif;
+      position: relative;
+    }
+    .guide-dim {
+      position: absolute;
+      font-size: 7px;
+      color: #e74c3c;
+      font-weight: 600;
+    }
+    .guide-dim-bottom { bottom: -12px; }
+    .guide-dim-right { right: -24px; top: 50%; transform: translateY(-50%); }
+
+    .cell-info-icon {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.08);
+      color: #999;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    .cell-delete-btn {
+      position: absolute;
+      top: 18px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .canvas-grid-cell:hover .cell-delete-btn { opacity: 1; }
+    .cell-delete-btn:hover { background: rgba(220,50,50,0.8); }
+
+    .canvas-grid-cell {
+      position: relative;
+      aspect-ratio: 1;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s;
+      overflow: hidden;
+      min-width: 0;
+      min-height: 0;
+    }
+    .canvas-grid-cell.active {
+      border-color: #222;
+    }
+    .canvas-grid-cell:hover:not(.active) {
+      border-color: #ccc;
+    }
+    .canvas-grid-cell .cell-label {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      z-index: 2;
+      pointer-events: none;
+    }
+
     .canvas-outer {
       position: relative;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      box-shadow: none;
       background: #fff;
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden;
     }
+    .canvas-outer .canvas-container {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    .canvas-outer .canvas-container canvas {
+      width: 100% !important;
+      height: 100% !important;
+      cursor: pointer !important;
+    }
+
+    .cell-dropzone {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      pointer-events: none;
+      z-index: 5;
+      padding: 10%;
+    }
+    .cell-dropzone svg { color: #999; }
+    .cell-dropzone .dz-main {
+      font-size: 13px; font-weight: 400; color: #999;
+      font-family: 'Noto Sans KR', sans-serif;
+      text-align: center; line-height: 1.5;
+    }
+    .cell-dropzone .dz-sub {
+      font-size: 11px; color: #999; font-weight: 400;
+      font-family: 'Noto Sans KR', sans-serif;
+      margin-top: 2px;
+    }
+    .cell-dropzone.hidden { display: none; }
 
     /* ── 캔버스 드롭존 오버레이 ── */
     #canvas-dropzone {
@@ -308,20 +678,21 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      z-index: 20;
+      z-index: 5;
       border-radius: 2px;
       transition: background 0.18s;
-      pointer-events: auto;
+      pointer-events: none;
     }
     #canvas-dropzone.hidden { display: none; }
     #canvas-dropzone.drag-over { background: rgba(255, 26, 133, 0.07); }
-    #canvas-dropzone .dz-icon { color: #ccc; margin-bottom: 14px; }
-    #canvas-dropzone .dz-title {
-      font-size: 15px; font-weight: 600; color: #555;
-      margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif;
+    #canvas-dropzone .dz-icon { color: #999; margin-bottom: 6px; }
+    #canvas-dropzone .dz-main {
+      font-size: 13px; font-weight: 400; color: #999;
+      font-family: 'Noto Sans KR', sans-serif;
+      text-align: center; line-height: 1.5;
     }
     #canvas-dropzone .dz-sub {
-      font-size: 12px; color: #aaa;
+      font-size: 11px; color: #999; font-weight: 400;
       font-family: 'Noto Sans KR', sans-serif;
     }
     #dpi-badge {
@@ -342,7 +713,7 @@
       right: 0;
       top: 0;
       bottom: 0;
-      width: 280px;
+      width: 400px;
       background: #fff;
       border-left: 1px solid #e0e0e0;
       padding: 56px 18px 18px;
@@ -487,7 +858,7 @@
       min-width: 290px;
       border-left: 1px solid #e0e0e0;
       background: #fff;
-      display: flex;
+      display: none;
       flex-direction: column;
       padding: 24px 20px 24px;
       overflow-y: auto;
@@ -1158,13 +1529,6 @@
     상하반전
   </button>
 
-  <button class="tool-btn" id="btn-remove-bg" disabled title="이미지 배경 자동 제거 (누끼따기)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 6l3 1m0 0l-3 9a5 5 0 0 0 6.27 6.17M6 7l3.5 9M6 7l6-2m6 2l3-1m-3 1l-3.5 9M18 7l-3.5 9m0 0l-1.5.5m5-10l3 9a5 5 0 0 1-6.27 6.17M18 7l-6-2m0 0l-3.5 1.5"/>
-    </svg>
-    누끼따기<br><span style="font-size:9px;color:#888;font-weight:400;">(배경제거)</span>
-  </button>
-
   <button class="tool-btn" id="btn-crop" disabled title="이미지 자르기">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>
@@ -1172,29 +1536,39 @@
     자르기
   </button>
 
-  <button class="tool-btn" id="btn-eyedropper" title="스포이드로 배경색 채우기">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"/>
-    </svg>
-    배경 채우기
-  </button>
+  <div class="tb-divider"></div>
 
-  <button class="tool-btn" id="btn-bg-auto" style="display:none" title="이미지 가장자리 색상을 분석해 배경을 자동으로 채워줍니다">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9.5 2l1.2 3.3L14 6.5l-3.3 1.2L9.5 11l-1.2-3.3L5 6.5l3.3-1.2z"/>
-      <path d="M19 12l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>
-      <path d="M4 17l.5 1.5L6 19l-1.5.5L4 21l-.5-1.5L2 19l1.5-.5z"/>
-    </svg>
-    자동 배경채우기
-  </button>
-
-  <button class="tool-btn" id="btn-bg-reset" title="배경색을 흰색으로 초기화">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-      <path d="M3 3v5h5"/>
-    </svg>
-    배경 초기화
-  </button>
+  <div class="nukki-wrap">
+    <button class="tool-btn" id="btn-remove-bg" disabled title="이미지 배경 자동 제거 (누끼따기)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6l3 1m0 0l-3 9a5 5 0 0 0 6.27 6.17M6 7l3.5 9M6 7l6-2m6 2l3-1m-3 1l-3.5 9M18 7l-3.5 9m0 0l-1.5.5m5-10l3 9a5 5 0 0 1-6.27 6.17M18 7l-6-2m0 0l-3.5 1.5"/>
+      </svg>
+      누끼따기
+    </button>
+    <div class="nukki-tooltip" id="nukki-tooltip">
+      <div class="nukki-tooltip-title">누끼따기란?</div>
+      <div class="nukki-tooltip-visual">
+        <div class="nukki-before">
+          <div class="nukki-img-box" style="background:#e8d4b8;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a08060" stroke-width="1.5"><circle cx="12" cy="10" r="5"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+          </div>
+          <span>원본</span>
+        </div>
+        <svg class="nukki-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <div class="nukki-after">
+          <div class="nukki-img-box" style="background:#fff;border:1.5px dashed #ddd;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><circle cx="12" cy="10" r="5"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            <div class="nukki-margin-label">2mm</div>
+          </div>
+          <span>누끼 완료</span>
+        </div>
+      </div>
+      <div class="nukki-tooltip-desc">
+        배경을 자동으로 제거합니다.<br>
+        테두리에서 <strong>2mm</strong> 여백이 흰색으로 유지됩니다.
+      </div>
+    </div>
+  </div>
 
   <div class="tb-divider"></div>
 
@@ -1227,59 +1601,11 @@
     텍스트
   </button>
 
-  <!-- 캔버스 배경색 선택 -->
-  <div class="canvas-color-wrap" id="canvas-color-wrap">
-    <button class="tool-btn" id="btn-canvas-color" title="캔버스 배경색 선택" style="position:relative;">
-      <svg id="canvas-color-dot" viewBox="0 0 26 18" width="26" height="18" style="margin:0 auto 2px;display:block;">
-        <rect x="0" y="0" width="26" height="18" rx="2" fill="#C4A47C"/>
-        <rect id="canvas-color-inner" x="2.5" y="2.5" width="21" height="13" fill="#FFFFFF"/>
-      </svg>
-      캔버스 배경색
-    </button>
-    <div class="canvas-color-popup" id="canvas-color-popup">
-      <div class="ccp-title">캔버스 배경색 선택</div>
-      <div class="ccp-swatches">
-        <div class="color-swatch swatch-none selected" data-color="none" title="색상 없음">
-          <svg viewBox="0 0 22 16" width="15" height="11" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="1" width="20" height="14" rx="2"/><line x1="1" y1="4" x2="21" y2="4"/><line x1="8" y1="1" x2="8" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-        </div>
-        <div class="color-swatch" data-color="#F5F5F5" style="background:#F5F5F5;border-color:#e0e0e0" title="연회색"></div>
-        <div class="color-swatch" data-color="#9E9E9E" style="background:#9E9E9E" title="회색"></div>
-        <div class="color-swatch" data-color="#424242" style="background:#424242" title="진회색"></div>
-        <div class="color-swatch" data-color="#000000" style="background:#000000" title="검정"></div>
-
-        <div class="color-swatch" data-color="#FFF8E1" style="background:#FFF8E1;border-color:#e0e0e0" title="크림"></div>
-        <div class="color-swatch" data-color="#FCE4EC" style="background:#FCE4EC;border-color:#e0e0e0" title="연핑크"></div>
-        <div class="color-swatch" data-color="#F48FB1" style="background:#F48FB1" title="핑크"></div>
-        <div class="color-swatch" data-color="#E91E63" style="background:#E91E63" title="핫핑크"></div>
-        <div class="color-swatch" data-color="#F44336" style="background:#F44336" title="빨강"></div>
-        <div class="color-swatch" data-color="#795548" style="background:#795548" title="브라운"></div>
-
-        <div class="color-swatch" data-color="#FFF9C4" style="background:#FFF9C4;border-color:#e0e0e0" title="연노랑"></div>
-        <div class="color-swatch" data-color="#FFC107" style="background:#FFC107" title="노랑"></div>
-        <div class="color-swatch" data-color="#FF9800" style="background:#FF9800" title="주황"></div>
-        <div class="color-swatch" data-color="#CDDC39" style="background:#CDDC39" title="라임"></div>
-        <div class="color-swatch" data-color="#4CAF50" style="background:#4CAF50" title="초록"></div>
-        <div class="color-swatch" data-color="#2E7D32" style="background:#2E7D32" title="진초록"></div>
-
-        <div class="color-swatch" data-color="#E3F2FD" style="background:#E3F2FD;border-color:#e0e0e0" title="연하늘"></div>
-        <div class="color-swatch" data-color="#00BCD4" style="background:#00BCD4" title="하늘"></div>
-        <div class="color-swatch" data-color="#2196F3" style="background:#2196F3" title="파랑"></div>
-        <div class="color-swatch" data-color="#1A237E" style="background:#1A237E" title="남색"></div>
-        <div class="color-swatch" data-color="#7B1FA2" style="background:#7B1FA2" title="보라"></div>
-        <div class="color-swatch" data-color="#673AB7" style="background:#673AB7" title="진보라"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="tb-divider"></div>
-
-  <button class="tool-btn" id="btn-ai-guide" title="AI 이미지 변환 가이드">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9.5 2l1.2 3.3L14 6.5l-3.3 1.2L9.5 11l-1.2-3.3L5 6.5l3.3-1.2z"/>
-      <path d="M19 12l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>
-      <path d="M4 17l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>
+  <button class="tool-btn" id="btn-title-color" title="타이틀 색상 변경">
+    <svg viewBox="0 0 30 18" width="30" height="18" fill="none">
+      <rect x="1" y="1" width="28" height="16" rx="8" fill="#fff3c4"/>
     </svg>
-    AI 꾸미기
+    타이틀 색상
   </button>
 
   <div class="tb-divider" style="display:none"></div>
@@ -1293,6 +1619,58 @@
     AI 변환
   </button>
 
+  <div class="tb-divider"></div>
+
+  <!-- 타이틀 색상 팝업 -->
+  <div class="title-color-popup" id="title-color-popup">
+    <div class="title-color-popup-title">타이틀 배경 색상</div>
+    <div class="title-color-swatches">
+      <div class="title-swatch active" data-color="#fff3c4" style="background:#fff3c4;border-color:#222"></div>
+      <div class="title-swatch" data-color="#d4eaf7" style="background:#d4eaf7"></div>
+      <div class="title-swatch" data-color="#fce4ec" style="background:#fce4ec"></div>
+      <div class="title-swatch" data-color="#e8f5e9" style="background:#e8f5e9"></div>
+      <div class="title-swatch" data-color="#f3e5f5" style="background:#f3e5f5"></div>
+      <div class="title-swatch" data-color="#fff8e1" style="background:#fff8e1"></div>
+      <div class="title-swatch" data-color="#e0f7fa" style="background:#e0f7fa"></div>
+      <div class="title-swatch" data-color="#fbe9e7" style="background:#fbe9e7"></div>
+      <div class="title-swatch" data-color="#f5f5f5" style="background:#f5f5f5"></div>
+      <div class="title-swatch" data-color="#e0e0e0" style="background:#e0e0e0"></div>
+      <div class="title-swatch" data-color="#ffcdd2" style="background:#ffcdd2"></div>
+      <div class="title-swatch" data-color="#c8e6c9" style="background:#c8e6c9"></div>
+    </div>
+  </div>
+
+  <button class="tool-btn" id="btn-guide-info" title="안내사항">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="16" x2="12" y2="12"/>
+      <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+    안내사항
+  </button>
+
+  <div style="flex:1;"></div>
+
+  <button id="btn-preview3d-top" title="내 예상작품 보기" style="
+    background:#fff; color:#222; border:1.5px solid #222; border-radius:6px;
+    padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer;
+    font-family:'Noto Sans KR',sans-serif; white-space:nowrap; flex-shrink:0;
+    display:flex; align-items:center; gap:5px;
+  ">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    내 예상작품 보기
+  </button>
+
+  <button id="btn-send-top" title="작업물 보내기" style="
+    background:#222; color:#fff; border:1.5px solid #222; border-radius:6px;
+    padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer;
+    font-family:'Noto Sans KR',sans-serif; white-space:nowrap; flex-shrink:0;
+    margin-left:6px; display:flex; align-items:center; gap:5px;
+  ">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    작업물 보내기
+  </button>
+
 </div>
 
 <!-- ════════════ 메인 콘텐츠 ════════════ -->
@@ -1300,18 +1678,17 @@
 
   <!-- 캔버스 영역 -->
   <div class="canvas-area">
-    <p id="sel-hint">이미지를 검정 테두리 끝까지 늘리면 여백 없이 인쇄됩니다.<br>글자·로고 등 잘리면 안 되는 부분은 빨간 점선 안쪽에 배치해 주세요.</p>
-    <div class="canvas-outer" id="canvas-outer">
-      <canvas id="c"></canvas>
-      <!-- 빈 캔버스 드롭존 -->
-      <div id="canvas-dropzone">
-        <svg class="dz-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-          <polyline points="21 15 16 10 5 21"/>
-        </svg>
-        <p class="dz-title">이미지를 드래그하거나 클릭하여 업로드 하세요</p>
-        <p class="dz-sub">JPG, PNG 파일을 지원합니다</p>
-      </div>
+    <div class="canvas-grid" id="canvas-grid">
+      <!-- 셀 1 (활성) -->
+      <div class="canvas-grid-cell active" data-cell="0">
+        <div class="overlap-warning" id="overlap-warning">⚠ 이미지가 겹쳐있어요! 스티커 간 간격을 띄워주세요.</div>
+        <div class="canvas-outer" id="canvas-outer">
+          <canvas id="c"></canvas>
+          <div id="canvas-dropzone" class="cell-dropzone">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span class="dz-main">이미지를 드래그하거나 클릭하여<br>업로드 하세요</span>
+            <span class="dz-sub">JPG, PNG 파일을 지원합니다</span>
+          </div>
       <!-- 블리드(옆면) 오버레이 -->
       <div id="bleed-overlay"></div>
       <!-- DPI 경고 배지 -->
@@ -1342,125 +1719,94 @@
           <button id="crop-cancel-btn">✕ 취소</button>
           <button id="crop-apply-btn">✓ 자르기 적용</button>
         </div>
+      </div><!-- /crop-overlay -->
+    </div><!-- /canvas-outer -->
+      </div><!-- /cell 1 -->
+
+      <!-- 추가 버튼 -->
+      <div class="add-cell-btn" id="add-cell-btn" title="스티커 추가">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span style="font-size:14px;">추가</span>
+      </div>
+
+    </div><!-- /canvas-grid -->
+
+    <!-- ════════ 안내 사항 ════════ -->
+    <div class="guide-section" id="guide-section">
+      <div class="guide-header">
+        <div class="guide-header-icon">i</div>
+        <div class="guide-header-title">유의사항</div>
+      </div>
+
+      <!-- 카드 1: 최소 사이즈 -->
+      <div class="guide-card">
+        <span class="guide-card-title">최소 사이즈</span>
+        <div class="guide-card-body">
+          <div class="guide-visual">
+            <div class="guide-visual-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="2"/><path d="M21 15l-5-5-8 8"/></svg>
+              <span class="guide-dim guide-dim-bottom">10mm 이상</span>
+              <span class="guide-dim guide-dim-right">10mm 이상</span>
+            </div>
+          </div>
+          <ul>
+            <li>타이틀(번호·이름) 부분을 제외한 스티커 이미지의 <strong>최소 크기는 10 x 10mm</strong>입니다.</li>
+            <li>이보다 작으면 인쇄 품질이 저하될 수 있습니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 카드 2: 스티커 수 / 간격 -->
+      <div class="guide-card">
+        <span class="guide-card-title">스티커 최대 수 / 간격</span>
+        <div class="guide-card-body">
+          <ul>
+            <li>한 페이지에 스티커는 <strong>최대 4개</strong>까지 가능합니다. (타이틀 제외)</li>
+            <li>스티커 칼선 간 간격은 <strong>3mm 이상</strong>을 유지해 주세요.</li>
+            <li>간격이 너무 좁으면 재단 시 스티커가 손상될 수 있습니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 카드 3: 타이틀 사용 -->
+      <div class="guide-card">
+        <span class="guide-card-title">타이틀 (번호 · 이름) 안내</span>
+        <div class="guide-card-body">
+          <ul>
+            <li>각 스티커 상단의 <strong>번호 태그</strong>와 <strong>이름</strong>을 더블클릭하여 자유롭게 편집할 수 있습니다.</li>
+            <li>타이틀 영역은 드래그하여 원하는 위치로 이동 가능합니다.</li>
+            <li>타이틀이 필요 없는 경우, 선택 후 Delete 키로 삭제할 수 있습니다.</li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <!-- 래핑 안내 힌트 -->
-    <div class="wrap-hint" id="wrap-hint">
-      <div class="wrap-hint-head">
-        꽉 찬 인쇄를 원하신다면<br>이미지를 검정색 점선까지 채워주세요.
-        <span class="wrap-hint-close" id="wrap-hint-close">×</span>
-      </div>
-      <div class="wrap-hint-body">
-        <div class="wrap-hint-visual">
-          <svg width="420" height="297" viewBox="0 0 420 297" xmlns="http://www.w3.org/2000/svg">
-            <!-- 전체 배경 (회색 = 사이드 영역) -->
-            <rect x="0" y="0" width="420" height="297" fill="#d0d0d0"/>
-            <!-- 인쇄 영역 (흰색) -->
-            <rect x="42" y="42" width="336" height="213" fill="white" stroke="#ff6b6b" stroke-width="1.8" stroke-dasharray="6,4"/>
-            <!-- 외곽 점선 (캔버스 테두리) - 안쪽으로 충분히 들여서 클리핑 방지 -->
-            <rect x="2" y="2" width="416" height="293" fill="none" stroke="#444" stroke-width="1.5" stroke-dasharray="6,4"/>
-            <!-- 인쇄 영역 텍스트 -->
-            <text x="210" y="151" text-anchor="middle" fill="#bbb" font-size="17" font-family="sans-serif">인쇄 영역</text>
-            <!-- 왼쪽 옆면 라벨 -->
-            <text x="21" y="122" text-anchor="middle" fill="#333" font-size="12" font-family="sans-serif" font-weight="600">옆면</text>
-            <!-- 3cm 측정 표시 — 옆면 라벨 바로 아래 -->
-            <line x1="4"  y1="136" x2="40" y2="136" stroke="#333" stroke-width="1.2"/>
-            <line x1="4"  y1="131" x2="4"  y2="141" stroke="#333" stroke-width="1.2"/>
-            <line x1="40" y1="131" x2="40" y2="141" stroke="#333" stroke-width="1.2"/>
-            <text x="22" y="152" text-anchor="middle" fill="#333" font-size="11" font-family="sans-serif">3cm</text>
-            <!-- 오른쪽 옆면 라벨 -->
-            <text x="399" y="122" text-anchor="middle" fill="#333" font-size="12" font-family="sans-serif" font-weight="600">옆면</text>
-            <!-- 오른쪽 3cm 측정 표시 (왼쪽과 대칭) -->
-            <line x1="380" y1="136" x2="416" y2="136" stroke="#333" stroke-width="1.2"/>
-            <line x1="380" y1="131" x2="380" y2="141" stroke="#333" stroke-width="1.2"/>
-            <line x1="416" y1="131" x2="416" y2="141" stroke="#333" stroke-width="1.2"/>
-            <text x="398" y="152" text-anchor="middle" fill="#333" font-size="11" font-family="sans-serif">3cm</text>
-            <!-- 윗면 라벨 — 가운데 정렬 (라벨+브래킷 묶음을 x=210 기준 중앙) -->
-            <text x="193" y="25" text-anchor="middle" fill="#333" font-size="12" font-family="sans-serif" font-weight="600">윗면</text>
-            <line x1="212" y1="4"  x2="212" y2="40" stroke="#333" stroke-width="1.2"/>
-            <line x1="207" y1="4"  x2="217" y2="4"  stroke="#333" stroke-width="1.2"/>
-            <line x1="207" y1="40" x2="217" y2="40" stroke="#333" stroke-width="1.2"/>
-            <text x="222" y="25" text-anchor="start" fill="#333" font-size="11" font-family="sans-serif">3cm</text>
-            <!-- 아랫면 라벨 — 가운데 정렬 -->
-            <text x="193" y="278" text-anchor="middle" fill="#333" font-size="12" font-family="sans-serif" font-weight="600">아랫면</text>
-            <line x1="220" y1="257" x2="220" y2="293" stroke="#333" stroke-width="1.2"/>
-            <line x1="215" y1="257" x2="225" y2="257" stroke="#333" stroke-width="1.2"/>
-            <line x1="215" y1="293" x2="225" y2="293" stroke="#333" stroke-width="1.2"/>
-            <text x="230" y="278" text-anchor="start" fill="#333" font-size="11" font-family="sans-serif">3cm</text>
-          </svg>
-        </div>
-        <p class="wrap-hint-sub">검정색 선 안쪽을 채우지 않으면<br>측면이 흰색으로 인쇄됩니다.</p>
-      </div>
-    </div>
   </div>
 
   <!-- 우측 사이드바 -->
   <div class="right-sidebar" id="right-sidebar">
 
     <div class="sidebar-product-info">
-      <div class="product-tag">캔버스 액자</div>
-      <div class="product-title" id="product-title">A4 가로 (29.7 × 21 cm)</div>
+      <div class="product-tag">카카오 스티커</div>
+      <div class="product-title" id="product-title">정사각형 (360 × 360 px)</div>
     </div>
 
     <div class="sidebar-label">사이즈</div>
     <div class="size-option-list">
 
-      <div class="size-cat-label">가로</div>
-
-      <div class="size-option selected" data-w="29.7" data-h="21" data-scale="0.88" data-name="A4 가로 (29.7 × 21 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A4 가로</span><span class="size-opt-dim">29.7 × 21 cm</span></span>
-      </div>
-      <div class="size-option" data-w="42" data-h="29.7" data-scale="1.0" data-name="A3 가로 (42 × 29.7 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A3 가로</span><span class="size-opt-dim">42 × 29.7 cm</span><span class="size-opt-badge badge-desk">탁상인기</span></span>
-      </div>
-      <div class="size-option" data-w="60" data-h="40" data-scale="1.1" data-name="60 × 40 cm">
-        <span class="size-opt-info"><span class="size-opt-name">60×40 cm</span><span class="size-opt-dim">60 × 40 cm</span></span>
-      </div>
-      <div class="size-option" data-w="59.4" data-h="42" data-scale="1.15" data-name="A2 가로 (59.4 × 42 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A2 가로</span><span class="size-opt-dim">59.4 × 42 cm</span><span class="size-opt-badge badge-wall">벽걸이 인기</span></span>
-      </div>
-      <div class="size-option" data-w="84.1" data-h="59.4" data-scale="1.2" data-name="A1 가로 (84.1 × 59.4 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A1 가로</span><span class="size-opt-dim">84.1 × 59.4 cm</span></span>
-      </div>
-      <div class="size-option" data-w="90" data-h="60" data-scale="1.2" data-name="90 × 60 cm">
-        <span class="size-opt-info"><span class="size-opt-name">90×60 cm</span><span class="size-opt-dim">90 × 60 cm</span></span>
-      </div>
-
-      <div class="size-cat-label">세로</div>
-
-      <div class="size-option" data-w="21" data-h="29.7" data-scale="0.72" data-name="A4 세로 (21 × 29.7 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A4 세로</span><span class="size-opt-dim">21 × 29.7 cm</span><span class="size-opt-badge badge-desk">탁상인기</span></span>
-      </div>
-      <div class="size-option" data-w="29.7" data-h="42" data-scale="0.86" data-name="A3 세로 (29.7 × 42 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A3 세로</span><span class="size-opt-dim">29.7 × 42 cm</span></span>
-      </div>
-      <div class="size-option" data-w="40" data-h="60" data-scale="1.0" data-name="40 × 60 cm">
-        <span class="size-opt-info"><span class="size-opt-name">40×60 cm</span><span class="size-opt-dim">40 × 60 cm</span></span>
-      </div>
-      <div class="size-option" data-w="42" data-h="59.4" data-scale="1.0" data-name="A2 세로 (42 × 59.4 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A2 세로</span><span class="size-opt-dim">42 × 59.4 cm</span></span>
-      </div>
-      <div class="size-option" data-w="50" data-h="70" data-scale="1.05" data-name="50 × 70 cm">
-        <span class="size-opt-info"><span class="size-opt-name">50×70 cm</span><span class="size-opt-dim">50 × 70 cm</span></span>
-      </div>
-      <div class="size-option" data-w="59.4" data-h="84.1" data-scale="1.1" data-name="A1 세로 (59.4 × 84.1 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">A1 세로</span><span class="size-opt-dim">59.4 × 84.1 cm</span><span class="size-opt-badge badge-wall">벽걸이 인기</span></span>
-      </div>
-
       <div class="size-cat-label">정사각형</div>
 
-      <div class="size-option" data-w="22" data-h="22" data-scale="0.88" data-name="정사각형 9&quot; (22 × 22 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">정사각형 9"</span><span class="size-opt-dim">22 × 22 cm</span></span>
+      <div class="size-option selected" data-w="9.53" data-h="9.53" data-scale="0.85" data-name="정사각형 (360 × 360 px)">
+        <span class="size-opt-info"><span class="size-opt-name">360 × 360 px</span><span class="size-opt-dim">9.53 × 9.53 cm</span></span>
       </div>
-      <div class="size-option" data-w="32" data-h="32" data-scale="1.05" data-name="정사각형 13&quot; (32 × 32 cm)">
-        <span class="size-opt-info"><span class="size-opt-name">정사각형 13"</span><span class="size-opt-dim">32 × 32 cm</span></span>
+      <div class="size-option" data-w="13.23" data-h="13.23" data-scale="0.95" data-name="정사각형 (500 × 500 px)">
+        <span class="size-opt-info"><span class="size-opt-name">500 × 500 px</span><span class="size-opt-dim">13.23 × 13.23 cm</span></span>
       </div>
-      <div class="size-option" data-w="40" data-h="40" data-scale="1.1" data-name="40 × 40 cm">
-        <span class="size-opt-info"><span class="size-opt-name">40×40 cm</span><span class="size-opt-dim">40 × 40 cm</span></span>
+      <div class="size-option" data-w="16.93" data-h="16.93" data-scale="1.0" data-name="정사각형 (640 × 640 px)">
+        <span class="size-opt-info"><span class="size-opt-name">640 × 640 px</span><span class="size-opt-dim">16.93 × 16.93 cm</span></span>
       </div>
-      <div class="size-option" data-w="50" data-h="50" data-scale="1.15" data-name="50 × 50 cm">
-        <span class="size-opt-info"><span class="size-opt-name">50×50 cm</span><span class="size-opt-dim">50 × 50 cm</span></span>
+      <div class="size-option" data-w="27.09" data-h="27.09" data-scale="1.1" data-name="정사각형 (1024 × 1024 px)">
+        <span class="size-opt-info"><span class="size-opt-name">1024 × 1024 px</span><span class="size-opt-dim">27.09 × 27.09 cm</span></span>
       </div>
 
     </div>
@@ -1908,15 +2254,20 @@ const COLORS = [
   '#6b7280','#e5e7eb','#1e40af','#7c3aed','#059669',
 ];
 
-// ─────────── 캔버스 크기 계산 (A4 가로 비율) ───────────
+// ─────────── 캔버스 크기 계산 (2x2 그리드 셀에 맞춤) ───────────
 const GAP = 32;
 const SIDEBAR_W = 290;
-const MAX_W = Math.max(Math.min((window.innerWidth || 860) - GAP - SIDEBAR_W, 780), 280);
-let CW = MAX_W;
-let CH = Math.round(CW * (21 / 29.7));
+const LEFT_SIDEBAR_W = 64;
+const gridMaxW = Math.max(Math.min((window.innerWidth || 860) - GAP - SIDEBAR_W - LEFT_SIDEBAR_W, 700), 280);
+const gridMaxH = Math.max((window.innerHeight || 700) - 100, 300);
+const gridSize = Math.min(gridMaxW, gridMaxH);
+const cellSize = Math.floor((gridSize - 12) / 2); // 12 = gap
+// 캔버스 내부 해상도를 높게 유지 (화질 개선) — CSS로 셀에 맞춤
+let CW = 500;
+let CH = 500;
 
 // 현재 선택된 사이즈 (cm)
-let currentSizeW = 29.7, currentSizeH = 21;
+let currentSizeW = 9.53, currentSizeH = 9.53;
 
 function resizeCanvas(wCm, hCm, scale) {
   scale = scale || 1.0;
@@ -2062,18 +2413,8 @@ canvas.on('selection:cleared', () => { document.getElementById('rot-shift-tip').
 // ─────────── 가이드 선 ───────────
 function drawGuides() {
   canvas.getObjects().filter(o => o.__guide).forEach(o => canvas.remove(o));
-  const w = CW, h = CH, b = 1;
-  // 실제 3cm 블리드를 픽셀로 환산
-  const s = Math.round(w * 3 / currentSizeW);
-  const mk = (l,t,ww,hh,clr,sw) => new fabric.Rect({
-    left:l, top:t, width:ww, height:hh,
-    fill:'transparent', stroke:clr, strokeWidth:sw,
-    strokeDashArray:[8,5], selectable:false, evented:false, __guide:true,
-  });
-  canvas.add(mk(b,b,w-b*2,h-b*2,'#000000', 0.6));
-  canvas.add(mk(s,s,w-s*2,h-s*2,'#e60000', 0.6));
+  // 스티커 모드: 블리드 가이드 없음
   canvas.renderAll();
-  updateBleedOverlay(s);
 }
 
 function bringGuidesToFront() {
@@ -2090,13 +2431,795 @@ function hasUserObjects() {
 }
 
 function syncBleedUI() {
-  const has = hasUserObjects();
-  document.getElementById('bleed-overlay').style.display = has ? 'block' : 'none';
-  if (has) {
-    document.getElementById('wrap-hint').style.display = 'block';
-  }
+  // 스티커 모드: 블리드/래핑 힌트 항상 숨김
+  document.getElementById('bleed-overlay').style.display = 'none';
 }
 drawGuides();
+
+// ─────────── 캔버스 클릭 처리 ───────────
+canvas.on('mouse:down', function(e) {
+  // 타이틀 파트 이동 준비: 모든 파트의 위치 기록
+  if (e.target && e.target.__titlePart && e.target.__titleParts) {
+    e.target.__titleParts.forEach(function(p) {
+      p.__lastLeft = p.left;
+      p.__lastTop = p.top;
+    });
+  }
+});
+
+// IText 더블클릭 → 편집 모드
+canvas.on('mouse:dblclick', function(e) {
+  if (e.target && e.target.type === 'i-text' && !e.target.isEditing) {
+    e.target.enterEditing();
+    e.target.selectAll();
+  }
+});
+
+// 네모 전체 클릭 → 이미지 업로드 (canvas-outer에 직접 연결)
+document.getElementById('canvas-outer').addEventListener('click', function(e) {
+  var active = canvas.getActiveObject();
+  if (active) return;
+  document.getElementById('file-input').click();
+});
+
+// ─────────── 칼선(Cut Line) 실시간 렌더링 ───────────
+canvas.on('after:render', function() {
+  var ctx = canvas.getContext();
+  var offset = CW * 0.02; // 약 2mm 여백
+  var radius = CW * 0.03; // 둥근 모서리
+  var objs = canvas.getObjects();
+
+  // 바운딩 박스 수집 (이미지 + 타이틀 그룹)
+  var boxes = [];
+
+  // 이미지 바운딩
+  objs.forEach(function(o) {
+    if (o.type === 'image') {
+      var b = o.getBoundingRect();
+      boxes.push({
+        left: b.left - offset,
+        top: b.top - offset,
+        right: b.left + b.width + offset,
+        bottom: b.top + b.height + offset
+      });
+    }
+  });
+
+  // 타이틀 그룹 (회색 테두리 위치 그대로 빨간 칼선)
+  objs.forEach(function(o) {
+    if (o.type === 'rect' && o.stroke === '#d0d0d0' && o.__titlePart) {
+      var b = o.getBoundingRect();
+      var r = b.height / 2; // 원통 모양 그대로
+      ctx.save();
+      ctx.strokeStyle = '#FF0000';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(b.left + r, b.top);
+      ctx.lineTo(b.left + b.width - r, b.top);
+      ctx.quadraticCurveTo(b.left + b.width, b.top, b.left + b.width, b.top + r);
+      ctx.lineTo(b.left + b.width, b.top + b.height - r);
+      ctx.quadraticCurveTo(b.left + b.width, b.top + b.height, b.left + b.width - r, b.top + b.height);
+      ctx.lineTo(b.left + r, b.top + b.height);
+      ctx.quadraticCurveTo(b.left, b.top + b.height, b.left, b.top + b.height - r);
+      ctx.lineTo(b.left, b.top + r);
+      ctx.quadraticCurveTo(b.left, b.top, b.left + r, b.top);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
+  });
+
+  if (boxes.length === 0) return;
+
+  // 겹치는 박스 합치기 (union)
+  function boxesOverlap(a, b) {
+    return !(a.right < b.left || b.right < a.left || a.bottom < b.top || b.bottom < a.top);
+  }
+
+  var merged = [];
+  var used = new Array(boxes.length).fill(false);
+
+  for (var i = 0; i < boxes.length; i++) {
+    if (used[i]) continue;
+    var group = { left: boxes[i].left, top: boxes[i].top, right: boxes[i].right, bottom: boxes[i].bottom };
+    used[i] = true;
+    var changed = true;
+    while (changed) {
+      changed = false;
+      for (var j = 0; j < boxes.length; j++) {
+        if (used[j]) continue;
+        if (boxesOverlap(group, boxes[j])) {
+          group.left = Math.min(group.left, boxes[j].left);
+          group.top = Math.min(group.top, boxes[j].top);
+          group.right = Math.max(group.right, boxes[j].right);
+          group.bottom = Math.max(group.bottom, boxes[j].bottom);
+          used[j] = true;
+          changed = true;
+        }
+      }
+    }
+    merged.push(group);
+  }
+
+  // 칼선 그리기
+  ctx.save();
+  ctx.strokeStyle = '#FF0000';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+
+  merged.forEach(function(box) {
+    var x = box.left;
+    var y = box.top;
+    var w = box.right - box.left;
+    var h = box.bottom - box.top;
+    var r = Math.min(radius, w / 2, h / 2);
+
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.stroke();
+  });
+
+  ctx.restore();
+});
+
+// ─────────── 겹침 감지 ───────────
+function checkOverlap(c) {
+  var objs = c.getObjects();
+  var images = objs.filter(function(o) { return o.type === 'image'; });
+  var titles = objs.filter(function(o) { return o.__titlePart; });
+  var overlapping = false;
+
+  // 이미지끼리 겹침 체크
+  for (var i = 0; i < images.length; i++) {
+    for (var j = i + 1; j < images.length; j++) {
+      if (images[i].intersectsWithObject(images[j])) { overlapping = true; break; }
+    }
+    if (overlapping) break;
+    // 이미지와 타이틀 겹침 체크
+    for (var k = 0; k < titles.length; k++) {
+      if (titles[k].type === 'rect' && titles[k].stroke === '#d0d0d0') {
+        if (images[i].intersectsWithObject(titles[k])) { overlapping = true; break; }
+      }
+    }
+    if (overlapping) break;
+  }
+
+  // 경고 표시/숨기기
+  var warning = c.getElement().closest('.canvas-grid-cell');
+  if (warning) {
+    var w = warning.querySelector('.overlap-warning');
+    if (w) {
+      if (overlapping) {
+        w.classList.add('visible');
+      } else {
+        w.classList.remove('visible');
+      }
+    }
+  }
+}
+
+// ─────────── 오브젝트 이동/크기 범위 제한 ───────────
+function clampToCanvas(e) {
+  var obj = e.target;
+
+  // 타이틀 파트 → 그룹 전체가 경계 안에서만 이동
+  if (obj.__titlePart) {
+    var parts = obj.__titleParts;
+    if (!parts) return;
+    var mSide = CW * 0.06;
+    var mTop = CH * 0.06;
+    var mBot = CH * 0.06;
+
+    // obj의 이동량
+    var objLastL = (obj.__lastLeft != null) ? obj.__lastLeft : obj.left;
+    var objLastT = (obj.__lastTop != null) ? obj.__lastTop : obj.top;
+    var dx = obj.left - objLastL;
+    var dy = obj.top - objLastT;
+
+    // 먼저 다른 파트들도 dx,dy 만큼 이동
+    parts.forEach(function(p) {
+      if (p === obj) return;
+      p.set({ left: p.left + dx, top: p.top + dy });
+      p.setCoords();
+    });
+
+    // 전체 그룹 바운딩 계산
+    var minL = Infinity, minT = Infinity, maxR = -Infinity, maxB = -Infinity;
+    parts.forEach(function(p) {
+      var b = p.getBoundingRect();
+      if (b.left < minL) minL = b.left;
+      if (b.top < minT) minT = b.top;
+      if (b.left + b.width > maxR) maxR = b.left + b.width;
+      if (b.top + b.height > maxB) maxB = b.top + b.height;
+    });
+
+    // 경계 보정
+    var cx = 0, cy = 0;
+    if (minL < mSide) cx = mSide - minL;
+    if (maxR > CW - mSide) cx = (CW - mSide) - maxR;
+    if (minT < mTop) cy = mTop - minT;
+    if (maxB > CH - mBot) cy = (CH - mBot) - maxB;
+
+    // 보정 적용
+    if (cx !== 0 || cy !== 0) {
+      parts.forEach(function(p) {
+        p.set({ left: p.left + cx, top: p.top + cy });
+        p.setCoords();
+      });
+    }
+
+    // 위치 기록 갱신
+    parts.forEach(function(p) {
+      p.__lastLeft = p.left;
+      p.__lastTop = p.top;
+    });
+    checkOverlap(obj.canvas || canvas);
+    return;
+  }
+
+  // 이미지 → 동일한 비율로 경계 제한 + 겹침 체크
+  if (obj.type === 'image') {
+    var m = CW * 0.06;
+    var bound = obj.getBoundingRect();
+    if (bound.left < m) obj.set('left', obj.left - bound.left + m);
+    if (bound.top < m) obj.set('top', obj.top - bound.top + m);
+    if (bound.left + bound.width > CW - m) obj.set('left', obj.left - (bound.left + bound.width - CW + m));
+    if (bound.top + bound.height > CH - m) obj.set('top', obj.top - (bound.top + bound.height - CH + m));
+    checkOverlap(obj.canvas || canvas);
+  }
+}
+canvas.on('object:moving', clampToCanvas);
+canvas.on('object:scaling', clampToCanvas);
+canvas.on('object:rotating', clampToCanvas);
+canvas.on('object:moved', clampToCanvas);
+canvas.on('object:modified', clampToCanvas);
+
+// ─────────── 스티커 기본 템플릿 ───────────
+function addStickerTemplate() {
+  const padX = CW * 0.1;
+  const padY = CH * 0.09;
+  const badgeH = CH * 0.09;
+  const badgeW = CW * 0.22;
+  const badgeFontSize = Math.round(CH * 0.045);
+  const nameFontSize = Math.round(CH * 0.05);
+
+  // 회색 둥근 테두리
+  const borderPadX = CW * 0.02;
+  const borderPadY = CH * 0.015;
+  const borderW = badgeW + CW * 0.22 + padX + borderPadX;
+  const borderH = badgeH + borderPadY * 2;
+  const borderLeft = padX - borderPadX;
+  const borderTop = padY - borderPadY;
+
+  const border = new fabric.Rect({
+    left: borderLeft, top: borderTop,
+    width: borderW, height: borderH,
+    rx: borderH / 2, ry: borderH / 2,
+    fill: 'rgba(255,255,255,0.01)', stroke: '#d0d0d0', strokeWidth: 1.5,
+    selectable: true, evented: true, __titlePart: true,
+    hasControls: false, hasBorders: false,
+  });
+
+  // 노란색 둥근 뱃지 배경
+  const badgeBg = new fabric.Rect({
+    left: padX, top: padY,
+    width: badgeW, height: badgeH,
+    rx: badgeH / 2, ry: badgeH / 2,
+    fill: '#fff3c4', stroke: 'transparent', strokeWidth: 0,
+    selectable: false, evented: false, __titlePart: true,
+  });
+
+  // 뱃지 텍스트 (편집 가능)
+  const badgeText = new fabric.IText('0000', {
+    left: padX + badgeW / 2, top: padY + badgeH / 2,
+    originX: 'center', originY: 'center',
+    fontSize: badgeFontSize, fontFamily: 'Noto Sans KR', fontWeight: '700', fill: '#333',
+    __titlePart: true, __titleRole: 'badge',
+  });
+
+  // 이름입력 텍스트 (편집 가능)
+  const nameText = new fabric.IText('이름입력', {
+    left: padX + badgeW + CW * 0.03, top: padY + badgeH / 2,
+    originX: 'left', originY: 'center',
+    fontSize: nameFontSize, fontFamily: 'Noto Sans KR', fontWeight: '700', fill: '#222',
+    __titlePart: true, __titleRole: 'name',
+  });
+
+  // 연결된 오브젝트 배열
+  var titleParts = [border, badgeBg, badgeText, nameText];
+  titleParts.forEach(function(p) { p.__titleParts = titleParts; });
+
+  // 텍스트 변경 시 뱃지/테두리 크기 자동 조정
+  var _prevBadgeText = '0000';
+  var _prevNameText = '이름입력';
+
+  function resizeTitleParts() {
+    var gap = CW * 0.03;
+    var padH = CW * 0.04;
+    var mSide = CW * 0.04;
+    var maxAllowedW = CW - mSide * 2;
+
+    var textW = badgeText.getScaledWidth();
+    var newBadgeW = textW + padH;
+    var nameW = nameText.getScaledWidth();
+    var totalW = newBadgeW + gap + nameW + borderPadX * 2;
+
+    // 총 너비가 빨간 영역을 초과하면 텍스트 되돌리기
+    if (totalW > maxAllowedW) {
+      if (badgeText.isEditing) {
+        badgeText.text = _prevBadgeText;
+        badgeText.exitEditing();
+        badgeText.enterEditing();
+      }
+      if (nameText.isEditing) {
+        nameText.text = _prevNameText;
+        nameText.exitEditing();
+        nameText.enterEditing();
+      }
+      canvas.renderAll();
+      return;
+    }
+
+    _prevBadgeText = badgeText.text;
+    _prevNameText = nameText.text;
+
+    // 노란 뱃지 크기 조정
+    badgeBg.set({ width: newBadgeW, left: badgeText.left - newBadgeW / 2 });
+    badgeBg.setCoords();
+
+    // 이름입력 위치 조정
+    nameText.set({ left: badgeBg.left + newBadgeW + gap });
+    nameText.setCoords();
+
+    // 회색 테두리 크기 조정
+    nameW = nameText.getScaledWidth();
+    totalW = newBadgeW + gap + nameW + borderPadX * 2;
+    border.set({ width: totalW, left: badgeBg.left - borderPadX });
+    border.setCoords();
+
+    // 빨간 영역 안에서만 유지
+    var mTop = CH * 0.04, mBot = CH * 0.04;
+    var parts = [border, badgeBg, badgeText, nameText];
+    var minL = Infinity, minT = Infinity, maxR = -Infinity, maxB = -Infinity;
+    parts.forEach(function(p) {
+      var b = p.getBoundingRect();
+      if (b.left < minL) minL = b.left;
+      if (b.top < minT) minT = b.top;
+      if (b.left + b.width > maxR) maxR = b.left + b.width;
+      if (b.top + b.height > maxB) maxB = b.top + b.height;
+    });
+    var dx = 0, dy = 0;
+    if (minL < mSide) dx = mSide - minL;
+    if (maxR > CW - mSide) dx = (CW - mSide) - maxR;
+    if (minT < mTop) dy = mTop - minT;
+    if (maxB > CH - mBot) dy = (CH - mBot) - maxB;
+    if (dx !== 0 || dy !== 0) {
+      parts.forEach(function(p) {
+        p.set({ left: p.left + dx, top: p.top + dy });
+        p.setCoords();
+      });
+    }
+
+    canvas.renderAll();
+  }
+
+  badgeText.on('changed', resizeTitleParts);
+  badgeText.on('editing:exited', resizeTitleParts);
+  nameText.on('changed', resizeTitleParts);
+  nameText.on('editing:exited', resizeTitleParts);
+
+  canvas.add(border, badgeBg, badgeText, nameText);
+
+  // 초기 위치도 빨간 영역 안으로 제한
+  (function() {
+    var mSide = CW * 0.04, mTop = CH * 0.04, mBot = CH * 0.04;
+    var parts = [border, badgeBg, badgeText, nameText];
+    var minL = Infinity, maxR = -Infinity, minT = Infinity, maxB = -Infinity;
+    parts.forEach(function(p) {
+      var b = p.getBoundingRect();
+      if (b.left < minL) minL = b.left;
+      if (b.top < minT) minT = b.top;
+      if (b.left + b.width > maxR) maxR = b.left + b.width;
+      if (b.top + b.height > maxB) maxB = b.top + b.height;
+    });
+    var dx = 0, dy = 0;
+    if (maxR > CW - mSide) dx = (CW - mSide) - maxR;
+    if (minL + dx < mSide) dx = mSide - minL;
+    if (maxB > CH - mBot) dy = (CH - mBot) - maxB;
+    if (minT + dy < mTop) dy = mTop - minT;
+    if (dx !== 0 || dy !== 0) {
+      parts.forEach(function(p) { p.set({ left: p.left + dx, top: p.top + dy }); p.setCoords(); });
+    }
+  })();
+
+  // 타이틀 삭제 버튼 (HTML 오버레이)
+  var deleteBtn = document.createElement('button');
+  deleteBtn.innerHTML = '&times;';
+  deleteBtn.className = 'title-delete-btn';
+  deleteBtn.style.cssText = 'display:none;position:absolute;z-index:30;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,0.5);color:#fff;font-size:14px;cursor:pointer;line-height:1;padding:0;';
+  document.getElementById('canvas-outer').appendChild(deleteBtn);
+
+  var titleParts_ref = [border, badgeBg, badgeText, nameText];
+
+  // 마우스 호버 시 삭제 버튼 표시
+  canvas.on('mouse:over', function(e) {
+    if (e.target && e.target.__titlePart && e.target.__titleParts) {
+      var b = border.getBoundingRect();
+      var canvasEl = canvas.getElement();
+      var ratio = canvasEl.offsetWidth / CW;
+      deleteBtn.style.left = ((b.left + b.width) * ratio - 10) + 'px';
+      deleteBtn.style.top = (b.top * ratio - 10) + 'px';
+      deleteBtn.style.display = 'block';
+    }
+  });
+
+  canvas.on('mouse:out', function(e) {
+    if (e.target && e.target.__titlePart) {
+      setTimeout(function() { deleteBtn.style.display = 'none'; }, 1500);
+    }
+  });
+
+  deleteBtn.addEventListener('mouseenter', function() { deleteBtn.style.display = 'block'; });
+  deleteBtn.addEventListener('click', function() {
+    titleParts_ref.forEach(function(p) { canvas.remove(p); });
+    canvas.discardActiveObject();
+    canvas.renderAll();
+    deleteBtn.style.display = 'none';
+    deleteBtn.remove();
+  });
+
+  canvas.renderAll();
+}
+addStickerTemplate();
+
+// ─────────── 타이틀 색상 변경 ───────────
+(function() {
+  var btn = document.getElementById('btn-title-color');
+  var popup = document.getElementById('title-color-popup');
+  if (!btn || !popup) return;
+
+  btn.addEventListener('click', function() {
+    if (popup.classList.contains('visible')) {
+      popup.classList.remove('visible');
+      return;
+    }
+    var r = btn.getBoundingClientRect();
+    popup.style.top = (r.bottom + 8) + 'px';
+    popup.style.left = Math.max(8, r.left + r.width / 2 - 100) + 'px';
+    popup.classList.add('visible');
+  });
+
+  // 색상 클릭 시 모든 캔버스의 뱃지 배경색 변경
+  popup.addEventListener('click', function(e) {
+    var swatch = e.target.closest('.title-swatch');
+    if (!swatch) return;
+    var color = swatch.dataset.color;
+    // 스와치 active 토글
+    popup.querySelectorAll('.title-swatch').forEach(function(s) { s.classList.remove('active'); s.style.borderColor = 'transparent'; });
+    swatch.classList.add('active');
+    swatch.style.borderColor = '#222';
+    // 모든 캔버스의 그룹 내 뱃지 배경색 변경
+    var allC = [canvas].concat(allCanvases || []);
+    allC.forEach(function(c) {
+      if (!c || !c.getObjects) return;
+      c.getObjects().forEach(function(obj) {
+        if (obj.__titleGroup && obj._objects) {
+          obj._objects.forEach(function(child) {
+            if (child.type === 'rect' && child.fill !== 'transparent') {
+              child.set({ fill: color });
+            }
+          });
+        }
+        if (obj.type === 'rect' && obj.rx > 0 && obj.width < CW * 0.3 && obj.height < CH * 0.15 && obj.fill !== 'transparent') {
+          obj.set({ fill: color, stroke: 'transparent' });
+        }
+      });
+      c.renderAll();
+    });
+  });
+
+  // 팝업 바깥 클릭 시 닫기
+  document.addEventListener('click', function(e) {
+    if (!popup.contains(e.target) && !btn.contains(e.target)) {
+      popup.classList.remove('visible');
+    }
+  });
+})();
+
+// ─────────── 상단 바 예상작품/작업물 버튼 연결 ───────────
+var previewTopBtn = document.getElementById('btn-preview3d-top');
+if (previewTopBtn) previewTopBtn.addEventListener('click', function() {
+  document.getElementById('btn-preview3d').click();
+});
+var sendTopBtn = document.getElementById('btn-send-top');
+if (sendTopBtn) sendTopBtn.addEventListener('click', function() {
+  document.getElementById('btn-send').click();
+});
+
+// ─────────── 안내사항 토글 (이벤트 위임) ───────────
+document.body.addEventListener('click', function(e) {
+  var btn = e.target.closest('#btn-guide-info');
+  if (!btn) return;
+  var gs = document.getElementById('guide-section');
+  gs.classList.toggle('visible');
+  if (gs.classList.contains('visible')) {
+    setTimeout(function() { gs.scrollIntoView({ behavior: 'smooth' }); }, 50);
+  }
+});
+
+// ─────────── 누끼따기 툴팁 ───────────
+(function() {
+  var wrap = document.querySelector('.nukki-wrap');
+  var tt = document.getElementById('nukki-tooltip');
+  if (!wrap || !tt) return;
+  var hideTimer;
+  function show() {
+    clearTimeout(hideTimer);
+    var r = wrap.getBoundingClientRect();
+    tt.style.top = (r.bottom + 8) + 'px';
+    tt.style.left = Math.max(8, r.left + r.width / 2 - 110) + 'px';
+    tt.style.display = 'block';
+  }
+  function hide() { hideTimer = setTimeout(function() { tt.style.display = 'none'; }, 150); }
+  wrap.addEventListener('mouseenter', show);
+  wrap.addEventListener('mouseleave', hide);
+  tt.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+  tt.addEventListener('mouseleave', hide);
+})();
+
+// ─────────── 동적 캔버스 추가 ───────────
+let cellCounter = 1;
+const allCanvases = [canvas];
+
+function addStickerTemplateToCanvas(c) {
+  const w = CW, h = CH;
+  const padX = w * 0.1, padY = h * 0.09;
+  const badgeH = h * 0.09, badgeW = w * 0.22;
+
+  const borderPadX = w * 0.02, borderPadY = h * 0.015;
+  const borderW = badgeW + w * 0.22 + padX + borderPadX;
+  const borderH = badgeH + borderPadY * 2;
+  const borderLeft = padX - borderPadX;
+  const borderTop = padY - borderPadY;
+
+  const border = new fabric.Rect({
+    left: borderLeft, top: borderTop,
+    width: borderW, height: borderH,
+    rx: borderH / 2, ry: borderH / 2,
+    fill: 'rgba(255,255,255,0.01)', stroke: '#d0d0d0', strokeWidth: 1.5,
+    selectable: true, evented: true, __titlePart: true,
+    hasControls: false, hasBorders: false,
+  });
+  const badgeBg = new fabric.Rect({
+    left: padX, top: padY,
+    width: badgeW, height: badgeH,
+    rx: badgeH / 2, ry: badgeH / 2,
+    fill: '#fff3c4', stroke: 'transparent', strokeWidth: 0,
+    selectable: false, evented: false, __titlePart: true,
+  });
+  const badgeText = new fabric.IText('0000', {
+    left: padX + badgeW / 2, top: padY + badgeH / 2,
+    originX: 'center', originY: 'center',
+    fontSize: Math.round(h * 0.045), fontFamily: 'Noto Sans KR', fontWeight: '700', fill: '#333',
+    __titlePart: true, __titleRole: 'badge',
+  });
+  const nameText = new fabric.IText('이름입력', {
+    left: padX + badgeW + w * 0.03, top: padY + badgeH / 2,
+    originX: 'left', originY: 'center',
+    fontSize: Math.round(h * 0.05), fontFamily: 'Noto Sans KR', fontWeight: '700', fill: '#222',
+    __titlePart: true, __titleRole: 'name',
+  });
+
+  var titleParts = [border, badgeBg, badgeText, nameText];
+  titleParts.forEach(function(p) { p.__titleParts = titleParts; });
+
+  var _prevBT2 = '0000', _prevNT2 = '이름입력';
+  function resizeTitleParts2() {
+    var gap = w * 0.03;
+    var padH = w * 0.04;
+    var mSide = w * 0.04;
+    var maxAllowedW = w - mSide * 2;
+
+    var textW = badgeText.getScaledWidth();
+    var newBadgeW = textW + padH;
+    var nameW = nameText.getScaledWidth();
+    var totalW = newBadgeW + gap + nameW + borderPadX * 2;
+
+    if (totalW > maxAllowedW) {
+      if (badgeText.isEditing) { badgeText.text = _prevBT2; badgeText.exitEditing(); badgeText.enterEditing(); }
+      if (nameText.isEditing) { nameText.text = _prevNT2; nameText.exitEditing(); nameText.enterEditing(); }
+      c.renderAll();
+      return;
+    }
+    _prevBT2 = badgeText.text;
+    _prevNT2 = nameText.text;
+
+    badgeBg.set({ width: newBadgeW, left: badgeText.left - newBadgeW / 2 });
+    badgeBg.setCoords();
+    nameText.set({ left: badgeBg.left + newBadgeW + gap });
+    nameText.setCoords();
+    nameW = nameText.getScaledWidth();
+    totalW = newBadgeW + gap + nameW + borderPadX * 2;
+    border.set({ width: totalW, left: badgeBg.left - borderPadX });
+    border.setCoords();
+
+    var mTop = h * 0.04, mBot = h * 0.04;
+    var parts = [border, badgeBg, badgeText, nameText];
+    var minL = Infinity, minT = Infinity, maxR = -Infinity, maxB = -Infinity;
+    parts.forEach(function(p) {
+      var b = p.getBoundingRect();
+      if (b.left < minL) minL = b.left;
+      if (b.top < minT) minT = b.top;
+      if (b.left + b.width > maxR) maxR = b.left + b.width;
+      if (b.top + b.height > maxB) maxB = b.top + b.height;
+    });
+    var dx = 0, dy = 0;
+    if (minL < mSide) dx = mSide - minL;
+    if (maxR > w - mSide) dx = (w - mSide) - maxR;
+    if (minT < mTop) dy = mTop - minT;
+    if (maxB > h - mBot) dy = (h - mBot) - maxB;
+    if (dx !== 0 || dy !== 0) {
+      parts.forEach(function(p) {
+        p.set({ left: p.left + dx, top: p.top + dy });
+        p.setCoords();
+      });
+    }
+    c.renderAll();
+  }
+  badgeText.on('changed', resizeTitleParts2);
+  badgeText.on('editing:exited', resizeTitleParts2);
+  nameText.on('changed', resizeTitleParts2);
+  nameText.on('editing:exited', resizeTitleParts2);
+
+  c.add(border, badgeBg, badgeText, nameText);
+
+  [badgeText, nameText].forEach(function(t) {
+    t.__lastLeft = t.left;
+    t.__lastTop = t.top;
+  });
+
+  c.on('object:moving', function(e) {
+    var obj = e.target;
+    if (!obj.__titlePart || !obj.__titleParts) return;
+    var dx = obj.left - obj.__lastLeft;
+    var dy = obj.top - obj.__lastTop;
+    obj.__titleParts.forEach(function(p) {
+      if (p === obj) return;
+      p.set({ left: p.left + dx, top: p.top + dy });
+      p.setCoords();
+    });
+    obj.__lastLeft = obj.left;
+    obj.__lastTop = obj.top;
+  });
+
+  c.on('mouse:down', function(e) {
+    if (e.target && e.target.__titlePart) {
+      e.target.__lastLeft = e.target.left;
+      e.target.__lastTop = e.target.top;
+    }
+    if (e.target && e.target.type === 'i-text' && !e.target.isEditing) {
+      e.target.enterEditing();
+      e.target.selectAll();
+    }
+  });
+
+  c.renderAll();
+}
+
+function deleteCell(btn) {
+  const cell = btn.closest('.canvas-grid-cell');
+  if (!cell) return;
+  // 최소 1개는 유지
+  const cells = document.querySelectorAll('.canvas-grid-cell');
+  if (cells.length <= 1) { alert('최소 1개의 스티커는 남겨야 합니다.'); return; }
+  cell.remove();
+}
+
+document.getElementById('add-cell-btn').addEventListener('click', function() {
+  cellCounter++;
+  const canvasId = 'c_' + cellCounter;
+
+  const cell = document.createElement('div');
+  cell.className = 'canvas-grid-cell';
+  cell.dataset.cell = cellCounter - 1;
+
+  cell.innerHTML =
+    '<div class="overlap-warning">\u26A0 이미지가 겹쳐있어요! 스티커 간 간격을 띄워주세요.</div>' +
+    '<button class="cell-delete-btn" title="삭제">&times;</button>' +
+    '<div class="canvas-outer">' +
+      '<canvas id="' + canvasId + '"></canvas>' +
+      '<div class="cell-dropzone" data-target="' + canvasId + '">' +
+        '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>' +
+        '<span class="dz-main">이미지를 드래그 하거나 클릭하여 업로드 하세요</span>' +
+        '<span class="dz-sub">JPG, PNG</span>' +
+      '</div>' +
+    '</div>';
+
+  // 삭제 버튼 이벤트
+  cell.querySelector('.cell-delete-btn').addEventListener('click', function() { deleteCell(this); });
+
+  const addBtn = document.getElementById('add-cell-btn');
+  addBtn.parentNode.insertBefore(cell, addBtn);
+
+  const newCanvas = new fabric.Canvas(canvasId, {
+    width: CW, height: CH, backgroundColor: '#ffffff', preserveObjectStacking: true,
+  });
+  // 빈 공간 클릭 시 이미지 업로드
+  newCanvas.on('mouse:down', function(ev) {
+    if (ev.target && ev.target.type === 'i-text' && !ev.target.isEditing) {
+      ev.target.enterEditing();
+      ev.target.selectAll();
+    }
+    if (!ev.target) {
+      var inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/jpeg,image/png,image/webp';
+      inp.onchange = function() {
+        var file = inp.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          fabric.Image.fromURL(e.target.result, function(img) {
+            var scale = Math.min(CW / img.width, CH / img.height);
+            img.scale(scale);
+            img.set({ left: (CW - img.getScaledWidth()) / 2, top: (CH - img.getScaledHeight()) / 2 });
+            newCanvas.add(img);
+            newCanvas.setActiveObject(img);
+            newCanvas.renderAll();
+            var dz = cell.querySelector('.cell-dropzone');
+            if (dz) dz.classList.add('hidden');
+          });
+        };
+        reader.readAsDataURL(file);
+      };
+      inp.click();
+    }
+  });
+  // 이동/크기 범위 제한
+  function clampNew(ev) { clampToCanvas(ev); }
+  newCanvas.on('object:moving', clampNew);
+  newCanvas.on('object:scaling', clampNew);
+  newCanvas.on('object:rotating', clampNew);
+  addStickerTemplateToCanvas(newCanvas);
+  allCanvases.push(newCanvas);
+
+  // 드롭존 클릭 → 해당 캔버스에 이미지 추가
+  var dz = cell.querySelector('.cell-dropzone');
+  if (dz) {
+    dz.addEventListener('click', function() {
+      var inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/jpeg,image/png,image/webp';
+      inp.onchange = function() {
+        var file = inp.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(evt) {
+          fabric.Image.fromURL(evt.target.result, function(img) {
+            var scale = Math.min(CW / img.width, CH / img.height);
+            img.scale(scale);
+            img.set({ left: (CW - img.getScaledWidth()) / 2, top: (CH - img.getScaledHeight()) / 2 });
+            newCanvas.add(img);
+            newCanvas.setActiveObject(img);
+            newCanvas.renderAll();
+            dz.classList.add('hidden');
+          });
+        };
+        reader.readAsDataURL(file);
+      };
+      inp.click();
+    });
+  }
+});
 
 // ─────────── 히스토리 ───────────
 let hist = [], hIdx = -1, inHist = false;
@@ -2134,7 +3257,8 @@ canvas.on('object:added',    e => { if (!e.target.__guide) { snap(); syncBleedUI
 canvas.on('object:modified', snap);
 canvas.on('object:removed',  e => { if (!e.target.__guide) { snap(); syncBleedUI(); } });
 
-document.getElementById('wrap-hint-close').addEventListener('click', () => {
+var wrapHintClose = document.getElementById('wrap-hint-close');
+if (wrapHintClose) wrapHintClose.addEventListener('click', () => {
   document.getElementById('wrap-hint').style.display = 'none';
 });
 
@@ -2150,13 +3274,15 @@ function syncSelBtns(on) {
   document.getElementById('btn-remove-bg').disabled = !isSingleImage;
 }
 function showSelHint() {
+  var el = document.getElementById('sel-hint');
+  if (!el) return;
   const obj = canvas.getActiveObject();
   const visible = obj && !obj.__guide && obj.type !== 'i-text';
-  document.getElementById('sel-hint').style.display = visible ? 'block' : 'none';
+  el.style.display = visible ? 'block' : 'none';
 }
 canvas.on('selection:created', () => { syncSelBtns(true);  showSelHint(); });
 canvas.on('selection:updated', () => { syncSelBtns(true);  showSelHint(); });
-canvas.on('selection:cleared', () => { syncSelBtns(false); document.getElementById('sel-hint').style.display = 'none'; });
+canvas.on('selection:cleared', () => { syncSelBtns(false); var el = document.getElementById('sel-hint'); if (el) el.style.display = 'none'; });
 
 // ─────────── Delete / Backspace 키로 오브젝트 삭제 ───────────
 document.addEventListener('keydown', function(e) {
@@ -2169,7 +3295,18 @@ document.addEventListener('keydown', function(e) {
   if (!activeObj) return;
   if (activeObj.type === 'i-text' && activeObj.isEditing) return;
   e.preventDefault();
-  canvas.getActiveObjects().forEach(function(o) { canvas.remove(o); });
+  // 타이틀 파트를 삭제하면 연결된 전체 그룹 삭제
+  var toRemove = [];
+  canvas.getActiveObjects().forEach(function(o) {
+    if (o.__titleParts) {
+      o.__titleParts.forEach(function(p) {
+        if (toRemove.indexOf(p) === -1) toRemove.push(p);
+      });
+    } else {
+      if (toRemove.indexOf(o) === -1) toRemove.push(o);
+    }
+  });
+  toRemove.forEach(function(o) { canvas.remove(o); });
   canvas.discardActiveObject();
   canvas.renderAll();
 });
@@ -2523,57 +3660,6 @@ imgWrap.addEventListener('mouseenter', () => {
 
 document.getElementById('close-img').addEventListener('click', () => closePanel('panel-img'));
 
-// ─────────── 캔버스 배경색 선택 ───────────
-(function() {
-  const wrap    = document.getElementById('canvas-color-wrap');
-  const popup   = document.getElementById('canvas-color-popup');
-  const dot     = document.getElementById('canvas-color-dot');
-  let hideTimer = null;
-
-  function showPopup() {
-    clearTimeout(hideTimer);
-    const rect = wrap.getBoundingClientRect();
-    popup.style.top  = (rect.bottom + 6) + 'px';
-    popup.style.left = '0px';
-    popup.style.visibility = 'hidden';
-    popup.classList.add('visible');
-    const popupW = popup.offsetWidth;
-    popup.classList.remove('visible');
-    popup.style.visibility = '';
-    const left = rect.left + rect.width / 2 - popupW / 2;
-    popup.style.top  = (rect.bottom + 6) + 'px';
-    popup.style.left = Math.min(Math.max(4, left), window.innerWidth - popupW - 8) + 'px';
-    popup.classList.add('visible');
-  }
-  function hidePopup() {
-    hideTimer = setTimeout(() => popup.classList.remove('visible'), 120);
-  }
-
-  wrap.addEventListener('mouseenter', showPopup);
-  wrap.addEventListener('mouseleave', hidePopup);
-  popup.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-  popup.addEventListener('mouseleave', hidePopup);
-
-  document.querySelectorAll('.color-swatch').forEach(swatch => {
-    swatch.addEventListener('click', function(e) {
-      e.stopPropagation();
-      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
-      this.classList.add('selected');
-      const color = this.dataset.color;
-      const inner = document.getElementById('canvas-color-inner');
-      if (color === 'none') {
-        canvas.backgroundColor = '#ffffff';
-        inner.setAttribute('fill', '#FFFFFF');
-      } else {
-        canvas.backgroundColor = color;
-        inner.setAttribute('fill', color);
-      }
-      canvas.renderAll();
-      snap();
-      setTimeout(() => popup.classList.remove('visible'), 200);
-    });
-  });
-})();
 
 // ─────────── 우측 사이드바 사이즈 선택 ───────────
 document.querySelectorAll('.size-option').forEach(opt => {
@@ -2812,7 +3898,7 @@ function checkMinimumResolution(file) {
     img.onload = () => {
       URL.revokeObjectURL(url);
       const minSide = Math.min(img.width, img.height);
-      if (minSide < 500) {
+      if (minSide < 100) {
         const modal = document.getElementById('res-error-modal');
         document.getElementById('res-error-msg').innerHTML =
           `현재 이미지 크기: <strong>${img.width}×${img.height}px</strong><br>` +
@@ -2834,28 +3920,32 @@ document.getElementById('res-error-ok').addEventListener('click', () => {
 
 // ── 이미지 파일 처리 공용 함수 (file-input + 드롭존 공유) ──
 async function processImageFile(file) {
+  console.log('[IMG] processImageFile 호출됨', file?.name, file?.size);
   if (!file || !file.type.match(/^image\/(jpeg|png|webp)$/)) {
     alert('JPG 또는 PNG 파일만 업로드할 수 있습니다.'); return;
   }
   if (file.size > 10 * 1024 * 1024) {
     alert('파일 크기가 10MB를 초과합니다.\n더 작은 이미지를 사용해주세요.'); return;
   }
+  console.log('[IMG] 해상도 검증 시작');
   const allowed = await checkMinimumResolution(file);
+  console.log('[IMG] 해상도 검증 결과:', allowed);
   if (!allowed) return;
 
+  console.log('[IMG] FileReader 시작');
   const reader = new FileReader();
   reader.onload = evt => {
     fabric.Image.fromURL(evt.target.result, img => {
-      const scale = Math.min(CW / img.width, CH / img.height);
+      const scale = Math.min(CW / img.width, CH / img.height) * 0.6;
       img.scale(scale);
       img.set({
-        left: (CW - img.getScaledWidth())  / 2,
+        left: (CW - img.getScaledWidth()) / 2,
         top:  (CH - img.getScaledHeight()) / 2,
       });
       canvas.add(img);
       canvas.setActiveObject(img);
       canvas.renderAll();
-      closePanel('panel-img');
+      checkOverlap(canvas);
     });
   };
   reader.readAsDataURL(file);
@@ -2870,8 +3960,9 @@ document.getElementById('file-input').addEventListener('change', async function 
 const dropzone = document.getElementById('canvas-dropzone');
 
 function updateDropzone() {
-  const hasContent = canvas.getObjects().some(o => !o.__guide);
-  dropzone.classList.toggle('hidden', hasContent);
+  // 실제 이미지가 있으면 드롭존 텍스트 숨기기 (타이틀/테두리 제외)
+  const hasImage = canvas.getObjects().some(o => o.type === 'image');
+  dropzone.classList.toggle('hidden', hasImage);
 }
 
 // 캔버스 변경 시 드롭존 업데이트
@@ -4080,7 +5171,7 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
     // 변환된 이미지를 캔버스에 새 레이어로 추가
     const dataUrl = 'data:image/png;base64,' + result.imageData;
     fabric.Image.fromURL(dataUrl, img => {
-      const scale = Math.min(CW / img.width, CH / img.height);
+      const scale = Math.min(CW / img.width, CH / img.height) * 0.6;
       img.scale(scale);
       img.set({
         left: (CW - img.getScaledWidth())  / 2,
@@ -4399,6 +5490,7 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
   document.getElementById('btn-ai-guide').addEventListener('click', () => {
     openPanel('panel-ai-guide');
   });
+
   document.getElementById('close-ai-guide').addEventListener('click', () => {
     closePanel('panel-ai-guide');
   });
@@ -4427,6 +5519,7 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
 <script>
 // ─────────── 스포이드(배경 채우기) ───────────
 (function() {
+  const canvasOuter = document.getElementById('canvas-outer');
   const btn     = document.getElementById('btn-eyedropper');
   const preview = document.getElementById('eyedropper-preview');
   const hint    = document.getElementById('eyedropper-hint');
