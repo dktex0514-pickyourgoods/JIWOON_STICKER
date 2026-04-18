@@ -4,8 +4,9 @@
     {
       "name": "pickyourgoodz",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "-p", "3388", "."],
-      "port": 3388
+      "runtimeArgs": ["serve", "."],
+      "port": 3388,
+      "autoPort": true
     }
   ]
 }

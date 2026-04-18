@@ -867,7 +867,7 @@
       min-width: 290px;
       border-left: 1px solid #e0e0e0;
       background: #fff;
-      display: none;
+      display: flex;
       flex-direction: column;
       padding: 24px 20px 24px;
       overflow-y: auto;
@@ -922,6 +922,33 @@
       background: #fff3cd; color: #856404;
       border: 1px solid #ffc107;
     }
+
+    /* ── 사이드바 드롭다운 ── */
+    .select-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .select-sub-label {
+      flex: 0 0 34px;
+      font-size: 12px; color: #888; font-weight: 600;
+    }
+    .sidebar-select {
+      flex: 1;
+      height: 38px;
+      padding: 0 32px 0 12px;
+      border: 1.5px solid #e0e0e0; border-radius: 8px;
+      background: #fff;
+      font-size: 13px; font-weight: 600; color: #222;
+      font-family: inherit;
+      cursor: pointer;
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23666' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><polyline points='2,4.5 6,8.5 10,4.5'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px 12px;
+      transition: border-color 0.15s;
+    }
+    .sidebar-select:hover { border-color: #aaa; }
+    .sidebar-select:focus { outline: none; border-color: #222; }
 
     .sidebar-bottom { margin-top: auto; padding-top: 20px; }
 
@@ -1624,6 +1651,9 @@
     }
     .cell-qty-btn:hover { background: #f0f0f0; border-color: #bbb; }
     .cell-qty-btn:disabled { color: #ccc; cursor: default; background: #fafafa; border-color: #eee; }
+    /* 10매 도달 시 + 버튼 상태 — 회색 힌트지만 클릭 가능 (팝업 표시용) */
+    .cell-qty-btn.maxed { color: #bbb; background: #fafafa; border-color: #eee; }
+    .cell-qty-btn.maxed:hover { background: #f5f5f5; border-color: #ddd; }
     .cell-qty-val {
       font-size: 14px;
       font-weight: 700;
@@ -2138,28 +2168,31 @@
   <div class="right-sidebar" id="right-sidebar">
 
     <div class="sidebar-product-info">
-      <div class="product-tag">카카오 스티커</div>
-      <div class="product-title" id="product-title">정사각형 (360 × 360 px)</div>
+      <div class="product-tag">스티커</div>
+      <div class="product-title" id="product-title">정사각형 S (38 × 38 mm)</div>
     </div>
 
     <div class="sidebar-label">사이즈</div>
-    <div class="size-option-list">
+    <div class="select-row">
+      <label class="select-sub-label">종류</label>
+      <select class="sidebar-select" id="category-select">
+        <option value="square">정사각형</option>
+        <option value="rect">직사각형</option>
+      </select>
+    </div>
+    <div class="select-row" style="margin-top:10px;">
+      <label class="select-sub-label">크기</label>
+      <select class="sidebar-select" id="size-select"></select>
+    </div>
 
-      <div class="size-cat-label">정사각형</div>
-
-      <div class="size-option selected" data-w="9.53" data-h="9.53" data-scale="0.85" data-name="정사각형 (360 × 360 px)">
-        <span class="size-opt-info"><span class="size-opt-name">360 × 360 px</span><span class="size-opt-dim">9.53 × 9.53 cm</span></span>
-      </div>
-      <div class="size-option" data-w="13.23" data-h="13.23" data-scale="0.95" data-name="정사각형 (500 × 500 px)">
-        <span class="size-opt-info"><span class="size-opt-name">500 × 500 px</span><span class="size-opt-dim">13.23 × 13.23 cm</span></span>
-      </div>
-      <div class="size-option" data-w="16.93" data-h="16.93" data-scale="1.0" data-name="정사각형 (640 × 640 px)">
-        <span class="size-opt-info"><span class="size-opt-name">640 × 640 px</span><span class="size-opt-dim">16.93 × 16.93 cm</span></span>
-      </div>
-      <div class="size-option" data-w="27.09" data-h="27.09" data-scale="1.1" data-name="정사각형 (1024 × 1024 px)">
-        <span class="size-opt-info"><span class="size-opt-name">1024 × 1024 px</span><span class="size-opt-dim">27.09 × 27.09 cm</span></span>
-      </div>
-
+    <div class="sidebar-label" style="margin-top:22px;">모양</div>
+    <div class="select-row">
+      <select class="sidebar-select" id="shape-select">
+        <option value="none" selected>없음</option>
+        <option value="circle">원형</option>
+        <option value="heart">하트</option>
+        <option value="star">별</option>
+      </select>
     </div>
 
     <div class="sidebar-bottom">
@@ -2587,6 +2620,26 @@
   </div>
 </div>
 
+<!-- ════════════ 수량 제한 팝업 ════════════ -->
+<div id="qty-limit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.22);text-align:center;">
+    <div style="display:flex;justify-content:center;margin-bottom:12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m7.5 4.27 9 5.15"/>
+        <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+        <path d="M3.3 7 12 12l8.7-5"/>
+        <path d="M12 22V12"/>
+      </svg>
+    </div>
+    <div style="font-size:16px;font-weight:700;color:#222;margin-bottom:12px;">10매까지만 담을 수 있어요</div>
+    <div style="font-size:13px;color:#555;line-height:1.75;margin-bottom:22px;">
+      스티커는 <b style="color:#222;">10매 1세트</b>로 구성되어 있어요.<br>
+      더 많은 수량이 필요하시면 주문을 마친 후<br>추가로 주문해주세요.
+    </div>
+    <button id="qty-limit-ok" style="background:#222;color:#fff;border:none;border-radius:8px;padding:10px 32px;font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">확인</button>
+  </div>
+</div>
+
 <!-- file-input: 스크립트보다 먼저 위치해야 JS에서 참조 가능 -->
 <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display:none">
 
@@ -2618,7 +2671,25 @@ let CW = 500;
 let CH = 500;
 
 // 현재 선택된 사이즈 (cm)
-let currentSizeW = 9.53, currentSizeH = 9.53;
+let currentSizeW = 3.8, currentSizeH = 3.8;
+
+// 현재 선택된 모양 ('none' | 'circle' | 'heart' | 'star')
+let currentShape = 'none';
+
+// 사이즈 데이터 (카테고리별)
+const SIZE_DATA = {
+  square: [
+    { key: '톨',   w: 3.8, h: 3.8, scale: 0.6, dim: '38 × 38 mm' },
+    { key: '그란데', w: 5.0, h: 5.0, scale: 0.8, dim: '50 × 50 mm' },
+    { key: '벤티',  w: 7.0, h: 7.0, scale: 1.0, dim: '70 × 70 mm' },
+  ],
+  rect: [
+    { key: '톨',   w: 3.0, h: 4.0, scale: 0.6, dim: '30 × 40 mm' },
+    { key: '그란데', w: 3.8, h: 5.0, scale: 0.8, dim: '38 × 50 mm' },
+    { key: '벤티',  w: 5.4, h: 8.6, scale: 1.0, dim: '54 × 86 mm' },
+  ],
+};
+const CATEGORY_LABEL = { square: '정사각형', rect: '직사각형' };
 
 function resizeCanvas(wCm, hCm, scale) {
   scale = scale || 1.0;
@@ -2764,8 +2835,59 @@ canvas.on('selection:cleared', () => { document.getElementById('rot-shift-tip').
 // ─────────── 가이드 선 ───────────
 function drawGuides() {
   canvas.getObjects().filter(o => o.__guide).forEach(o => canvas.remove(o));
-  // 스티커 모드: 블리드 가이드 없음
+  drawShapeCutLine();
   canvas.renderAll();
+}
+
+// ── 모양에 맞춰 칼선(재단선) 그리기 ──
+function drawShapeCutLine() {
+  if (currentShape === 'none') return;
+  const pad = 10;
+  const w = CW - pad * 2;
+  const h = CH - pad * 2;
+  const commonProps = {
+    fill: 'transparent',
+    stroke: '#ff4d4d',
+    strokeWidth: 1.8,
+    strokeDashArray: [6, 4],
+    strokeUniform: true,
+    selectable: false,
+    evented: false,
+    hoverCursor: 'default',
+    objectCaching: false,
+    originX: 'left',
+    originY: 'top',
+  };
+  let obj;
+  if (currentShape === 'circle') {
+    obj = new fabric.Ellipse({
+      rx: w / 2, ry: h / 2,
+      ...commonProps,
+    });
+  } else if (currentShape === 'heart') {
+    // 하트 패스 (바운딩 박스: x 8..92 = 너비 84, y 8..88 = 높이 80)
+    const hp = 'M 50 88 C 50 88 8 58 8 30 C 8 16 19 8 30 8 C 40 8 47 16 50 22 C 53 16 60 8 70 8 C 81 8 92 16 92 30 C 92 58 50 88 50 88 Z';
+    obj = new fabric.Path(hp, commonProps);
+    const pathW = 84, pathH = 80;
+    const s = Math.min(w / pathW, h / pathH);
+    obj.set({ scaleX: s, scaleY: s });
+  } else if (currentShape === 'star') {
+    // 5각 별 (0,0 기준, fabric.Polygon이 바운딩 박스를 자동 계산)
+    const outerR = Math.min(w, h) / 2;
+    const innerR = outerR * 0.42;
+    const pts = [];
+    for (let i = 0; i < 10; i++) {
+      const r = (i % 2 === 0) ? outerR : innerR;
+      const a = -Math.PI / 2 + i * Math.PI / 5;
+      pts.push({ x: Math.cos(a) * r, y: Math.sin(a) * r });
+    }
+    obj = new fabric.Polygon(pts, commonProps);
+  }
+  obj.__guide = true;
+  canvas.add(obj);
+  canvas.centerObject(obj);
+  obj.setCoords();
+  canvas.sendToBack(obj);
 }
 
 function bringGuidesToFront() {
@@ -4030,21 +4152,52 @@ imgWrap.addEventListener('mouseenter', () => {
 document.getElementById('close-img').addEventListener('click', () => closePanel('panel-img'));
 
 
-// ─────────── 우측 사이드바 사이즈 선택 ───────────
-document.querySelectorAll('.size-option').forEach(opt => {
-  opt.addEventListener('click', function() {
-    document.querySelectorAll('.size-option').forEach(o => o.classList.remove('selected'));
-    this.classList.add('selected');
-    document.getElementById('product-title').textContent = this.dataset.name;
-    resizeCanvas(parseFloat(this.dataset.w), parseFloat(this.dataset.h), parseFloat(this.dataset.scale || 1));
+// ─────────── 우측 사이드바 드롭다운 (종류/크기/모양) ───────────
+(function initSidebarDropdowns() {
+  const catSel   = document.getElementById('category-select');
+  const sizeSel  = document.getElementById('size-select');
+  const shapeSel = document.getElementById('shape-select');
+  const titleEl  = document.getElementById('product-title');
+
+  function rebuildSizeOptions(category, preserveKey) {
+    const list = SIZE_DATA[category] || [];
+    sizeSel.innerHTML = '';
+    list.forEach(function(item) {
+      const opt = document.createElement('option');
+      opt.value = item.key;
+      opt.textContent = item.key + ' (' + item.dim + ')';
+      opt.dataset.w = item.w;
+      opt.dataset.h = item.h;
+      opt.dataset.scale = item.scale;
+      sizeSel.appendChild(opt);
+    });
+    if (preserveKey && list.some(function(i){ return i.key === preserveKey; })) {
+      sizeSel.value = preserveKey;
+    }
+  }
+
+  function applySelection() {
+    const cat  = catSel.value;
+    const item = (SIZE_DATA[cat] || []).find(function(i){ return i.key === sizeSel.value; });
+    if (!item) return;
+    titleEl.textContent = CATEGORY_LABEL[cat] + ' ' + item.key + ' (' + item.dim + ')';
+    resizeCanvas(item.w, item.h, item.scale);
+  }
+
+  catSel.addEventListener('change', function() {
+    rebuildSizeOptions(catSel.value, sizeSel.value);
+    applySelection();
   });
-  opt.addEventListener('mouseenter', function() {
-    showSizePopup(parseFloat(this.dataset.w), parseFloat(this.dataset.h), this.dataset.name);
+  sizeSel.addEventListener('change', applySelection);
+  shapeSel.addEventListener('change', function() {
+    currentShape = shapeSel.value;
+    drawGuides();
   });
-  opt.addEventListener('mouseleave', function() {
-    closeSizePopup();
-  });
-});
+
+  // 초기 로드
+  rebuildSizeOptions(catSel.value);
+  applySelection();
+})();
 
 // ─────────── 사이즈 비교 팝업 ───────────
 function showSizePopup(wCm, hCm, name) {
@@ -6233,8 +6386,11 @@ function cellQtyUpdateAll() {
   var total = cellQtyGetTotal();
   var tqEl = document.getElementById('tq-count');
   if (tqEl) tqEl.textContent = total;
+  // + 버튼: 10매 도달 시 maxed 클래스로 시각적 힌트만, 클릭은 허용 (팝업 표시용)
   document.querySelectorAll('.cell-qty-btn[data-dir="1"]').forEach(function(btn) {
-    btn.disabled = total >= 10;
+    btn.disabled = false;
+    if (total >= 10) btn.classList.add('maxed');
+    else btn.classList.remove('maxed');
   });
   document.querySelectorAll('.cell-qty-btn[data-dir="-1"]').forEach(function(btn) {
     var wrap = btn.closest('.cell-qty-wrap');
@@ -6243,18 +6399,34 @@ function cellQtyUpdateAll() {
   });
 }
 
+function showQtyLimitPopup() {
+  document.getElementById('qty-limit-modal').style.display = 'flex';
+}
+function closeQtyLimitPopup() {
+  document.getElementById('qty-limit-modal').style.display = 'none';
+}
+
 function cellQtyChange(btn, dir) {
   if (btn.disabled) return;
   var wrap = btn.closest('.cell-qty-wrap');
   var valEl = wrap.querySelector('.cell-qty-val');
   var qty = parseInt(valEl.dataset.qty) || 1;
   var newQty = qty + dir;
-  if (newQty < 1 || newQty > 10) return;
-  if (dir > 0 && cellQtyGetTotal() >= 10) return;
+  if (newQty < 1) return;
+  if (dir > 0 && cellQtyGetTotal() >= 10) {
+    showQtyLimitPopup();
+    return;
+  }
   valEl.dataset.qty = newQty;
   valEl.textContent = newQty + '매';
   cellQtyUpdateAll();
 }
+
+// 팝업 닫기 핸들러
+document.getElementById('qty-limit-ok').addEventListener('click', closeQtyLimitPopup);
+document.getElementById('qty-limit-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeQtyLimitPopup();
+});
 
 (function() {
 
