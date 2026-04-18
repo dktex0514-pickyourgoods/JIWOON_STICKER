@@ -2147,7 +2147,7 @@
 
     <div class="sidebar-product-info">
       <div class="product-tag">스티커</div>
-      <div class="product-title" id="product-title">톨 (38 × 38 mm)</div>
+      <div class="product-title" id="product-title">미니 (38 × 38 mm)</div>
     </div>
 
     <div class="sidebar-label">사이즈</div>
@@ -2581,6 +2581,26 @@
   </div>
 </div>
 
+<!-- ════════════ 겹침 경고 팝업 (작업물 보내기 차단) ════════════ -->
+<div id="overlap-block-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.22);text-align:center;">
+    <div style="display:flex;justify-content:center;margin-bottom:12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4535a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+        <path d="M12 9v4"/>
+        <path d="M12 17h.01"/>
+      </svg>
+    </div>
+    <div style="font-size:16px;font-weight:700;color:#222;margin-bottom:12px;">스티커 간격을 조금 띄워주세요</div>
+    <div style="font-size:13px;color:#555;line-height:1.75;margin-bottom:22px;">
+      <b style="color:#d4535a;">빨간 칼선이 겹치는 스티커</b>가 있어요.<br>
+      재단 과정에서 스티커가 손상될 수 있으니<br>
+      간격을 조금 더 띄워주신 후 보내주세요.
+    </div>
+    <button id="overlap-block-ok" onclick="document.getElementById('overlap-block-modal').style.display='none'" style="background:#222;color:#fff;border:none;border-radius:8px;padding:10px 32px;font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;">확인했어요</button>
+  </div>
+</div>
+
 <!-- ════════════ 수량 제한 팝업 ════════════ -->
 <div id="qty-limit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.22);text-align:center;">
@@ -2636,7 +2656,7 @@ let currentSizeW = 3.8, currentSizeH = 3.8;
 
 // 사이즈 데이터
 const SIZES = [
-  { key: '톨',   w: 3.8, h: 3.8, scale: 0.6, dim: '38 × 38 mm' },
+  { key: '미니',  w: 3.8, h: 3.8, scale: 0.6, dim: '38 × 38 mm' },
   { key: '그란데', w: 3.8, h: 5.0, scale: 0.8, dim: '38 × 50 mm' },
   { key: '벤티',  w: 5.4, h: 8.6, scale: 1.0, dim: '54 × 86 mm' },
 ];
@@ -2969,9 +2989,9 @@ function checkOverlap(c) {
   var borders = objs.filter(function(o) { return o.__titlePart && o.__titleRole === 'border'; });
   var overlapping = false;
 
-  // 캔버스 너비의 4% 여유로 부풀려 검사 (근처만 가도 경고 트리거)
+  // 빨간 칼선 offset(2%)과 동일한 padding — 칼선이 겹칠 때만 경고
   var canvasW = c.getWidth() || CW;
-  var PAD = Math.max(8, canvasW * 0.04);
+  var PAD = Math.max(4, canvasW * 0.02);
   function pb(o) {
     var b = o.getBoundingRect();
     return { l: b.left - PAD, t: b.top - PAD, r: b.left + b.width + PAD, b: b.top + b.height + PAD };
@@ -3082,6 +3102,71 @@ canvas.on('object:scaling', clampToCanvas);
 canvas.on('object:rotating', clampToCanvas);
 canvas.on('object:moved', clampToCanvas);
 canvas.on('object:modified', clampToCanvas);
+
+// ─────────── 키보드 Delete/Backspace로 선택 이미지 삭제 ───────────
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Delete' && e.key !== 'Backspace') return;
+  // 입력 필드 포커스 시 무시
+  var tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
+  // 텍스트 편집 중이면 무시
+  for (var i = 0; i < allCanvases.length; i++) {
+    var c = allCanvases[i];
+    var active = c.getActiveObject();
+    if (!active) continue;
+    if (active.isEditing) return; // i-text 편집 중
+    if (active.__titlePart || active.__guide) continue; // 타이틀/가이드는 키보드 삭제 금지
+    if (active.type === 'image' || active.type === 'i-text') {
+      c.remove(active);
+      c.discardActiveObject();
+      c.renderAll();
+      e.preventDefault();
+      return;
+    }
+  }
+});
+
+// ─────────── 이미지 선택 시 X 삭제 버튼 오버레이 ───────────
+function setupImageDeleteButton(c) {
+  var canvasEl = c.getElement();
+  var outer = canvasEl.closest('.canvas-outer');
+  if (!outer) return;
+
+  var delBtn = document.createElement('button');
+  delBtn.className = 'img-delete-overlay';
+  delBtn.innerHTML = '&times;';
+  delBtn.style.cssText = 'display:none;position:absolute;z-index:40;width:24px;height:24px;border-radius:50%;border:none;background:rgba(0,0,0,0.6);color:#fff;font-size:16px;line-height:1;cursor:pointer;padding:0;font-family:Arial,sans-serif;';
+  outer.appendChild(delBtn);
+
+  function positionBtn() {
+    var obj = c.getActiveObject();
+    if (!obj || obj.type !== 'image') { delBtn.style.display = 'none'; return; }
+    var b = obj.getBoundingRect();
+    var ratio = canvasEl.offsetWidth / c.getWidth();
+    delBtn.style.left = ((b.left + b.width) * ratio - 12) + 'px';
+    delBtn.style.top = (b.top * ratio - 12) + 'px';
+    delBtn.style.display = 'block';
+  }
+
+  c.on('selection:created', positionBtn);
+  c.on('selection:updated', positionBtn);
+  c.on('selection:cleared', function() { delBtn.style.display = 'none'; });
+  c.on('object:moving', positionBtn);
+  c.on('object:scaling', positionBtn);
+  c.on('object:rotating', positionBtn);
+
+  delBtn.addEventListener('click', function(ev) {
+    ev.stopPropagation();
+    var obj = c.getActiveObject();
+    if (obj && obj.type === 'image') {
+      c.remove(obj);
+      c.discardActiveObject();
+      c.renderAll();
+      delBtn.style.display = 'none';
+    }
+  });
+}
+setupImageDeleteButton(canvas);
 
 // ─────────── 스티커 기본 템플릿 ───────────
 function addStickerTemplate() {
@@ -3616,7 +3701,8 @@ document.getElementById('add-cell-btn').addEventListener('click', function() {
     const reader = new FileReader();
     reader.onload = function(e) {
       fabric.Image.fromURL(e.target.result, function(img) {
-        const s = Math.min(CW / img.width, CH / img.height);
+        // 클램프 margin(6%) 안에 딱 들어가도록 60%로 축소 (main 캔버스와 동일)
+        const s = Math.min(CW / img.width, CH / img.height) * 0.6;
         img.scale(s);
         img.set({ left: (CW - img.getScaledWidth()) / 2, top: (CH - img.getScaledHeight()) / 2 });
         newCanvas.add(img);
@@ -3656,16 +3742,16 @@ document.getElementById('add-cell-btn').addEventListener('click', function() {
     if (dzEl) dzEl.classList.remove('drag-over');
     uploadFileToThisCell(e.dataTransfer.files[0]);
   });
-  // 이동/크기 범위 제한
-  function clampNew(ev) { clampToCanvas(ev); }
-  newCanvas.on('object:moving', clampNew);
-  newCanvas.on('object:scaling', clampNew);
-  newCanvas.on('object:rotating', clampNew);
-  // 칼선(빨간 타이틀 테두리) 렌더러 + overlap 경고 연결
+  // 이동/크기 범위 제한 (clampToCanvas 내부에서 checkOverlap 호출됨 → 중복 연결 금지)
+  newCanvas.on('object:moving',   clampToCanvas);
+  newCanvas.on('object:scaling',  clampToCanvas);
+  newCanvas.on('object:rotating', clampToCanvas);
+  newCanvas.on('object:moved',    clampToCanvas);
+  newCanvas.on('object:modified', clampToCanvas);
+  // 칼선(빨간 타이틀 테두리) 렌더러
   attachCutLineRenderer(newCanvas);
-  newCanvas.on('object:modified', function() { checkOverlap(newCanvas); });
-  newCanvas.on('object:moving',   function() { checkOverlap(newCanvas); });
-  newCanvas.on('object:scaling',  function() { checkOverlap(newCanvas); });
+  // 이미지 선택 시 X 삭제 버튼
+  setupImageDeleteButton(newCanvas);
   addStickerTemplateToCanvas(newCanvas);
   allCanvases.push(newCanvas);
 
@@ -3682,13 +3768,12 @@ document.getElementById('add-cell-btn').addEventListener('click', function() {
         var reader = new FileReader();
         reader.onload = function(evt) {
           fabric.Image.fromURL(evt.target.result, function(img) {
-            var scale = Math.min(CW / img.width, CH / img.height);
+            var scale = Math.min(CW / img.width, CH / img.height) * 0.6;
             img.scale(scale);
             img.set({ left: (CW - img.getScaledWidth()) / 2, top: (CH - img.getScaledHeight()) / 2 });
             newCanvas.add(img);
             newCanvas.setActiveObject(img);
             newCanvas.renderAll();
-            dz.classList.add('hidden');
           });
         };
         reader.readAsDataURL(file);
@@ -4675,6 +4760,12 @@ document.getElementById('add-text').addEventListener('click', () => {
 
 // ─────────── 전송 모달 ───────────
 document.getElementById('btn-send').addEventListener('click', () => {
+  // 겹침 경고가 하나라도 있으면 차단
+  const hasOverlap = Array.from(document.querySelectorAll('.overlap-warning')).some(w => w.classList.contains('visible'));
+  if (hasOverlap) {
+    document.getElementById('overlap-block-modal').style.display = 'flex';
+    return;
+  }
   document.getElementById('order-modal').classList.add('open');
 });
 document.getElementById('modal-cancel').addEventListener('click', () => {
