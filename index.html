@@ -300,8 +300,9 @@
       flex-shrink: 0;
     }
     .add-cell-btn {
-      width: 400px;
-      aspect-ratio: 1;
+      flex-shrink: 0;
+      min-width: 0;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -598,7 +599,6 @@
 
     .canvas-grid-cell {
       position: relative;
-      aspect-ratio: 1;
       background: #fff;
       box-shadow: none;
       border-radius: 8px;
@@ -617,8 +617,9 @@
     }
     /* 셀+매수 래퍼 */
     .cell-wrap {
-      width: 400px;
       flex-shrink: 0;
+      min-width: 0;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -949,6 +950,13 @@
     }
     .sidebar-select:hover { border-color: #aaa; }
     .sidebar-select:focus { outline: none; border-color: #222; }
+    .sidebar-hint {
+      margin-top: 8px;
+      padding-left: 2px;
+      font-size: 11.5px;
+      color: #8a8a8a;
+      line-height: 1.5;
+    }
 
     .sidebar-bottom { margin-top: auto; padding-top: 20px; }
 
@@ -2169,21 +2177,14 @@
 
     <div class="sidebar-product-info">
       <div class="product-tag">스티커</div>
-      <div class="product-title" id="product-title">정사각형 S (38 × 38 mm)</div>
+      <div class="product-title" id="product-title">톨 (38 × 38 mm)</div>
     </div>
 
     <div class="sidebar-label">사이즈</div>
     <div class="select-row">
-      <label class="select-sub-label">종류</label>
-      <select class="sidebar-select" id="category-select">
-        <option value="square">정사각형</option>
-        <option value="rect">직사각형</option>
-      </select>
-    </div>
-    <div class="select-row" style="margin-top:10px;">
-      <label class="select-sub-label">크기</label>
       <select class="sidebar-select" id="size-select"></select>
     </div>
+    <div class="sidebar-hint">스티커는 같은 사이즈로 10매씩 만들어드려요</div>
 
     <div class="sidebar-label" style="margin-top:22px;">모양</div>
     <div class="select-row">
@@ -2620,6 +2621,28 @@
   </div>
 </div>
 
+<!-- ════════════ 사이즈 변경 확인 팝업 ════════════ -->
+<div id="size-change-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.22);text-align:center;">
+    <div style="display:flex;justify-content:center;margin-bottom:12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4a000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+        <path d="M12 9v4"/>
+        <path d="M12 17h.01"/>
+      </svg>
+    </div>
+    <div style="font-size:16px;font-weight:700;color:#222;margin-bottom:12px;">사이즈를 변경할까요?</div>
+    <div style="font-size:13px;color:#555;line-height:1.75;margin-bottom:22px;">
+      주문 1건에는 <b style="color:#222;">하나의 사이즈</b>만 선택할 수 있어요.<br>
+      사이즈를 바꾸면 <b style="color:#d4535a;">지금까지 작업한 모든 스티커가 초기화</b>돼요.
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <button id="size-change-cancel" style="background:#f2f2f2;color:#222;border:none;border-radius:8px;padding:10px 28px;font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;">취소</button>
+      <button id="size-change-ok" style="background:#222;color:#fff;border:none;border-radius:8px;padding:10px 28px;font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;">변경하기</button>
+    </div>
+  </div>
+</div>
+
 <!-- ════════════ 수량 제한 팝업 ════════════ -->
 <div id="qty-limit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.22);text-align:center;">
@@ -2676,46 +2699,51 @@ let currentSizeW = 3.8, currentSizeH = 3.8;
 // 현재 선택된 모양 ('none' | 'circle' | 'heart' | 'star')
 let currentShape = 'none';
 
-// 사이즈 데이터 (카테고리별)
-const SIZE_DATA = {
-  square: [
-    { key: '톨',   w: 3.8, h: 3.8, scale: 0.6, dim: '38 × 38 mm' },
-    { key: '그란데', w: 5.0, h: 5.0, scale: 0.8, dim: '50 × 50 mm' },
-    { key: '벤티',  w: 7.0, h: 7.0, scale: 1.0, dim: '70 × 70 mm' },
-  ],
-  rect: [
-    { key: '톨',   w: 3.0, h: 4.0, scale: 0.6, dim: '30 × 40 mm' },
-    { key: '그란데', w: 3.8, h: 5.0, scale: 0.8, dim: '38 × 50 mm' },
-    { key: '벤티',  w: 5.4, h: 8.6, scale: 1.0, dim: '54 × 86 mm' },
-  ],
-};
-const CATEGORY_LABEL = { square: '정사각형', rect: '직사각형' };
+// 사이즈 데이터
+const SIZES = [
+  { key: '톨',   w: 3.8, h: 3.8, scale: 0.6, dim: '38 × 38 mm' },
+  { key: '그란데', w: 3.8, h: 5.0, scale: 0.8, dim: '38 × 50 mm' },
+  { key: '벤티',  w: 5.4, h: 8.6, scale: 1.0, dim: '54 × 86 mm' },
+];
 
 function resizeCanvas(wCm, hCm, scale) {
-  scale = scale || 1.0;
   currentSizeW = wCm;
   currentSizeH = hCm;
-  const ratio = hCm / wCm;
-  const baseMaxH = Math.round((window.innerHeight || 700) - 100);
-  const availW = Math.round(MAX_W * scale);
-  const availH = Math.round(baseMaxH * Math.min(scale, 1.0));
-  let newW, newH;
-  if (ratio <= availH / availW) {
-    newW = availW;
-    newH = Math.round(availW * ratio);
-  } else {
-    newH = availH;
-    newW = Math.round(availH / ratio);
-  }
-  CW = newW;
-  CH = newH;
-  canvas.setWidth(CW);
-  canvas.setHeight(CH);
-  canvas.setBackgroundColor('#ffffff', () => {
-    drawGuides();
-    canvas.renderAll();
+
+  // 셀 표시 크기: 1mm = 7px (실제 물리 크기에 비례)
+  const PX_PER_MM = 7;
+  const cssW = Math.round(wCm * 10 * PX_PER_MM);
+  const cssH = Math.round(hCm * 10 * PX_PER_MM);
+
+  // 내부 캔버스 해상도 (고DPI 유지)
+  const DPI_MULT = 1.25;
+  CW = Math.round(cssW * DPI_MULT);
+  CH = Math.round(cssH * DPI_MULT);
+
+  // 모든 .cell-wrap 과 .canvas-grid-cell 에 직접 스타일 적용
+  document.querySelectorAll('.cell-wrap').forEach(function(el) {
+    el.style.width = cssW + 'px';
   });
-  // 사이즈 바뀌면 활성 이미지 DPI 재계산
+  document.querySelectorAll('.canvas-grid-cell').forEach(function(el) {
+    el.style.width = cssW + 'px';
+    el.style.height = cssH + 'px';
+  });
+  document.querySelectorAll('.add-cell-btn').forEach(function(el) {
+    el.style.width = cssW + 'px';
+    el.style.height = cssH + 'px';
+  });
+
+  // 모든 fabric 캔버스 내부 해상도 업데이트
+  const canvasList = (typeof allCanvases !== 'undefined' && allCanvases) ? allCanvases : [canvas];
+  canvasList.forEach(function(c) {
+    if (!c) return;
+    c.setWidth(CW);
+    c.setHeight(CH);
+    c.setBackgroundColor('#ffffff', function() { c.renderAll(); });
+  });
+
+  drawGuides();
+  canvas.renderAll();
   updateDPIBadge(canvas.getActiveObject());
 }
 
@@ -3352,7 +3380,7 @@ function addStickerTemplate() {
 
   canvas.renderAll();
 }
-addStickerTemplate();
+// addStickerTemplate()는 initSidebarDropdowns에서 resizeCanvas 후 호출됨
 
 // ─────────── 타이틀 색상 변경 ───────────
 (function() {
@@ -3603,13 +3631,21 @@ document.getElementById('add-cell-btn').addEventListener('click', function() {
   cellCounter++;
   const canvasId = 'c_' + cellCounter;
 
+  // 현재 사이즈 기준 셀 표시 크기 계산 (1mm = 7px)
+  const PX_PER_MM = 7;
+  const cssW = Math.round(currentSizeW * 10 * PX_PER_MM);
+  const cssH = Math.round(currentSizeH * 10 * PX_PER_MM);
+
   // cell-wrap 래퍼 생성
   const wrap = document.createElement('div');
   wrap.className = 'cell-wrap';
+  wrap.style.width = cssW + 'px';
 
   const cell = document.createElement('div');
   cell.className = 'canvas-grid-cell';
   cell.dataset.cell = cellCounter - 1;
+  cell.style.width = cssW + 'px';
+  cell.style.height = cssH + 'px';
 
   cell.innerHTML =
     '<div class="overlap-warning">\u26A0 이미지가 겹쳐있어요! 스티커 간 간격을 띄워주세요.</div>' +
@@ -4152,51 +4188,114 @@ imgWrap.addEventListener('mouseenter', () => {
 document.getElementById('close-img').addEventListener('click', () => closePanel('panel-img'));
 
 
-// ─────────── 우측 사이드바 드롭다운 (종류/크기/모양) ───────────
+// ─────────── 우측 사이드바 드롭다운 (크기/모양) ───────────
 (function initSidebarDropdowns() {
-  const catSel   = document.getElementById('category-select');
   const sizeSel  = document.getElementById('size-select');
   const shapeSel = document.getElementById('shape-select');
   const titleEl  = document.getElementById('product-title');
 
-  function rebuildSizeOptions(category, preserveKey) {
-    const list = SIZE_DATA[category] || [];
-    sizeSel.innerHTML = '';
-    list.forEach(function(item) {
-      const opt = document.createElement('option');
-      opt.value = item.key;
-      opt.textContent = item.key + ' (' + item.dim + ')';
-      opt.dataset.w = item.w;
-      opt.dataset.h = item.h;
-      opt.dataset.scale = item.scale;
-      sizeSel.appendChild(opt);
-    });
-    if (preserveKey && list.some(function(i){ return i.key === preserveKey; })) {
-      sizeSel.value = preserveKey;
-    }
-  }
+  // 크기 옵션 채우기
+  SIZES.forEach(function(item) {
+    const opt = document.createElement('option');
+    opt.value = item.key;
+    opt.textContent = item.key + ' (' + item.dim + ')';
+    sizeSel.appendChild(opt);
+  });
+
+  let currentSizeKey = sizeSel.value;
 
   function applySelection() {
-    const cat  = catSel.value;
-    const item = (SIZE_DATA[cat] || []).find(function(i){ return i.key === sizeSel.value; });
+    const item = SIZES.find(function(i){ return i.key === sizeSel.value; });
     if (!item) return;
-    titleEl.textContent = CATEGORY_LABEL[cat] + ' ' + item.key + ' (' + item.dim + ')';
+    titleEl.textContent = item.key + ' (' + item.dim + ')';
     resizeCanvas(item.w, item.h, item.scale);
+    currentSizeKey = sizeSel.value;
   }
 
-  catSel.addEventListener('change', function() {
-    rebuildSizeOptions(catSel.value, sizeSel.value);
+  // 사용자가 작업물(이미지 업로드 또는 추가 셀)을 만들었는지 감지
+  function hasUserWork() {
+    if (allCanvases.length > 1) return true;
+    return allCanvases.some(function(c) {
+      return c.getObjects().some(function(o) {
+        return !o.__guide && !o.__titlePart; // 가이드/타이틀 제외
+      });
+    });
+  }
+
+  // 모든 셀을 초기 상태로 리셋 (첫 셀 1개만 유지, 이미지 제거)
+  function resetAllCells() {
+    // 추가된 셀들 제거 (allCanvases[0]만 남김)
+    const wraps = document.querySelectorAll('.cell-wrap');
+    wraps.forEach(function(w, i) {
+      if (i === 0) return;
+      w.remove();
+    });
+    // allCanvases 배열 정리 — 첫 번째만 유지
+    while (allCanvases.length > 1) {
+      const c = allCanvases.pop();
+      if (c && typeof c.dispose === 'function') c.dispose();
+    }
+    // 첫 캔버스에서 사용자 오브젝트 제거 (가이드/타이틀 제외)
+    const firstC = allCanvases[0];
+    firstC.getObjects().slice().forEach(function(o) {
+      if (!o.__guide && !o.__titlePart) firstC.remove(o);
+    });
+    // 드롭존 다시 표시
+    const dz = document.querySelector('.cell-dropzone');
+    if (dz) dz.classList.remove('hidden');
+    firstC.renderAll();
+    // 수량 초기화
+    const qtyVal = document.querySelector('.cell-qty-val');
+    if (qtyVal) { qtyVal.dataset.qty = '1'; qtyVal.textContent = '1매'; }
+    if (typeof cellQtyUpdateAll === 'function') cellQtyUpdateAll();
+  }
+
+  // 사이즈 변경 확인 팝업 제어
+  const sizeChangeModal = document.getElementById('size-change-modal');
+  let pendingSizeKey = null;
+  function openSizeChangeModal(newKey) {
+    pendingSizeKey = newKey;
+    sizeChangeModal.style.display = 'flex';
+  }
+  function closeSizeChangeModal() {
+    sizeChangeModal.style.display = 'none';
+    pendingSizeKey = null;
+  }
+  document.getElementById('size-change-ok').addEventListener('click', function() {
+    resetAllCells();
+    applySelection();
+    closeSizeChangeModal();
+  });
+  document.getElementById('size-change-cancel').addEventListener('click', function() {
+    // 드롭다운 이전 값으로 되돌리기
+    sizeSel.value = currentSizeKey;
+    closeSizeChangeModal();
+  });
+  sizeChangeModal.addEventListener('click', function(e) {
+    if (e.target === sizeChangeModal) {
+      sizeSel.value = currentSizeKey;
+      closeSizeChangeModal();
+    }
+  });
+
+  sizeSel.addEventListener('change', function() {
+    if (sizeSel.value === currentSizeKey) return;
+    if (hasUserWork()) {
+      openSizeChangeModal(sizeSel.value);
+      return;
+    }
     applySelection();
   });
-  sizeSel.addEventListener('change', applySelection);
   shapeSel.addEventListener('change', function() {
     currentShape = shapeSel.value;
     drawGuides();
   });
 
-  // 초기 로드
-  rebuildSizeOptions(catSel.value);
   applySelection();
+  // 템플릿은 초기 사이즈 적용 후에 추가 (올바른 CW/CH 기준)
+  if (!canvas.getObjects().some(function(o) { return o.__titlePart; })) {
+    addStickerTemplate();
+  }
 })();
 
 // ─────────── 사이즈 비교 팝업 ───────────
