@@ -1940,18 +1940,6 @@
 
   <div class="tb-divider"></div>
 
-  <!-- 그리드 토글 -->
-  <button class="tool-btn" id="btn-grid-toggle" title="격자 표시/숨기기">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-      <rect x="3" y="3" width="18" height="18" rx="1"/>
-      <line x1="3" y1="9" x2="21" y2="9"/>
-      <line x1="3" y1="15" x2="21" y2="15"/>
-      <line x1="9" y1="3" x2="9" y2="21"/>
-      <line x1="15" y1="3" x2="15" y2="21"/>
-    </svg>
-    격자
-  </button>
-
   <!-- 줌 컨트롤 -->
   <div class="zoom-controls">
     <button class="zoom-btn" id="zoom-out" title="축소">−</button>
@@ -1983,6 +1971,7 @@
       <div class="cell-wrap">
         <div class="canvas-grid-cell active" data-cell="0">
           <div class="overlap-warning" id="overlap-warning">⚠ 이미지가 겹쳐있어요! 스티커 간 간격을 띄워주세요.</div>
+          <button class="cell-delete-btn" title="삭제" onclick="deleteCell(this)">&times;</button>
           <div class="canvas-outer" id="canvas-outer">
             <canvas id="c"></canvas>
             <!-- 그리드 오버레이 -->
@@ -2166,16 +2155,6 @@
       <select class="sidebar-select" id="size-select"></select>
     </div>
     <div class="sidebar-hint">스티커는 같은 사이즈로 10매씩 만들어드려요</div>
-
-    <div class="sidebar-label" style="margin-top:22px;">모양</div>
-    <div class="select-row">
-      <select class="sidebar-select" id="shape-select">
-        <option value="none" selected>없음</option>
-        <option value="circle">원형</option>
-        <option value="heart">하트</option>
-        <option value="star">별</option>
-      </select>
-    </div>
 
     <div class="sidebar-bottom">
       <button class="preview3d-btn" id="btn-preview3d">
@@ -2655,9 +2634,6 @@ let CH = 500;
 // 현재 선택된 사이즈 (cm)
 let currentSizeW = 3.8, currentSizeH = 3.8;
 
-// 현재 선택된 모양 ('none' | 'circle' | 'heart' | 'star')
-let currentShape = 'none';
-
 // 사이즈 데이터
 const SIZES = [
   { key: '톨',   w: 3.8, h: 3.8, scale: 0.6, dim: '38 × 38 mm' },
@@ -2822,60 +2798,7 @@ canvas.on('selection:cleared', () => { document.getElementById('rot-shift-tip').
 // ─────────── 가이드 선 ───────────
 function drawGuides() {
   canvas.getObjects().filter(o => o.__guide).forEach(o => canvas.remove(o));
-  drawShapeCutLine();
   canvas.renderAll();
-}
-
-// ── 모양에 맞춰 칼선(재단선) 그리기 ──
-function drawShapeCutLine() {
-  if (currentShape === 'none') return;
-  const pad = 10;
-  const w = CW - pad * 2;
-  const h = CH - pad * 2;
-  const commonProps = {
-    fill: 'transparent',
-    stroke: '#ff4d4d',
-    strokeWidth: 1.8,
-    strokeDashArray: [6, 4],
-    strokeUniform: true,
-    selectable: false,
-    evented: false,
-    hoverCursor: 'default',
-    objectCaching: false,
-    originX: 'left',
-    originY: 'top',
-  };
-  let obj;
-  if (currentShape === 'circle') {
-    const r = Math.min(w, h) / 2;
-    obj = new fabric.Circle({
-      radius: r,
-      ...commonProps,
-    });
-  } else if (currentShape === 'heart') {
-    // 하트 패스 (바운딩 박스: x 8..92 = 너비 84, y 8..88 = 높이 80)
-    const hp = 'M 50 88 C 50 88 8 58 8 30 C 8 16 19 8 30 8 C 40 8 47 16 50 22 C 53 16 60 8 70 8 C 81 8 92 16 92 30 C 92 58 50 88 50 88 Z';
-    obj = new fabric.Path(hp, commonProps);
-    const pathW = 84, pathH = 80;
-    const s = Math.min(w / pathW, h / pathH);
-    obj.set({ scaleX: s, scaleY: s });
-  } else if (currentShape === 'star') {
-    // 5각 별 (0,0 기준, fabric.Polygon이 바운딩 박스를 자동 계산)
-    const outerR = Math.min(w, h) / 2;
-    const innerR = outerR * 0.42;
-    const pts = [];
-    for (let i = 0; i < 10; i++) {
-      const r = (i % 2 === 0) ? outerR : innerR;
-      const a = -Math.PI / 2 + i * Math.PI / 5;
-      pts.push({ x: Math.cos(a) * r, y: Math.sin(a) * r });
-    }
-    obj = new fabric.Polygon(pts, commonProps);
-  }
-  obj.__guide = true;
-  canvas.add(obj);
-  canvas.centerObject(obj);
-  obj.setCoords();
-  canvas.sendToBack(obj);
 }
 
 function bringGuidesToFront() {
@@ -2923,12 +2846,13 @@ document.getElementById('canvas-outer').addEventListener('click', function(e) {
   document.getElementById('file-input').click();
 });
 
-// ─────────── 칼선(Cut Line) 실시간 렌더링 ───────────
-canvas.on('after:render', function() {
-  var ctx = canvas.getContext();
-  var offset = CW * 0.02; // 약 2mm 여백
-  var radius = CW * 0.03; // 둥근 모서리
-  var objs = canvas.getObjects();
+// ─────────── 칼선(Cut Line) 실시간 렌더링 (재사용 가능) ───────────
+function renderCutLinesFor(c) {
+  var ctx = c.getContext();
+  var canvasW = c.getWidth() || CW;
+  var offset = canvasW * 0.02; // 약 2mm 여백
+  var radius = canvasW * 0.03; // 둥근 모서리
+  var objs = c.getObjects();
 
   // 바운딩 박스 수집 (이미지 + 타이틀 그룹)
   var boxes = [];
@@ -2946,9 +2870,9 @@ canvas.on('after:render', function() {
     }
   });
 
-  // 타이틀 그룹 (회색 테두리 위치 그대로 빨간 칼선)
+  // 타이틀 그룹 (투명 테두리 위치 기준 빨간 칼선)
   objs.forEach(function(o) {
-    if (o.type === 'rect' && o.stroke === '#d0d0d0' && o.__titlePart) {
+    if (o.__titlePart && o.__titleRole === 'border') {
       var b = o.getBoundingRect();
       var r = b.height / 2; // 원통 모양 그대로
       ctx.save();
@@ -3030,28 +2954,43 @@ canvas.on('after:render', function() {
   });
 
   ctx.restore();
-});
+}
+
+// 각 캔버스에 after:render 연결
+function attachCutLineRenderer(c) {
+  c.on('after:render', function() { renderCutLinesFor(c); });
+}
+attachCutLineRenderer(canvas);
 
 // ─────────── 겹침 감지 ───────────
 function checkOverlap(c) {
   var objs = c.getObjects();
   var images = objs.filter(function(o) { return o.type === 'image'; });
-  var titles = objs.filter(function(o) { return o.__titlePart; });
+  var borders = objs.filter(function(o) { return o.__titlePart && o.__titleRole === 'border'; });
   var overlapping = false;
 
+  // 캔버스 너비의 4% 여유로 부풀려 검사 (근처만 가도 경고 트리거)
+  var canvasW = c.getWidth() || CW;
+  var PAD = Math.max(8, canvasW * 0.04);
+  function pb(o) {
+    var b = o.getBoundingRect();
+    return { l: b.left - PAD, t: b.top - PAD, r: b.left + b.width + PAD, b: b.top + b.height + PAD };
+  }
+  function bbOverlap(a, b) {
+    return !(a.r < b.l || b.r < a.l || a.b < b.t || b.b < a.t);
+  }
+
   // 이미지끼리 겹침 체크
-  for (var i = 0; i < images.length; i++) {
+  for (var i = 0; i < images.length && !overlapping; i++) {
+    var ai = pb(images[i]);
     for (var j = i + 1; j < images.length; j++) {
-      if (images[i].intersectsWithObject(images[j])) { overlapping = true; break; }
+      if (bbOverlap(ai, pb(images[j]))) { overlapping = true; break; }
     }
     if (overlapping) break;
-    // 이미지와 타이틀 겹침 체크
-    for (var k = 0; k < titles.length; k++) {
-      if (titles[k].type === 'rect' && titles[k].stroke === '#d0d0d0') {
-        if (images[i].intersectsWithObject(titles[k])) { overlapping = true; break; }
-      }
+    // 이미지와 타이틀 테두리 겹침 체크
+    for (var k = 0; k < borders.length; k++) {
+      if (bbOverlap(ai, pb(borders[k]))) { overlapping = true; break; }
     }
-    if (overlapping) break;
   }
 
   // 경고 표시/숨기기
@@ -3165,8 +3104,8 @@ function addStickerTemplate() {
     left: borderLeft, top: borderTop,
     width: borderW, height: borderH,
     rx: borderH / 2, ry: borderH / 2,
-    fill: 'rgba(255,255,255,0.01)', stroke: '#d0d0d0', strokeWidth: 1.5,
-    selectable: true, evented: true, __titlePart: true,
+    fill: 'rgba(255,255,255,0.01)', stroke: 'transparent', strokeWidth: 0,
+    selectable: true, evented: true, __titlePart: true, __titleRole: 'border',
     hasControls: false, hasBorders: false,
   });
 
@@ -3456,8 +3395,8 @@ function addStickerTemplateToCanvas(c) {
     left: borderLeft, top: borderTop,
     width: borderW, height: borderH,
     rx: borderH / 2, ry: borderH / 2,
-    fill: 'rgba(255,255,255,0.01)', stroke: '#d0d0d0', strokeWidth: 1.5,
-    selectable: true, evented: true, __titlePart: true,
+    fill: 'rgba(255,255,255,0.01)', stroke: 'transparent', strokeWidth: 0,
+    selectable: true, evented: true, __titlePart: true, __titleRole: 'border',
     hasControls: false, hasBorders: false,
   });
   const badgeBg = new fabric.Rect({
@@ -3581,6 +3520,17 @@ function deleteCell(btn) {
   if (!cell) return;
   const cells = document.querySelectorAll('.canvas-grid-cell');
   if (cells.length <= 1) { alert('최소 1개의 스티커는 남겨야 합니다.'); return; }
+  // 메인 셀(data-cell=0)은 삭제 금지 (전역 canvas와 연결됨)
+  if (cell.dataset.cell === '0') { alert('첫 번째 스티커는 삭제할 수 없습니다.'); return; }
+  // 해당 셀의 fabric canvas를 allCanvases 배열에서 제거 + dispose
+  const canvasEl = cell.querySelector('canvas');
+  if (canvasEl) {
+    const idx = allCanvases.findIndex(c => c.getElement() === canvasEl);
+    if (idx > 0) { // 0번은 메인 canvas이므로 건너뜀
+      const removed = allCanvases.splice(idx, 1)[0];
+      if (removed && typeof removed.dispose === 'function') removed.dispose();
+    }
+  }
   // cell-wrap이 있으면 래퍼째 삭제, 없으면 셀만 삭제
   const wrap = cell.closest('.cell-wrap');
   if (wrap) wrap.remove(); else cell.remove();
@@ -3640,42 +3590,82 @@ document.getElementById('add-cell-btn').addEventListener('click', function() {
   const newCanvas = new fabric.Canvas(canvasId, {
     width: CW, height: CH, backgroundColor: '#ffffff', preserveObjectStacking: true,
   });
-  // 빈 공간 클릭 시 이미지 업로드
-  newCanvas.on('mouse:down', function(ev) {
+  // IText 더블클릭 → 편집 모드
+  newCanvas.on('mouse:dblclick', function(ev) {
     if (ev.target && ev.target.type === 'i-text' && !ev.target.isEditing) {
       ev.target.enterEditing();
       ev.target.selectAll();
     }
-    if (!ev.target) {
-      var inp = document.createElement('input');
-      inp.type = 'file';
-      inp.accept = 'image/jpeg,image/png,image/webp';
-      inp.onchange = function() {
-        var file = inp.files[0];
-        if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          fabric.Image.fromURL(e.target.result, function(img) {
-            var scale = Math.min(CW / img.width, CH / img.height);
-            img.scale(scale);
-            img.set({ left: (CW - img.getScaledWidth()) / 2, top: (CH - img.getScaledHeight()) / 2 });
-            newCanvas.add(img);
-            newCanvas.setActiveObject(img);
-            newCanvas.renderAll();
-            var dz = cell.querySelector('.cell-dropzone');
-            if (dz) dz.classList.add('hidden');
-          });
-        };
-        reader.readAsDataURL(file);
-      };
-      inp.click();
+  });
+
+  // 이미지 업로드 헬퍼 (이 셀 전용)
+  const canvasOuterEl = cell.querySelector('.canvas-outer');
+  const dzEl = cell.querySelector('.cell-dropzone');
+
+  // 드롭존 자동 표시/숨김: 이미지 유무에 따라
+  function syncDropzone() {
+    if (!dzEl) return;
+    const hasImg = newCanvas.getObjects().some(o => o.type === 'image');
+    dzEl.classList.toggle('hidden', hasImg);
+  }
+  newCanvas.on('object:added', syncDropzone);
+  newCanvas.on('object:removed', syncDropzone);
+
+  function uploadFileToThisCell(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      fabric.Image.fromURL(e.target.result, function(img) {
+        const s = Math.min(CW / img.width, CH / img.height);
+        img.scale(s);
+        img.set({ left: (CW - img.getScaledWidth()) / 2, top: (CH - img.getScaledHeight()) / 2 });
+        newCanvas.add(img);
+        newCanvas.setActiveObject(img);
+        newCanvas.renderAll();
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // 빈 영역 클릭 → 파일 피커 (이미지가 없을 때만)
+  canvasOuterEl.addEventListener('click', function(e) {
+    if (newCanvas.getActiveObject()) return;
+    if (newCanvas.getObjects().some(o => o.type === 'image')) return;
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/jpeg,image/png,image/webp';
+    inp.onchange = function() { uploadFileToThisCell(inp.files[0]); };
+    inp.click();
+  });
+
+  // 드래그앤드롭
+  canvasOuterEl.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    if (dzEl) { dzEl.classList.add('drag-over'); dzEl.classList.remove('hidden'); }
+  });
+  canvasOuterEl.addEventListener('dragleave', function(e) {
+    if (!canvasOuterEl.contains(e.relatedTarget)) {
+      if (dzEl) {
+        dzEl.classList.remove('drag-over');
+        if (newCanvas.getObjects().some(o => o.type === 'image')) dzEl.classList.add('hidden');
+      }
     }
+  });
+  canvasOuterEl.addEventListener('drop', function(e) {
+    e.preventDefault();
+    if (dzEl) dzEl.classList.remove('drag-over');
+    uploadFileToThisCell(e.dataTransfer.files[0]);
   });
   // 이동/크기 범위 제한
   function clampNew(ev) { clampToCanvas(ev); }
   newCanvas.on('object:moving', clampNew);
   newCanvas.on('object:scaling', clampNew);
   newCanvas.on('object:rotating', clampNew);
+  // 칼선(빨간 타이틀 테두리) 렌더러 + overlap 경고 연결
+  attachCutLineRenderer(newCanvas);
+  newCanvas.on('object:modified', function() { checkOverlap(newCanvas); });
+  newCanvas.on('object:moving',   function() { checkOverlap(newCanvas); });
+  newCanvas.on('object:scaling',  function() { checkOverlap(newCanvas); });
   addStickerTemplateToCanvas(newCanvas);
   allCanvases.push(newCanvas);
 
@@ -4148,13 +4138,11 @@ imgWrap.addEventListener('mouseenter', () => {
 document.getElementById('close-img').addEventListener('click', () => closePanel('panel-img'));
 
 
-// ─────────── 우측 사이드바 드롭다운 (크기/모양) ───────────
+// ─────────── 우측 사이드바 드롭다운 (크기) ───────────
 (function initSidebarDropdowns() {
-  const sizeSel  = document.getElementById('size-select');
-  const shapeSel = document.getElementById('shape-select');
-  const titleEl  = document.getElementById('product-title');
+  const sizeSel = document.getElementById('size-select');
+  const titleEl = document.getElementById('product-title');
 
-  // 크기 옵션 채우기
   SIZES.forEach(function(item) {
     const opt = document.createElement('option');
     opt.value = item.key;
@@ -4170,13 +4158,8 @@ document.getElementById('close-img').addEventListener('click', () => closePanel(
   }
 
   sizeSel.addEventListener('change', applySelection);
-  shapeSel.addEventListener('change', function() {
-    currentShape = shapeSel.value;
-    drawGuides();
-  });
 
   applySelection();
-  // 템플릿은 초기 사이즈 적용 후에 추가 (올바른 CW/CH 기준)
   if (!canvas.getObjects().some(function(o) { return o.__titlePart; })) {
     addStickerTemplate();
   }
@@ -6318,6 +6301,7 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
 (function() {
   const btn = document.getElementById('btn-grid-toggle');
   const overlay = document.getElementById('grid-overlay');
+  if (!btn || !overlay) return; // 격자 버튼 제거됨
   let gridOn = false;
 
   btn.addEventListener('click', () => {
