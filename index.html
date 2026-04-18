@@ -530,30 +530,31 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 8px 0 4px;
+      margin: 10px 28px 22px;
       gap: 10px;
     }
     .guide-visual-box {
-      width: 48px; height: 48px;
+      width: 52px; height: 52px;
       border: 1px dashed #ccc;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      font-size: 7px;
+      font-size: 8px;
       color: #999;
       font-family: 'Noto Sans KR', sans-serif;
       position: relative;
     }
     .guide-dim {
       position: absolute;
-      font-size: 7px;
+      font-size: 9px;
       color: #e74c3c;
       font-weight: 600;
+      white-space: nowrap;
     }
-    .guide-dim-bottom { bottom: -12px; }
-    .guide-dim-right { right: -24px; top: 50%; transform: translateY(-50%); }
+    .guide-dim-bottom { bottom: -18px; left: 50%; transform: translateX(-50%); }
+    .guide-dim-right  { right: -44px; top: 50%; transform: translateY(-50%); }
 
     .cell-info-icon {
       position: absolute;
@@ -1970,26 +1971,6 @@
 
   <div style="flex:1;"></div>
 
-  <button id="btn-preview3d-top" title="내 예상작품 보기" style="
-    background:#fff; color:#222; border:1.5px solid #222; border-radius:6px;
-    padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer;
-    font-family:'Noto Sans KR',sans-serif; white-space:nowrap; flex-shrink:0;
-    display:flex; align-items:center; gap:5px;
-  ">
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-    내 예상작품 보기
-  </button>
-
-  <button id="btn-send-top" title="작업물 보내기" style="
-    background:#222; color:#fff; border:1.5px solid #222; border-radius:6px;
-    padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer;
-    font-family:'Noto Sans KR',sans-serif; white-space:nowrap; flex-shrink:0;
-    margin-left:6px; display:flex; align-items:center; gap:5px;
-  ">
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-    작업물 보내기
-  </button>
-
 </div>
 
 <!-- ════════════ 메인 콘텐츠 ════════════ -->
@@ -2866,8 +2847,9 @@ function drawShapeCutLine() {
   };
   let obj;
   if (currentShape === 'circle') {
-    obj = new fabric.Ellipse({
-      rx: w / 2, ry: h / 2,
+    const r = Math.min(w, h) / 2;
+    obj = new fabric.Circle({
+      radius: r,
       ...commonProps,
     });
   } else if (currentShape === 'heart') {
