@@ -26,7 +26,6 @@
 
   <!-- Fabric.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -979,17 +978,6 @@
     #size-popup-close:hover { color:#333; }
     #size-popup-note { text-align:center; font-size:11.5px; color:#888; margin-top:12px; padding-top:10px; border-top:1px solid #f0f0f0; }
 
-.preview3d-btn {
-      width: 100%; padding: 11px;
-      background: #fff; color: #111;
-      border: 1.5px solid #ccc; border-radius: 9px;
-      font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
-      font-weight: 600; cursor: pointer;
-      transition: all 0.15s; margin-bottom: 8px;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
-    .preview3d-btn:hover { border-color: #111; background: #f5f5f5; }
-
     /* ── 회전 핸들 Shift 툴팁 ── */
     #rot-shift-tip {
       display: none;
@@ -1014,114 +1002,6 @@
       border-bottom: none;
     }
 
-    /* ── 3D 미리보기 모달 ── */
-    #mock3d-modal {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.62); z-index: 2000;
-      align-items: center; justify-content: center;
-    }
-    #mock3d-dialog {
-      background: #fff; border-radius: 14px; overflow: hidden;
-      width: 1400px;
-      max-width: 88vw;
-      max-height: calc(100vh - 60px);
-      box-shadow: 0 24px 72px rgba(0,0,0,0.38);
-      display: flex; flex-direction: column;
-    }
-    #mock3d-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 24px; background: #111; color: #fff;
-      font-weight: 700; font-size: 21px; flex-shrink: 0;
-    }
-    #mock3d-close-btn {
-      background: none; border: none; color: #fff;
-      font-size: 36px; cursor: pointer; opacity: 0.75; line-height: 1; padding: 0;
-    }
-    #mock3d-close-btn:hover { opacity: 1; }
-    #mock3d-viewport {
-      width: 100%; flex: 1; min-height: 0;
-      background: #e8e2d8; position: relative;
-    }
-    #mock3d-canvas { display: block; width: 100%; height: 100%; cursor: grab; }
-    #mock3d-canvas:active { cursor: grabbing; }
-    #mock3d-hint {
-      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-      font-size: 17.5px; font-weight: 600;
-      color: #111;
-      background: rgba(255,255,255,0.82);
-      border: 1px solid rgba(0,0,0,0.13);
-      border-radius: 20px;
-      padding: 6px 18px;
-      white-space: nowrap;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-      pointer-events: none;
-      margin: 0;
-      font-family: 'Noto Sans KR', sans-serif;
-      letter-spacing: -0.01em;
-    }
-
-    /* ── 드래그 유도 손 애니메이션 오버레이 ── */
-    #mock3d-drag-hint {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: 10;
-    }
-    #mock3d-drag-hint.visible { opacity: 1; }
-    #mock3d-drag-hint.fadeout { opacity: 0; }
-
-    .drag-hint-hand {
-      font-size: 44px;
-      animation: dragSwipe 1.1s ease-in-out infinite;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
-    }
-    .drag-hint-arrows {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 22px;
-      color: #fff;
-      font-weight: 700;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-      letter-spacing: 2px;
-    }
-    .drag-hint-label {
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
-      background: rgba(0,0,0,0.45);
-      border-radius: 20px;
-      padding: 5px 16px;
-      font-family: 'Noto Sans KR', sans-serif;
-      text-shadow: none;
-      letter-spacing: -0.01em;
-    }
-    @keyframes dragSwipe {
-      0%   { transform: translateX(-18px); }
-      50%  { transform: translateX( 18px); }
-      100% { transform: translateX(-18px); }
-    }
-    #mock3d-disclaimer {
-      text-align: center;
-      font-size: 18px;
-      font-weight: 500;
-      color: #111;
-      background: #f7f7f7;
-      border-top: 1px solid #ececec;
-      margin: 0;
-      padding: 11px 20px;
-      font-family: 'Noto Sans KR', sans-serif;
-      flex-shrink: 0;
-      letter-spacing: -0.01em;
-    }
-
     .send-btn {
       width: 100%;
       padding: 14px;
@@ -1136,118 +1016,6 @@
       transition: background 0.15s;
     }
     .send-btn:hover { background: #333; }
-
-    /* ── 모달 공통 ── */
-    .modal-bg {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.52);
-      z-index: 500;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-bg.open { display: flex; }
-
-    .modal-box {
-      background: #fff;
-      border-radius: 14px;
-      padding: 26px 24px;
-      width: 90%;
-      max-width: 420px;
-      position: relative;
-    }
-
-    .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
-
-    .form-row { margin-bottom: 14px; }
-    .form-label { display: block; font-size: 12.5px; font-weight: 700; color: #333; margin-bottom: 6px; }
-    .req { color: #e33; }
-    .form-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 7px;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .form-input:focus { border-color: #222; }
-
-    .email-toggle-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border: 1.5px solid #ddd;
-      border-radius: 7px;
-      cursor: pointer;
-      user-select: none;
-      font-size: 13px;
-      color: #333;
-      margin-bottom: 12px;
-      transition: border-color 0.15s;
-    }
-    .email-toggle-row.on { border-color: #222; background: #fafafa; }
-    .toggle-check {
-      width: 18px; height: 18px;
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: #222;
-      flex-shrink: 0;
-    }
-    .email-toggle-row.on .toggle-check { border-color: #222; }
-
-    .email-extra { display: none; margin-bottom: 14px; }
-    .email-extra.show { display: block; }
-
-    .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
-    .m-btn {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-    }
-    .m-cancel { background: #f0f0f0; color: #444; }
-    .m-cancel:hover { background: #e0e0e0; }
-    .m-confirm { background: #111; color: #fff; }
-    .m-confirm:hover { background: #333; }
-
-    /* 로딩 */
-    .loading-bg {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      gap: 14px;
-      font-size: 14px;
-    }
-    .loading-bg.open { display: flex; }
-    .spinner {
-      width: 44px; height: 44px;
-      border: 4px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* 성공 모달 */
-    .success-icon { font-size: 50px; text-align: center; margin-bottom: 10px; }
 
     /* ── AI 스타일 변환 패널 ── */
     .ai-style-grid {
@@ -1290,13 +1058,6 @@
       font-size: 11.5px; color: #aaa; text-align: center;
       line-height: 1.65;
     }
-    .ai-api-notice {
-      background: #fffbe6; border: 1px solid #ffe082;
-      border-radius: 8px; padding: 11px 12px;
-      font-size: 11.5px; color: #795548;
-      line-height: 1.7; margin-bottom: 14px;
-    }
-
     /* ── AI 변환 가이드 패널 ── */
     .guide-intro-box {
       background: linear-gradient(135deg, #f5f3ff, #fdf2f8);
@@ -2157,11 +1918,7 @@
     <div class="sidebar-hint">스티커는 같은 사이즈로 10매씩 만들어드려요</div>
 
     <div class="sidebar-bottom">
-      <button class="preview3d-btn" id="btn-preview3d">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        내 예상작품 보기
-      </button>
-      <button class="send-btn" id="btn-send">작업물 보내기</button>
+      <button class="send-btn" id="btn-send">주문하기</button>
     </div>
 
   </div><!-- /right-sidebar -->
@@ -2170,25 +1927,6 @@
 
 <!-- 회전 핸들 Shift 툴팁 -->
 <div id="rot-shift-tip">Shift 누르면 45° 단위로 회전</div>
-
-<!-- ════════════ 3D 미리보기 모달 ════════════ -->
-<div id="mock3d-modal">
-  <div id="mock3d-dialog">
-    <div id="mock3d-header">
-      <span>내 예상작품 미리보기</span>
-      <button id="mock3d-close-btn">×</button>
-    </div>
-    <div id="mock3d-viewport">
-      <canvas id="mock3d-canvas"></canvas>
-      <div id="mock3d-drag-hint">
-        <div class="drag-hint-hand">👆</div>
-        <div class="drag-hint-arrows">← &nbsp; 드래그로 회전 &nbsp; →</div>
-      </div>
-      <p id="mock3d-hint">🖱 마우스 드래그로 회전 · 스크롤로 확대/축소</p>
-    </div>
-    <p id="mock3d-disclaimer">💡 3D 미리보기는 참고용입니다. 모니터 환경에 따라 실제 캔버스의 색상·질감과 차이가 있을 수 있습니다.</p>
-  </div>
-</div>
 
 <!-- ════════════ 이미지 업로드 패널 ════════════ -->
 <div class="side-panel" id="panel-img">
@@ -2295,10 +2033,6 @@
     <span class="panel-title" style="color:#7c3aed;">✨ AI 스타일 변환</span>
     <span class="panel-close" id="close-ai">×</span>
   </div>
-  <div class="ai-api-notice">
-    ⚠️ 사용 전 GAS 스크립트 속성에 <strong>STABILITY_API_KEY</strong>를 설정하세요.<br>
-    <a href="https://platform.stability.ai" target="_blank" style="color:#7c3aed;">stability.ai</a>에서 무료로 발급 가능 (회당 약 ₩15~40)
-  </div>
   <p style="font-size:12.5px;color:#555;margin-bottom:14px;line-height:1.65;">
     캔버스의 이미지를 아래 스타일로 변환합니다.<br>
     이미지를 먼저 캔버스에 올려주세요.
@@ -2373,7 +2107,7 @@
     원하는 스타일을 선택하고 이미지를 변환해보세요! 🎨<br>
     <span style="font-size:12px;color:#888;line-height:1.8;display:block;margin-top:6px;">
       💡 AI 특성상 변환할 때마다 결과가 조금씩 달라져요.<br>
-      <strong style="color:#7c3aed;">마음에 드는 결과가 나왔다면 바로 작업물 보내기!</strong><br>
+      <strong style="color:#7c3aed;">마음에 드는 결과가 나왔다면 바로 주문하기!</strong><br>
       좋은 결과는 다음엔 안 나올 수도 있어요 🥹
     </span>
   </div>
@@ -2472,19 +2206,12 @@
 
   <hr class="guide-divider">
 
-  <!-- 영상 가이드 섹션 -->
-  <div class="guide-step-title" style="margin-top:0;">
+  <!-- 영상 가이드 섹션 (영상 준비 시 data-video-id 값 채우면 자동 노출) -->
+  <div class="guide-step-title" style="margin-top:0; display:none;" id="guide-video-title">
     <span style="font-size:16px;">🎬</span> 영상으로 보기
   </div>
-  <div class="guide-video-section" id="guide-video-section">
-    <!-- YouTube 영상 ID를 설정하려면 아래 data-video-id 값을 변경하세요 -->
-    <div id="guide-video-inner" data-video-id="">
-      <div class="guide-video-placeholder" id="guide-video-placeholder">
-        <span class="guide-video-placeholder-icon">▶️</span>
-        <span class="guide-video-placeholder-text">튜토리얼 영상을<br>준비 중입니다</span>
-      </div>
-    </div>
-    <p class="guide-video-note">영상을 준비 중입니다. 곧 업로드될 예정이에요!</p>
+  <div class="guide-video-section" id="guide-video-section" style="display:none;">
+    <div id="guide-video-inner" data-video-id=""></div>
   </div>
 
   <!-- 하단 닫기 버튼 -->
@@ -2503,61 +2230,6 @@
     </button>
   </div>
 
-</div>
-
-<!-- ════════════ 주문 정보 모달 ════════════ -->
-<div class="modal-bg" id="order-modal">
-  <div class="modal-box">
-    <div class="modal-title">주문 정보 입력</div>
-    <div style="font-size:12px;color:#c0392b;background:#fff5f5;border-left:3px solid #e33;border-radius:0 5px 5px 0;padding:7px 10px;margin:-12px 0 16px;line-height:1.55;">
-      📌 홈페이지 주문 시 입력한 정보와 <strong>동일하게</strong> 입력해주세요<br>
-      <span style="color:#888;font-size:11px;">(이름·연락처로 주문을 확인합니다)</span>
-    </div>
-
-    <div class="form-row">
-      <label class="form-label">주문자 이름 <span class="req">*</span></label>
-      <input class="form-input" id="inp-name" type="text" placeholder="이름을 입력해주세요">
-    </div>
-
-    <div class="form-row">
-      <label class="form-label">연락처 <span class="req">*</span></label>
-      <input class="form-input" id="inp-phone" type="tel" placeholder="010-0000-0000">
-    </div>
-
-    <div class="form-row">
-      <label class="form-label">이메일 주소 <span class="req">*</span></label>
-      <p style="font-size:11.5px;color:#888;margin:-2px 0 7px;line-height:1.5;">✉️ 고객님께서 방금 완성하신 작업물을 이 이메일로 보내드립니다</p>
-      <input class="form-input" id="inp-email" type="email" placeholder="example@email.com">
-    </div>
-
-    <div class="modal-btns">
-      <button class="m-btn m-cancel" id="modal-cancel">취소</button>
-      <button class="m-btn m-confirm" id="modal-confirm">전송하기</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════ 로딩 ════════════ -->
-<div class="loading-bg" id="loading">
-  <div class="spinner"></div>
-  <span>전송 중입니다...</span>
-</div>
-
-<!-- ════════════ 성공 모달 ════════════ -->
-<div class="modal-bg" id="success-modal">
-  <div class="modal-box" style="text-align:center;">
-    <div class="success-icon">✅</div>
-    <div class="modal-title" style="justify-content:center;">주문이 접수되었습니다!</div>
-    <p style="font-size:13px;color:#444;line-height:1.8;margin-bottom:20px;text-align:left;">
-      📧 <b>이메일을 확인해주세요!</b><br>
-      주문하신 작품의 <b>3D 미리보기 파일</b>이 첨부되어 있습니다.<br>
-      파일을 열어 실제 캔버스가 어떻게 보일지 직접 확인하실 수 있어요.<br><br>
-      ✏️ 수정이 필요하신 경우, 함께 첨부된<br>
-      <b>AI 프롬프트 가이드</b>를 참고해 원하시는 스타일을 알려주시면<br>
-      빠르게 반영해드리겠습니다.
-    </p>
-    <button class="m-btn m-confirm" style="width:100%;" id="success-ok">확인</button>
-  </div>
 </div>
 
 <!-- 해상도 부족 경고 팝업 -->
@@ -2581,7 +2253,7 @@
   </div>
 </div>
 
-<!-- ════════════ 겹침 경고 팝업 (작업물 보내기 차단) ════════════ -->
+<!-- ════════════ 겹침 경고 팝업 (주문하기 차단) ════════════ -->
 <div id="overlap-block-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.22);text-align:center;">
     <div style="display:flex;justify-content:center;margin-bottom:12px;">
@@ -3420,15 +3092,6 @@ function addStickerTemplate() {
   });
 })();
 
-// ─────────── 상단 바 예상작품/작업물 버튼 연결 ───────────
-var previewTopBtn = document.getElementById('btn-preview3d-top');
-if (previewTopBtn) previewTopBtn.addEventListener('click', function() {
-  document.getElementById('btn-preview3d').click();
-});
-var sendTopBtn = document.getElementById('btn-send-top');
-if (sendTopBtn) sendTopBtn.addEventListener('click', function() {
-  document.getElementById('btn-send').click();
-});
 
 // ─────────── 안내사항 토글 (이벤트 위임) ───────────
 document.body.addEventListener('click', function(e) {
@@ -4471,7 +4134,7 @@ function checkMinimumResolution(file) {
     img.onload = () => {
       URL.revokeObjectURL(url);
       const minSide = Math.min(img.width, img.height);
-      if (minSide < 100) {
+      if (minSide < 500) {
         const modal = document.getElementById('res-error-modal');
         document.getElementById('res-error-msg').innerHTML =
           `현재 이미지 크기: <strong>${img.width}×${img.height}px</strong><br>` +
@@ -4493,19 +4156,20 @@ document.getElementById('res-error-ok').addEventListener('click', () => {
 
 // ── 이미지 파일 처리 공용 함수 (file-input + 드롭존 공유) ──
 async function processImageFile(file) {
-  console.log('[IMG] processImageFile 호출됨', file?.name, file?.size);
   if (!file || !file.type.match(/^image\/(jpeg|png|webp)$/)) {
+    // iOS HEIC 감지 → 친절한 안내
+    if (file && (file.type === 'image/heic' || /\.heic$/i.test(file.name || ''))) {
+      alert('아이폰 사진(HEIC)은 바로 업로드가 어렵습니다.\n\n[설정 → 카메라 → 포맷 → 높은 호환성]으로 변경하거나,\n사진을 JPG로 변환 후 다시 시도해주세요.');
+      return;
+    }
     alert('JPG 또는 PNG 파일만 업로드할 수 있습니다.'); return;
   }
   if (file.size > 10 * 1024 * 1024) {
     alert('파일 크기가 10MB를 초과합니다.\n더 작은 이미지를 사용해주세요.'); return;
   }
-  console.log('[IMG] 해상도 검증 시작');
   const allowed = await checkMinimumResolution(file);
-  console.log('[IMG] 해상도 검증 결과:', allowed);
   if (!allowed) return;
 
-  console.log('[IMG] FileReader 시작');
   const reader = new FileReader();
   reader.onload = evt => {
     fabric.Image.fromURL(evt.target.result, img => {
@@ -4758,7 +4422,18 @@ document.getElementById('add-text').addEventListener('click', () => {
   canvas.renderAll();
 });
 
-// ─────────── 전송 모달 ───────────
+
+// ════════════════════════════════════════════════════
+//  🛒 주문하기 (아임웹 상품 페이지로 이동)
+// ════════════════════════════════════════════════════
+//
+//  아임웹에 상품 등록 후, 아래 IMWEB_PRODUCT_URL 값을
+//  해당 상품 상세 페이지 URL로 교체해주세요.
+//  예: 'https://pickyourgoods.imweb.me/shop/product.html?idx=12'
+//
+// ════════════════════════════════════════════════════
+const IMWEB_PRODUCT_URL = 'YOUR_IMWEB_PRODUCT_URL_HERE';
+
 document.getElementById('btn-send').addEventListener('click', () => {
   // 겹침 경고가 하나라도 있으면 차단
   const hasOverlap = Array.from(document.querySelectorAll('.overlap-warning')).some(w => w.classList.contains('visible'));
@@ -4766,885 +4441,34 @@ document.getElementById('btn-send').addEventListener('click', () => {
     document.getElementById('overlap-block-modal').style.display = 'flex';
     return;
   }
-  document.getElementById('order-modal').classList.add('open');
-});
-document.getElementById('modal-cancel').addEventListener('click', () => {
-  document.getElementById('order-modal').classList.remove('open');
-});
-
-// 전송 확인
-document.getElementById('modal-confirm').addEventListener('click', async () => {
-  const name  = document.getElementById('inp-name').value.trim();
-  const phone = document.getElementById('inp-phone').value.trim();
-  const email = document.getElementById('inp-email').value.trim();
-
-  if (!name)  { alert('주문자 이름을 입력해주세요.'); return; }
-  if (!phone) { alert('연락처를 입력해주세요.'); return; }
-  if (!email) { alert('이메일 주소를 입력해주세요.'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    alert('올바른 이메일 주소를 입력해주세요.'); return;
+  // 총 10매 체크 (셀별 매수 합)
+  if (typeof cellQtyGetTotal === 'function') {
+    const totalQty = cellQtyGetTotal();
+    if (totalQty !== 10) {
+      const short = 10 - totalQty;
+      alert('총 10매로 맞춰주세요.\n\n현재: ' + totalQty + '매\n' +
+            (short > 0 ? ('부족: ' + short + '매') : ('초과: ' + Math.abs(short) + '매')) +
+            '\n\n각 스티커의 +/− 버튼으로 조정해주세요.');
+      return;
+    }
   }
-
-  // GAS URL 미설정 / 예시 URL 사용 여부 검사
-  const urlIsPlaceholder = !GAS_URL
-    || GAS_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
-    || !GAS_URL.startsWith('https://script.google.com/macros/s/')
-    || !GAS_URL.endsWith('/exec')
-    || GAS_URL.includes('ABCDEF')
-    || GAS_URL.includes('...');
-
-  if (urlIsPlaceholder) {
-    alert('⚠️ Google Apps Script URL이 아직 올바르게 설정되지 않았습니다.\n\n설치가이드.txt 의 STEP 1~2를 다시 따라해주세요.\n\n실제 URL 형식 예시:\nhttps://script.google.com/macros/s/AKfycb.../exec');
+  // 빈 캔버스 체크
+  const hasUserContent = canvas.getObjects().some(o => !o.__guide && !o.__titlePart);
+  if (!hasUserContent) {
+    alert('스티커에 이미지나 텍스트를 추가해주세요.');
     return;
   }
 
-  document.getElementById('order-modal').classList.remove('open');
-  document.getElementById('loading').classList.add('open');
-
-  // 로딩 화면이 먼저 렌더링되도록 한 프레임 양보
-  await new Promise(resolve => setTimeout(resolve, 80));
-
-  try {
-    const guides = canvas.getObjects().filter(o => o.__guide);
-
-    // ① 고객용 PNG — 가이드선(빨간/검정 점선) 포함
-    canvas.discardActiveObject();
-    canvas.renderAll();
-    const customerImageData = canvas.toDataURL({ format: 'png', multiplier: 1 }).split(',')[1];
-
-    // ② 사장님용 PNG — 가이드선 숨기고, 사이즈별 목표 150DPI로 동적 배율 적용
-    guides.forEach(g => g.set('visible', false));
-    canvas.renderAll();
-    const _currentDpi = (CW / currentSizeW) * 2.54;
-    const exportMultiplier = Math.max(1, Math.min(Math.ceil(150 / _currentDpi), 5));
-    const imageData = canvas.toDataURL({ format: 'png', multiplier: exportMultiplier }).split(',')[1];
-
-    // ③ 인터랙티브 3D HTML 생성 — fabricEl이 guide-free인 상태에서 캡처
-    // ④ 가이드선 복원은 finally로 항상 실행 (3D 생성 실패해도 guide 복원 보장)
-    let preview3dHtml = null;
-    try {
-      preview3dHtml = generate3DPreviewHTML();
-    } catch (e3d) {
-      console.warn('3D HTML 생성 실패 (이메일 첨부 없이 진행):', e3d);
-    } finally {
-      guides.forEach(g => g.set('visible', true));
-      canvas.renderAll();
-    }
-
-    const payload = { name, phone, email, imageData, customerImageData, preview3dHtml };
-
-    // 30초 타임아웃 설정
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 30000);
-
-    let res;
-    try {
-      res = await fetch(GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timer);
-    }
-
-    const result = await res.json();
-    document.getElementById('loading').classList.remove('open');
-
-    if (result.success) {
-      document.getElementById('success-modal').classList.add('open');
-      resetForm();
-    } else {
-      throw new Error(result.error || '서버 오류');
-    }
-  } catch (err) {
-    document.getElementById('loading').classList.remove('open');
-    if (err.name === 'AbortError') {
-      alert('전송 시간이 초과되었습니다. (30초)\n인터넷 연결을 확인하고 다시 시도해주세요.');
-    } else {
-      alert('전송 중 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.\n\n(' + err.message + ')');
-    }
-  }
-});
-
-document.getElementById('success-ok').addEventListener('click', () => {
-  document.getElementById('success-modal').classList.remove('open');
-});
-
-function resetForm() {
-  document.getElementById('inp-name').value  = '';
-  document.getElementById('inp-phone').value = '';
-  document.getElementById('inp-email').value = '';
-}
-
-// ════════════════════════════════════════════════════
-//  3D 미리보기
-// ════════════════════════════════════════════════════
-let mock3dRenderer = null, mock3dAnimId = null;
-let mock3dDisposables = [];   // 텍스처/재질/지오메트리 추적 → cleanup 시 dispose
-
-function cleanup3D() {
-  if (mock3dAnimId) { cancelAnimationFrame(mock3dAnimId); mock3dAnimId = null; }
-  mock3dDisposables.forEach(d => { try { d.dispose(); } catch(e) {} });
-  mock3dDisposables = [];
-  if (mock3dRenderer) { mock3dRenderer.dispose(); mock3dRenderer = null; }
-}
-
-// 캔버스 천 노멀맵 — 수직/수평 섬유가 교차하는 리넨 직물 패턴
-function makeCanvasGrainNormalMap() {
-  const size = 512;
-  const c = document.createElement('canvas');
-  c.width = size; c.height = size;
-  const ctx = c.getContext('2d');
-  // 중립 노멀 (rgb 128,128,255)
-  ctx.fillStyle = '#8080ff';
-  ctx.fillRect(0, 0, size, size);
-
-  const sp = 5; // 섬유 간격(px)
-  // 수평 섬유 (씨실)
-  ctx.lineWidth = sp * 0.62;
-  for (let y = sp / 2; y < size; y += sp) {
-    const rnd = Math.random();
-    const dark = Math.round(70 + rnd * 35);
-    ctx.strokeStyle = `rgba(${dark},${dark},240,0.52)`;
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    for (let x = 0; x < size; x += 12) {
-      ctx.quadraticCurveTo(x + 6, y + (Math.random() - 0.5) * 1.2, x + 12, y);
-    }
-    ctx.stroke();
-  }
-  // 수직 섬유 (날실)
-  ctx.lineWidth = sp * 0.58;
-  for (let x = sp / 2; x < size; x += sp) {
-    const rnd = Math.random();
-    const hi = Math.round(148 + rnd * 30);
-    ctx.strokeStyle = `rgba(${hi},128,255,0.44)`;
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    for (let y = 0; y < size; y += 12) {
-      ctx.quadraticCurveTo(x + (Math.random() - 0.5) * 1.2, y + 6, x, y + 12);
-    }
-    ctx.stroke();
-  }
-  // 교차점 미세 음영 (직물 질감 강화)
-  for (let y = sp / 2; y < size; y += sp) {
-    for (let x = sp / 2; x < size; x += sp) {
-      if (Math.random() > 0.5) {
-        ctx.fillStyle = 'rgba(100,100,240,0.18)';
-        ctx.fillRect(x - 1, y - 1, 2, 2);
-      }
-    }
-  }
-  const tex = new THREE.CanvasTexture(c);
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  const tiles = Math.max(currentSizeW, currentSizeH) / 3.5;
-  tex.repeat.set(tiles, tiles);
-  return tex;
-}
-
-// 거칠기 맵 — 캔버스 표면 불균일 재현
-function makeRoughnessMap() {
-  const size = 256;
-  const c = document.createElement('canvas');
-  c.width = size; c.height = size;
-  const ctx = c.getContext('2d');
-  ctx.fillStyle = '#c8c8c8'; // 기본 roughness ~0.78
-  ctx.fillRect(0, 0, size, size);
-  const id = ctx.getImageData(0, 0, size, size);
-  for (let i = 0; i < id.data.length; i += 4) {
-    const v = 185 + Math.random() * 55 | 0;
-    id.data[i] = id.data[i+1] = id.data[i+2] = v;
-    id.data[i+3] = 255;
-  }
-  ctx.putImageData(id, 0, 0);
-  const tex = new THREE.CanvasTexture(c);
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(6, 6);
-  return tex;
-}
-
-// padH: 좌우 확장(px), padV: 상하 확장(px)
-// 확장 영역은 인접 블리드 픽셀을 사용해 UV 경계에서 흰선 방지
-function cropTex(src, sx, sy, sw, sh, flipH, padH, padV) {
-  padH = padH || 0; padV = padV || 0;
-
-  const psx = Math.max(0, sx - padH);
-  const actualPadL = sx - psx;
-  const psy = Math.max(0, sy - padV);
-  const actualPadT = sy - psy;
-  const pex = Math.min(src.width,  sx + sw + padH);
-  const pey = Math.min(src.height, sy + sh + padV);
-  const actualPadR = pex - (sx + sw);
-  const actualPadB = pey - (sy + sh);
-  const psw = pex - psx;
-  const psh = pey - psy;
-
-  const c = document.createElement('canvas');
-  c.width = psw; c.height = psh;
-  const ctx = c.getContext('2d');
-  if (flipH) { ctx.translate(psw, 0); ctx.scale(-1, 1); }
-  ctx.drawImage(src, psx, psy, psw, psh, 0, 0, psw, psh);
-
-  const tex = new THREE.CanvasTexture(c);
-  tex.generateMipmaps = false;
-  tex.minFilter = THREE.LinearFilter;
-  tex.magFilter = THREE.LinearFilter;
-  tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-
-  // UV 조정: 확장 영역은 clamp 여유분, 실제 face에는 원본 sw×sh만 표시
-  if (psh > sh) {
-    // flipY=true 기준: offset.y = actualPadB/psh, repeat.y = sh/psh
-    tex.offset.y = actualPadB / psh;
-    tex.repeat.y = sh / psh;
-  }
-  if (psw > sw) {
-    tex.offset.x = flipH ? (actualPadR / psw) : (actualPadL / psw);
-    tex.repeat.x = sw / psw;
-  }
-  return tex;
-}
-
-// ── 실제 캔버스 뒷면 텍스처 생성 ──
-function makeCanvasBackTexture() {
-  const S = 512;
-  const bc = document.createElement('canvas');
-  bc.width = S; bc.height = S;
-  const ctx = bc.getContext('2d');
-  const BW = 42;   // 프레임 바 너비 (실물처럼 얇게)
-
-  // ── 1단계: 회색 캔버스 천 배경 (전체) ──
-  ctx.fillStyle = '#8e8b85';
-  ctx.fillRect(0, 0, S, S);
-  // 직조 텍스처 (가로/세로 교차)
-  for (let i = 0; i < S; i += 3) {
-    const a = (i % 6 === 0) ? 0.10 : 0.05;
-    ctx.strokeStyle = `rgba(255,255,255,${a})`;
-    ctx.lineWidth = 0.8;
-    ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, S); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(S, i); ctx.stroke();
-  }
-  // 천 전체에 약한 주변부 어둠 (실물처럼 구석이 약간 어두움)
-  const vignette = ctx.createRadialGradient(S/2, S/2, S*0.25, S/2, S/2, S*0.75);
-  vignette.addColorStop(0, 'rgba(0,0,0,0)');
-  vignette.addColorStop(1, 'rgba(0,0,0,0.18)');
-  ctx.fillStyle = vignette;
-  ctx.fillRect(0, 0, S, S);
-
-  // ── 2단계: 밝은 소나무 프레임 바 ──
-  function drawBar(x, y, w, h) {
-    ctx.save();
-    ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
-
-    // 소나무 기본색 — 실사처럼 밝은 크림/아이보리
-    ctx.fillStyle = '#dfd4b0';
-    ctx.fillRect(x, y, w, h);
-
-    // 나뭇결 (베지어 곡선으로 자연스럽게)
-    const isH = w >= h;
-    const len = isH ? w : h;
-    for (let k = 2; k < len - 2; k += 4 + Math.random() * 7) {
-      const alpha = 0.04 + Math.random() * 0.10;
-      ctx.strokeStyle = `rgba(120,80,30,${alpha})`;
-      ctx.lineWidth = 0.6 + Math.random() * 1.0;
-      ctx.beginPath();
-      if (isH) {
-        const x0 = x + k, wave = (Math.random()-0.5) * h * 0.6;
-        ctx.moveTo(x0, y);
-        ctx.bezierCurveTo(x0 + wave*0.5, y + h*0.35, x0 + wave, y + h*0.65, x0 + wave*0.3, y + h);
-      } else {
-        const y0 = y + k, wave = (Math.random()-0.5) * w * 0.6;
-        ctx.moveTo(x, y0);
-        ctx.bezierCurveTo(x + w*0.35, y0 + wave*0.5, x + w*0.65, y0 + wave, x + w, y0 + wave*0.3);
-      }
-      ctx.stroke();
-    }
-
-    // 바 표면 하이라이트 (빛이 위/좌에서 — 올라와 있는 느낌)
-    const hl = isH
-      ? ctx.createLinearGradient(x, y, x, y + h)
-      : ctx.createLinearGradient(x, y, x + w, y);
-    hl.addColorStop(0,   'rgba(255,255,255,0.28)');
-    hl.addColorStop(0.4, 'rgba(255,255,255,0.08)');
-    hl.addColorStop(1,   'rgba(0,0,0,0.08)');
-    ctx.fillStyle = hl;
-    ctx.fillRect(x, y, w, h);
-
-    ctx.restore();
-
-    // 바 안쪽 가장자리 — 천 위에 올라온 단차 그림자
-    ctx.save();
-    if (isH) {
-      // 상단 바 → 아래쪽 가장자리에 그림자
-      if (y < S / 2) {
-        const sh = ctx.createLinearGradient(0, y + h, 0, y + h + BW * 0.7);
-        sh.addColorStop(0, 'rgba(0,0,0,0.45)');
-        sh.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = sh;
-        ctx.fillRect(x + BW, y + h, w - BW*2, BW * 0.7);
-      } else {
-        // 하단 바 → 위쪽 가장자리
-        const sh = ctx.createLinearGradient(0, y - BW * 0.5, 0, y);
-        sh.addColorStop(0, 'rgba(0,0,0,0)');
-        sh.addColorStop(1, 'rgba(0,0,0,0.35)');
-        ctx.fillStyle = sh;
-        ctx.fillRect(x + BW, y - BW * 0.5, w - BW*2, BW * 0.5);
-      }
-    } else {
-      // 좌측 바 → 오른쪽 가장자리
-      if (x < S / 2) {
-        const sh = ctx.createLinearGradient(x + w, 0, x + w + BW * 0.7, 0);
-        sh.addColorStop(0, 'rgba(0,0,0,0.40)');
-        sh.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = sh;
-        ctx.fillRect(x + w, y, BW * 0.7, h);
-      } else {
-        // 우측 바 → 왼쪽 가장자리
-        const sh = ctx.createLinearGradient(x - BW * 0.5, 0, x, 0);
-        sh.addColorStop(0, 'rgba(0,0,0,0)');
-        sh.addColorStop(1, 'rgba(0,0,0,0.30)');
-        ctx.fillStyle = sh;
-        ctx.fillRect(x - BW * 0.5, y, BW * 0.5, h);
-      }
-    }
-    ctx.restore();
-  }
-
-  drawBar(0,      0,      S,        BW);        // 상단
-  drawBar(0,      S-BW,   S,        BW);        // 하단
-  drawBar(0,      BW,     BW,       S - BW*2);  // 좌측
-  drawBar(S-BW,   BW,     BW,       S - BW*2);  // 우측
-
-  // ── 3단계: 모서리 이음새 (밝은 소나무 색으로 채움) ──
-  ctx.fillStyle = '#dfd4b0';
-  ctx.fillRect(0, 0, BW, BW);
-  ctx.fillRect(S-BW, 0, BW, BW);
-  ctx.fillRect(0, S-BW, BW, BW);
-  ctx.fillRect(S-BW, S-BW, BW, BW);
-
-  // 모서리 이음새 경계 (실제 나무 조각이 만나는 45° 선)
-  ctx.strokeStyle = 'rgba(60,40,10,0.30)';
-  ctx.lineWidth = 1.2;
-  [[0,0,BW,BW],[S,0,S-BW,BW],[0,S,BW,S-BW],[S,S,S-BW,S-BW]].forEach(([x1,y1,x2,y2]) => {
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
-  });
-
-  // ── 4단계: 외곽 흰색 캔버스 천 감싸기 (실물처럼 바깥쪽이 흰천) ──
-  ctx.strokeStyle = 'rgba(220,215,205,0.9)';
-  ctx.lineWidth = BW * 0.18;
-  ctx.strokeRect(ctx.lineWidth/2, ctx.lineWidth/2, S - ctx.lineWidth, S - ctx.lineWidth);
-
-  return new THREE.CanvasTexture(bc);
-}
-
-function init3DScene() {
-  cleanup3D();
-
-  // ── 캔버스 캡처 전 처리 ──
-  // 1) 선택 해제 (선택 핸들이 텍스처에 포함되지 않도록)
-  canvas.discardActiveObject();
-  // 2) 가이드선 일시 숨기기 (빨간선/검정선이 텍스처에 찍히지 않도록)
-  const guides = canvas.getObjects().filter(o => o.__guide);
-  guides.forEach(g => { g.visible = false; });
-  canvas.renderAll();
-
-  const fabricEl = canvas.getElement();
-  const cw = fabricEl.width, ch = fabricEl.height;
-
-  // drawGuides와 동일한 공식 + retina 스케일 반영으로 정확한 bleedPx 계산
-  const retinaScale = (canvas.getRetinaScaling && canvas.getRetinaScaling()) || 1;
-  const bleedPx = Math.round(CW * 3 / currentSizeW) * retinaScale;
-
-  // 내부 픽셀 크기 = 빨간선 안쪽 (앞면에 쓸 영역)
-  const innerCw = cw - 2 * bleedPx;
-  const innerCh = ch - 2 * bleedPx;
-
-  // 3D 단위: 전체 캔버스 긴 변 기준 스케일
-  const scl = 2.6 / Math.max(currentSizeW, currentSizeH);
-  // 박스 앞면 크기 = 빨간선 안쪽 실제 치수 (전체 - 양쪽 3cm씩)
-  const W = currentSizeW * scl;
-  const H = currentSizeH * scl;
-  // 옆면 깊이 = 정확히 3cm 비율 (사이즈에 따라 자동 비례)
-  const D = 3 * scl;
-
-  const vp = document.getElementById('mock3d-viewport');
-  const vw = vp.clientWidth, vh = vp.clientHeight;
-
-  // ── Scene ──
-  const scene = new THREE.Scene();
-
-  // 그라데이션 배경 (2번 참고이미지처럼: 중앙 밝은 회색 → 가장자리 어두운 회색)
-  const bgC = document.createElement('canvas');
-  bgC.width = 512; bgC.height = 512;
-  const bgCtx = bgC.getContext('2d');
-  const bgGrad = bgCtx.createRadialGradient(256, 210, 0, 256, 256, 380);
-  bgGrad.addColorStop(0,   '#d6d6d6');
-  bgGrad.addColorStop(0.5, '#b8b8b8');
-  bgGrad.addColorStop(1,   '#7a7a7a');
-  bgCtx.fillStyle = bgGrad;
-  bgCtx.fillRect(0, 0, 512, 512);
-  scene.background = new THREE.CanvasTexture(bgC);
-
-  // ── Camera — 캔버스를 화면 상단으로 올려 힌트와 간격 확보 ──
-  const camDist = Math.max(W, H) * 2.3;
-  const cam = new THREE.PerspectiveCamera(36, vw / vh, 0.01, 50);
-  cam.position.set(W * 0.04, -H * 0.075, camDist);
-  cam.lookAt(0, -H * 0.075, 0);
-
-  // ── Renderer ──
-  const c3 = document.getElementById('mock3d-canvas');
-  c3.width = vw; c3.height = vh;
-  mock3dRenderer = new THREE.WebGLRenderer({ canvas: c3, antialias: true });
-  mock3dRenderer.setSize(vw, vh);
-  mock3dRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  mock3dRenderer.shadowMap.enabled = true;
-  mock3dRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  mock3dRenderer.toneMapping = THREE.LinearToneMapping;
-  mock3dRenderer.toneMappingExposure = 1.0;
-
-  // ── 조명: 캔버스 질감이 살아나도록 방향성 조명 강화 ──
-  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-
-  // 메인 키 라이트 (우상단 앞쪽 → 정면은 밝고 측면은 어두워져 입체감)
-  const keyLight = new THREE.DirectionalLight(0xfff8f0, 0.85);
-  keyLight.position.set(3, 5, 4);
-  keyLight.castShadow = true;
-  keyLight.shadow.mapSize.set(1024, 1024);
-  keyLight.shadow.camera.near = 0.1;
-  keyLight.shadow.camera.far  = 20;
-  keyLight.shadow.camera.left = keyLight.shadow.camera.bottom = -4;
-  keyLight.shadow.camera.right = keyLight.shadow.camera.top   =  4;
-  keyLight.shadow.bias = -0.001;
-  scene.add(keyLight);
-
-  // 보조 필 라이트 (반대편 약하게 — 측면이 완전히 어둡지 않게)
-  const fillLight = new THREE.DirectionalLight(0xffffff, 0.25);
-  fillLight.position.set(-2, 1, -2);
-  scene.add(fillLight);
-
-  // ── 리넨 직조 타일 생성 함수 — 레퍼런스 수준의 섬세한 질감 ──
-  function applyWeave(ctx, w, h) {
-    const fw = 3; // 섬유 폭(px) — 가늘게 해야 실제 캔버스처럼 촘촘해 보임
-    const tile = document.createElement('canvas');
-    tile.width = tile.height = fw * 2;
-    const tc = tile.getContext('2d');
-    // 수평 씨실: 중앙이 살짝 밝고 가장자리가 살짝 어둠 (실 볼록함)
-    const hg = tc.createLinearGradient(0, 0, 0, fw);
-    hg.addColorStop(0,    'rgba(255,255,255,0.00)');
-    hg.addColorStop(0.4,  'rgba(255,255,255,0.09)');
-    hg.addColorStop(1,    'rgba(0,0,0,0.06)');
-    tc.fillStyle = hg; tc.fillRect(0, 0, fw * 2, fw);
-    // 수직 날실: 왼쪽 살짝 밝고 오른쪽 살짝 어둠
-    const vg = tc.createLinearGradient(0, 0, fw, 0);
-    vg.addColorStop(0,    'rgba(255,255,255,0.00)');
-    vg.addColorStop(0.4,  'rgba(255,255,255,0.07)');
-    vg.addColorStop(1,    'rgba(0,0,0,0.05)');
-    tc.fillStyle = vg; tc.fillRect(0, fw, fw, fw);
-    // 교차점: 아주 살짝만
-    tc.fillStyle = 'rgba(0,0,0,0.03)';
-    tc.fillRect(fw, fw, fw, fw);
-    const pat = ctx.createPattern(tile, 'repeat');
-    ctx.save();
-    ctx.globalCompositeOperation = 'overlay';
-    ctx.globalAlpha = 0.40;   // 레퍼런스 수준 — 보이지만 이미지를 해치지 않음
-    ctx.fillStyle = pat;
-    ctx.fillRect(0, 0, w, h);
-    ctx.restore();
-  }
-
-  // ── 텍스처 생성 (MeshStandardMaterial — 조명 반응, 질감 표현) ──
-
-  // 앞면: 빨간선 안쪽만 크롭 (블리드 영역 제외)
-  const compositeC = document.createElement('canvas');
-  compositeC.width = innerCw; compositeC.height = innerCh;
-  const compCtx = compositeC.getContext('2d');
-  compCtx.drawImage(fabricEl, bleedPx, bleedPx, innerCw, innerCh, 0, 0, innerCw, innerCh);
-  applyWeave(compCtx, innerCw, innerCh);
-
-  const frontTex = new THREE.CanvasTexture(compositeC);
-  frontTex.needsUpdate = true;
-
-  // 옆면: 빨간선↔검정선 사이 스트립 크롭 + bleedPx만큼 상하/좌우 확장
-  // → UV clamp 시 흰 배경 대신 인접 블리드 픽셀 사용 (흰선 방지)
-  const rightTex  = cropTex(fabricEl, cw - bleedPx, bleedPx, bleedPx, innerCh, false, 0, bleedPx);
-  const leftTex   = cropTex(fabricEl, 0,            bleedPx, bleedPx, innerCh, false, 0, bleedPx);
-  const topTex    = cropTex(fabricEl, bleedPx, 0,            innerCw, bleedPx, false, bleedPx, 0);
-  const bottomTex = cropTex(fabricEl, bleedPx, ch - bleedPx, innerCw, bleedPx, false, bleedPx, 0);
-
-  // 뒷면: 실제 캔버스 뒷면 (나무 프레임 + 코르크 모서리)
-  const backTex = makeCanvasBackTexture();
-
-  // ── 캡처 완료 → 가이드선 복원 ──
-  guides.forEach(g => { g.visible = true; });
-  canvas.renderAll();
-
-  // ── 재질: MeshStandardMaterial — 조명 반응 + 캔버스 무광 질감 ──
-  function mat(tex) {
-    return new THREE.MeshStandardMaterial({
-      map: tex,
-      roughness: 1.0,   // 완전 무광 (캔버스 천 느낌)
-      metalness: 0.0,
-    });
-  }
-
-  // BoxGeometry 면 순서: +x(우), -x(좌), +y(상), -y(하), +z(앞), -z(뒤)
-  const materials = [
-    mat(rightTex),
-    mat(leftTex),
-    mat(topTex),
-    mat(bottomTex),
-    mat(frontTex),
-    new THREE.MeshStandardMaterial({ map: backTex, roughness: 1.0, metalness: 0.0 }),
-  ];
-
-  const geo = new THREE.BoxGeometry(W, H, D);
-  const box = new THREE.Mesh(geo, materials);
-  box.castShadow    = true;
-  box.receiveShadow = true;
-  scene.add(box);
-
-  // ── 메모리 관리: 텍스처/재질/지오메트리 dispose 등록 ──
-  mock3dDisposables.push(frontTex, rightTex, leftTex, topTex, bottomTex, backTex, geo);
-  mock3dDisposables.push(...materials);
-
-  // 바닥 그림자 (캔버스가 세워진 듯한 느낌)
-  const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(20, 20),
-    new THREE.ShadowMaterial({ opacity: 0.32 })
-  );
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -H / 2 - 0.003;
-  floor.receiveShadow = true;
-  scene.add(floor);
-
-  // ── 초기 각도: 좌측으로 틀어서 3D 인지 (반대 방향) ──
-  let rotY = 0.52, rotX = 0.10;
-  box.rotation.y = rotY;
-  box.rotation.x = rotX;
-
-  // ── 마우스/터치 드래그 회전, 휠 줌 ──
-  let dragging = false, prev = { x: 0, y: 0 };
-
-  // ── 자동 회전 (처음 열릴 때 왼쪽→오른쪽으로 회전해서 3D임을 인지) ──
-  let autoRotating = true;
-  const autoRotStartY = rotY;          // 시작 각도 (0.52)
-  const autoRotEndY   = rotY - 1.05;   // 왼쪽으로 60° 돌고 멈춤
-  const autoRotDur    = 1600;          // 1.6초
-  const autoRotStart  = performance.now();
-
-  // 드래그 유도 힌트 오버레이
-  const dragHintEl = document.getElementById('mock3d-drag-hint');
-  let dragHintTimer = null;
-  function showDragHint() {
-    if (!dragHintEl) return;
-    dragHintEl.classList.remove('fadeout');
-    dragHintEl.classList.add('visible');
-    dragHintTimer = setTimeout(() => {
-      dragHintEl.classList.add('fadeout');
-      setTimeout(() => dragHintEl.classList.remove('visible', 'fadeout'), 400);
-    }, 2200);
-  }
-  function hideDragHint() {
-    if (!dragHintEl) return;
-    clearTimeout(dragHintTimer);
-    dragHintEl.classList.remove('visible');
-    dragHintEl.classList.add('fadeout');
-    setTimeout(() => dragHintEl.classList.remove('fadeout'), 400);
-  }
-
-  function onDown(x, y) {
-    autoRotating = false;              // 드래그하면 자동회전 즉시 중단
-    hideDragHint();
-    dragging = true;
-    prev = { x, y };
-  }
-  function onMove(x, y) {
-    if (!dragging) return;
-    rotY += (x - prev.x) * 0.012;
-    rotX += (y - prev.y) * 0.012;
-    rotX = Math.max(-Math.PI * 0.48, Math.min(Math.PI * 0.48, rotX));
-    box.rotation.y = rotY;
-    box.rotation.x = rotX;
-    prev = { x, y };
-  }
-  function onUp() { dragging = false; }
-
-  c3.addEventListener('mousedown',  e => onDown(e.clientX, e.clientY));
-  c3.addEventListener('mousemove',  e => onMove(e.clientX, e.clientY));
-  c3.addEventListener('mouseup',    onUp);
-  c3.addEventListener('mouseleave', onUp);
-  c3.addEventListener('touchstart', e => { autoRotating = false; onDown(e.touches[0].clientX, e.touches[0].clientY); });
-  c3.addEventListener('touchmove',  e => { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
-  c3.addEventListener('touchend',   onUp);
-  c3.addEventListener('wheel', e => {
-    e.preventDefault();
-    cam.position.z = Math.max(camDist * 0.42, Math.min(camDist * 2.4, cam.position.z + e.deltaY * 0.004));
-  }, { passive: false });
-
-  // ── 렌더 루프 ──
-  function animate() {
-    mock3dAnimId = requestAnimationFrame(animate);
-
-    // 자동 회전: ease-out 커브로 부드럽게 감속
-    if (autoRotating) {
-      const elapsed = performance.now() - autoRotStart;
-      const t = Math.min(elapsed / autoRotDur, 1);
-      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
-      rotY = autoRotStartY + (autoRotEndY - autoRotStartY) * eased;
-      box.rotation.y = rotY;
-      if (t >= 1) { autoRotating = false; showDragHint(); }
-    }
-
-    mock3dRenderer.render(scene, cam);
-  }
-  animate();
-}
-
-document.getElementById('btn-preview3d').addEventListener('click', () => {
-  const hasContent = canvas.getObjects().some(o => !o.__guide);
-  if (!hasContent) {
-    alert('캔버스에 이미지나 텍스트를 먼저 추가해 주세요.');
+  // 아임웹 URL 설정 확인
+  if (!IMWEB_PRODUCT_URL || IMWEB_PRODUCT_URL === 'YOUR_IMWEB_PRODUCT_URL_HERE') {
+    alert('⚠️ 아임웹 상품 URL이 아직 설정되지 않았습니다.\n\n관리자에게 문의해주세요.');
     return;
   }
-  document.getElementById('mock3d-modal').style.display = 'flex';
-  setTimeout(init3DScene, 60);
+
+  // 아임웹 상품 상세 페이지로 이동
+  window.location.href = IMWEB_PRODUCT_URL;
 });
 
-document.getElementById('mock3d-close-btn').addEventListener('click', () => {
-  document.getElementById('mock3d-modal').style.display = 'none';
-  cleanup3D();
-});
-
-document.getElementById('mock3d-modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('mock3d-modal')) {
-    document.getElementById('mock3d-modal').style.display = 'none';
-    cleanup3D();
-  }
-});
-
-// ─────────── 인터랙티브 3D HTML 생성 (이메일 첨부용) ───────────
-// guides가 이미 숨겨진 상태에서 호출
-function generate3DPreviewHTML() {
-  const fabricEl = canvas.getElement();
-  const retinaScale = (canvas.getRetinaScaling && canvas.getRetinaScaling()) || 1;
-  const bleedPx = Math.round(CW * 3 / currentSizeW) * retinaScale;
-  const cw = fabricEl.width, ch = fabricEl.height;
-  const innerCw = cw - 2 * bleedPx, innerCh = ch - 2 * bleedPx;
-
-  // 영역 → JPEG data URL 변환 헬퍼
-  function cropURL(sx, sy, sw, sh, q) {
-    const tmp = document.createElement('canvas');
-    tmp.width  = Math.max(1, Math.round(sw));
-    tmp.height = Math.max(1, Math.round(sh));
-    tmp.getContext('2d').drawImage(fabricEl, sx, sy, sw, sh, 0, 0, tmp.width, tmp.height);
-    return tmp.toDataURL('image/jpeg', q || 0.90);
-  }
-
-  // 앞면 0.95 고화질, 4개 옆면은 실제 블리드 스트립 캡처
-  const frontURL  = cropURL(bleedPx,          bleedPx,          innerCw,  innerCh,  0.95);
-  const rightURL  = cropURL(cw - bleedPx,     bleedPx,          bleedPx,  innerCh,  0.90);
-  const leftURL   = cropURL(0,                bleedPx,          bleedPx,  innerCh,  0.90);
-  const topURL    = cropURL(bleedPx,          0,                innerCw,  bleedPx,  0.90);
-  const bottomURL = cropURL(bleedPx,          ch - bleedPx,     innerCw,  bleedPx,  0.90);
-
-  // init3DScene과 동일한 3D 크기 계산
-  const scl3d = 2.6 / Math.max(currentSizeW, currentSizeH);
-  const W3d   = (currentSizeW * scl3d).toFixed(5);
-  const H3d   = (currentSizeH * scl3d).toFixed(5);
-  const D3d   = (3            * scl3d).toFixed(5);
-
-  // HTML 파서 오인식 방지: SC 변수로 조합
-  const SC = '<' + '/script>';
-
-  const html = `<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>픽유어굿즈 — 나의 캔버스 3D 미리보기</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">${SC}
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#b0b0b0;overflow:hidden;font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif}
-#c{display:block;width:100vw;height:100vh;cursor:grab}
-#c:active{cursor:grabbing}
-#topbar{position:fixed;top:0;left:0;right:0;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:10}
-#brand{font-size:18px;font-weight:800;color:#111;letter-spacing:-0.03em}
-#brand span{color:#8b5cf6}
-#tagline{font-size:12px;color:#555;font-weight:500}
-#bottom-hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.88);padding:9px 24px;border-radius:30px;font-size:13px;font-weight:600;color:#333;box-shadow:0 3px 16px rgba(0,0,0,0.14);white-space:nowrap;pointer-events:none;transition:opacity 0.5s;z-index:10}
-#bottom-hint.hidden{opacity:0}
-#drag-hint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;gap:10px;pointer-events:none;z-index:20}
-.dh-hand{font-size:46px;animation:swipe 1.1s ease-in-out infinite}
-.dh-text{font-size:15px;font-weight:700;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,0.55);letter-spacing:0.04em;white-space:nowrap}
-@keyframes swipe{0%{transform:translateX(-18px)}50%{transform:translateX(18px)}100%{transform:translateX(-18px)}}
-</style>
-</head>
-<body>
-<div id="topbar">
-  <div id="brand">✨ <span>픽유어굿즈</span></div>
-  <div id="tagline">나의 캔버스 3D 미리보기</div>
-</div>
-<canvas id="c"></canvas>
-<div id="drag-hint"><div class="dh-hand">👆</div><div class="dh-text">← &nbsp;드래그로 회전&nbsp; →</div></div>
-<div id="bottom-hint">🖱 드래그로 회전 &nbsp;·&nbsp; 스크롤로 확대/축소</div>
-<script>
-(function(){
-  var FRONT='${frontURL}';
-  var RIGHT='${rightURL}';
-  var LEFT='${leftURL}';
-  var TOP='${topURL}';
-  var BOTTOM='${bottomURL}';
-  var W=${W3d},H=${H3d},D=${D3d};
-
-  var c=document.getElementById('c');
-  var renderer=new THREE.WebGLRenderer({canvas:c,antialias:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.shadowMap.enabled=true;
-  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  renderer.toneMapping=THREE.LinearToneMapping;
-  renderer.toneMappingExposure=1.0;
-
-  var scene=new THREE.Scene();
-  var bgC=document.createElement('canvas'); bgC.width=512; bgC.height=512;
-  var bx=bgC.getContext('2d');
-  var bgG=bx.createRadialGradient(256,210,0,256,256,380);
-  bgG.addColorStop(0,'#d6d6d6'); bgG.addColorStop(0.5,'#b8b8b8'); bgG.addColorStop(1,'#7a7a7a');
-  bx.fillStyle=bgG; bx.fillRect(0,0,512,512);
-  scene.background=new THREE.CanvasTexture(bgC);
-
-  var camDist=Math.max(W,H)*2.3;
-  var cam=new THREE.PerspectiveCamera(36,1,0.01,50);
-  cam.position.set(W*0.04,-H*0.075,camDist);
-  cam.lookAt(0,-H*0.075,0);
-
-  scene.add(new THREE.AmbientLight(0xffffff,0.55));
-  var kL=new THREE.DirectionalLight(0xfff8f0,0.85);
-  kL.position.set(3,5,4); kL.castShadow=true;
-  kL.shadow.mapSize.width=kL.shadow.mapSize.height=1024;
-  kL.shadow.camera.near=0.1; kL.shadow.camera.far=20;
-  kL.shadow.camera.left=kL.shadow.camera.bottom=-4;
-  kL.shadow.camera.right=kL.shadow.camera.top=4;
-  kL.shadow.bias=-0.001; scene.add(kL);
-  var fL=new THREE.DirectionalLight(0xffffff,0.25);
-  fL.position.set(-2,1,-2); scene.add(fL);
-
-  var floor=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.ShadowMaterial({opacity:0.28}));
-  floor.rotation.x=-Math.PI/2; floor.position.y=-H/2-0.003; floor.receiveShadow=true; scene.add(floor);
-
-  // 뒷면 — makeCanvasBackTexture 와 동일 로직
-  function mkBack(){
-    var S=512,BW=42;
-    var bc=document.createElement('canvas'); bc.width=S; bc.height=S;
-    var ctx=bc.getContext('2d');
-    ctx.fillStyle='#8e8b85'; ctx.fillRect(0,0,S,S);
-    for(var i=0;i<S;i+=3){var a=i%6===0?0.10:0.05;ctx.strokeStyle='rgba(255,255,255,'+a+')';ctx.lineWidth=0.8;ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,S);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(S,i);ctx.stroke();}
-    var vig=ctx.createRadialGradient(S/2,S/2,S*0.25,S/2,S/2,S*0.75);
-    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.18)');
-    ctx.fillStyle=vig; ctx.fillRect(0,0,S,S);
-    function drawBar(x,y,w,h){
-      ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
-      ctx.fillStyle='#dfd4b0'; ctx.fillRect(x,y,w,h);
-      var isH=w>=h,len=isH?w:h;
-      for(var k=2;k<len-2;k+=4+Math.random()*7){
-        ctx.strokeStyle='rgba(120,80,30,'+(0.04+Math.random()*0.10)+')';
-        ctx.lineWidth=0.6+Math.random()*1.0; ctx.beginPath();
-        if(isH){var x0=x+k,wv=(Math.random()-0.5)*h*0.6;ctx.moveTo(x0,y);ctx.bezierCurveTo(x0+wv*0.5,y+h*0.35,x0+wv,y+h*0.65,x0+wv*0.3,y+h);}
-        else{var y0=y+k,wv=(Math.random()-0.5)*w*0.6;ctx.moveTo(x,y0);ctx.bezierCurveTo(x+w*0.35,y0+wv*0.5,x+w*0.65,y0+wv,x+w,y0+wv*0.3);}
-        ctx.stroke();
-      }
-      var hl=isH?ctx.createLinearGradient(x,y,x,y+h):ctx.createLinearGradient(x,y,x+w,y);
-      hl.addColorStop(0,'rgba(255,255,255,0.28)'); hl.addColorStop(0.4,'rgba(255,255,255,0.08)'); hl.addColorStop(1,'rgba(0,0,0,0.08)');
-      ctx.fillStyle=hl; ctx.fillRect(x,y,w,h); ctx.restore();
-      ctx.save();
-      if(isH){if(y<S/2){var sh=ctx.createLinearGradient(0,y+h,0,y+h+BW*0.7);sh.addColorStop(0,'rgba(0,0,0,0.45)');sh.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=sh;ctx.fillRect(x+BW,y+h,w-BW*2,BW*0.7);}else{var sh=ctx.createLinearGradient(0,y-BW*0.5,0,y);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,0.35)');ctx.fillStyle=sh;ctx.fillRect(x+BW,y-BW*0.5,w-BW*2,BW*0.5);}}
-      else{if(x<S/2){var sh=ctx.createLinearGradient(x+w,0,x+w+BW*0.7,0);sh.addColorStop(0,'rgba(0,0,0,0.40)');sh.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=sh;ctx.fillRect(x+w,y,BW*0.7,h);}else{var sh=ctx.createLinearGradient(x-BW*0.5,0,x,0);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,0.30)');ctx.fillStyle=sh;ctx.fillRect(x-BW*0.5,y,BW*0.5,h);}}
-      ctx.restore();
-    }
-    drawBar(0,0,S,BW); drawBar(0,S-BW,S,BW); drawBar(0,BW,BW,S-BW*2); drawBar(S-BW,BW,BW,S-BW*2);
-    ctx.fillStyle='#dfd4b0';
-    ctx.fillRect(0,0,BW,BW); ctx.fillRect(S-BW,0,BW,BW); ctx.fillRect(0,S-BW,BW,BW); ctx.fillRect(S-BW,S-BW,BW,BW);
-    ctx.strokeStyle='rgba(60,40,10,0.30)'; ctx.lineWidth=1.2;
-    [[0,0,BW,BW],[S,0,S-BW,BW],[0,S,BW,S-BW],[S,S,S-BW,S-BW]].forEach(function(v){ctx.beginPath();ctx.moveTo(v[0],v[1]);ctx.lineTo(v[2],v[3]);ctx.stroke();});
-    ctx.strokeStyle='rgba(220,215,205,0.9)'; ctx.lineWidth=BW*0.18;
-    ctx.strokeRect(ctx.lineWidth/2,ctx.lineWidth/2,S-ctx.lineWidth,S-ctx.lineWidth);
-    return new THREE.CanvasTexture(bc);
-  }
-
-  function mat(t){return new THREE.MeshStandardMaterial({map:t,roughness:1.0,metalness:0})}
-
-  // 5개 텍스처 로드 후 씬 구성
-  var loaded=0, texMap={};
-  function onLoad(key,tex){texMap[key]=tex; if(++loaded===5) buildScene();}
-  var ldr=new THREE.TextureLoader();
-  ldr.load(FRONT,  function(t){onLoad('front',t);});
-  ldr.load(RIGHT,  function(t){onLoad('right',t);});
-  ldr.load(LEFT,   function(t){onLoad('left',t);});
-  ldr.load(TOP,    function(t){onLoad('top',t);});
-  ldr.load(BOTTOM, function(t){onLoad('bottom',t);});
-
-  function buildScene(){
-    var backTex=mkBack();
-    var geo=new THREE.BoxGeometry(W,H,D);
-    // BoxGeometry 면 순서: +x(우), -x(좌), +y(상), -y(하), +z(앞), -z(뒤)
-    var mats=[mat(texMap.right),mat(texMap.left),mat(texMap.top),mat(texMap.bottom),mat(texMap.front),new THREE.MeshStandardMaterial({map:backTex,roughness:1.0,metalness:0})];
-    var box=new THREE.Mesh(geo,mats);
-    box.castShadow=true; box.receiveShadow=true; scene.add(box);
-
-    var rotY=0.52, rotX=0.10;
-    box.rotation.y=rotY; box.rotation.x=rotX;
-
-    // 자동회전 (init3DScene과 동일)
-    var autoRot=true, autoSY=rotY, autoEY=rotY-1.05, autoDur=1800, autoT0=performance.now();
-
-    // 드래그 힌트 표시 (자동회전 완료 후)
-    function showDragHint(){
-      var dh=document.getElementById('drag-hint');
-      dh.style.display='flex';
-      setTimeout(function(){
-        dh.style.transition='opacity 0.6s'; dh.style.opacity='0';
-        setTimeout(function(){dh.style.display='none';},700);
-      },2200);
-    }
-
-    // 드래그 컨트롤
-    var drag=false, px=0, py=0;
-    function dn(x,y){autoRot=false;drag=true;px=x;py=y;document.getElementById('bottom-hint').classList.add('hidden');document.getElementById('drag-hint').style.display='none';}
-    function mv(x,y){if(!drag)return;rotY+=(x-px)*0.012;rotX+=(y-py)*0.012;rotX=Math.max(-1.5,Math.min(1.5,rotX));box.rotation.y=rotY;box.rotation.x=rotX;px=x;py=y;}
-    function up(){drag=false;}
-    c.addEventListener('mousedown',function(e){dn(e.clientX,e.clientY);});
-    window.addEventListener('mousemove',function(e){mv(e.clientX,e.clientY);});
-    window.addEventListener('mouseup',up);
-    c.addEventListener('touchstart',function(e){dn(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
-    c.addEventListener('touchmove',function(e){e.preventDefault();mv(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
-    c.addEventListener('touchend',up);
-    c.addEventListener('wheel',function(e){e.preventDefault();cam.position.z=Math.max(camDist*0.4,Math.min(camDist*2.5,cam.position.z+e.deltaY*0.005));},{passive:false});
-
-    function resize(){renderer.setSize(window.innerWidth,window.innerHeight);cam.aspect=window.innerWidth/window.innerHeight;cam.updateProjectionMatrix();}
-    window.addEventListener('resize',resize); resize();
-
-    var hintShown=false;
-    function animate(){
-      requestAnimationFrame(animate);
-      if(autoRot){
-        var t=Math.min((performance.now()-autoT0)/autoDur,1);
-        var e=1-Math.pow(1-t,3);
-        rotY=autoSY+(autoEY-autoSY)*e; box.rotation.y=rotY;
-        if(t>=1){autoRot=false; if(!hintShown){hintShown=true; showDragHint();}}
-      }
-      renderer.render(scene,cam);
-    }
-    animate();
-  }
-})();
-${SC}
-</body>
-</html>`;
-
-  // UTF-8 safe base64 인코딩
-  return btoa(unescape(encodeURIComponent(html)));
-}
 
 // ════════════════════════════════════════════════════
 //  ✨ AI 스타일 변환
@@ -5750,6 +4574,10 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
     // 변환된 이미지를 캔버스에 새 레이어로 추가
     const dataUrl = 'data:image/png;base64,' + result.imageData;
     fabric.Image.fromURL(dataUrl, img => {
+      if (!img || !img.width) {
+        alert('변환된 이미지를 불러오는 데 실패했습니다.\n다시 시도해주세요.');
+        return;
+      }
       const scale = Math.min(CW / img.width, CH / img.height) * 0.6;
       img.scale(scale);
       img.set({
@@ -5760,7 +4588,7 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
       canvas.setActiveObject(img);
       canvas.renderAll();
       closePanel('panel-ai');
-      alert('✨ AI 변환 완료!\n\n변환된 이미지가 새 레이어로 추가되었습니다.\n원본 이미지는 뒤에 그대로 있으니, 필요 없으면 선택 후 Delete 키로 삭제하세요.');
+      alert('✨ AI 변환 완료!\n\n변환된 이미지가 새 레이어로 추가되었어요.\n필요 없는 원본 이미지는 선택 후 삭제 버튼(🗑)을 눌러주세요.');
     });
 
   } catch (err) {
@@ -6075,6 +4903,7 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
   });
 
   // ── YouTube 영상 자동 삽입 ──
+  // data-video-id 값이 있을 때만 섹션을 노출 (기본은 숨김)
   (function() {
     const inner = document.getElementById('guide-video-inner');
     if (!inner) return;
@@ -6084,8 +4913,10 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
         '<div class="guide-video-iframe-wrap">' +
         '<iframe src="https://www.youtube.com/embed/' + videoId.trim() +
         '?rel=0" allowfullscreen></iframe></div>';
-      const note = document.querySelector('.guide-video-note');
-      if (note) note.style.display = 'none';
+      var section = document.getElementById('guide-video-section');
+      var title = document.getElementById('guide-video-title');
+      if (section) section.style.display = '';
+      if (title) title.style.display = '';
     }
   })();
 
