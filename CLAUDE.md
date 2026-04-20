@@ -4,8 +4,9 @@
 - **사이트명**: 픽유어굿즈 (Pick Your Goods) — 임지운 스티커 버전
 - **목적**: 고객이 직접 스티커 디자인을 캔버스에서 편집하고 PNG로 다운로드하는 디자인 툴
 - **구조**: 단일 HTML 파일 (`index.html`) — 백엔드 없음, 완전 클라이언트 사이드
-- **배포**: Netlify — 사이트 ID `ca4932be-0210-464b-9db1-e1d0c74ec1a1` / URL: `pickyourgoods.netlify.app`
-- **GitHub**: `https://github.com/dktex0514-pickyourgoods/pickyourgoods`
+- **배포**: Netlify — 사이트 ID `e0cffbfc-1e10-477e-ba6c-13439f6a1b2c` / URL: `https://pickyourgoods-sticker-jiwoon.netlify.app`
+- **GitHub**: `https://github.com/dktex0514-pickyourgoods/JIWOON_STICKER`
+- **GitHub 연동 없음** — Netlify 사이트는 GitHub repo와 연결되어 있지 않음. `git push` 로는 배포되지 않고, ZIP 업로드(`POST /api/v1/sites/{id}/deploys`, Content-Type: application/zip)로 수동 배포해야 함.
 
 ## 핵심 기술 스택
 - **Fabric.js 5.3.1** — 캔버스 편집 엔진
