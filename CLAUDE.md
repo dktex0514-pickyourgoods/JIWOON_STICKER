@@ -6,7 +6,24 @@
 - **구조**: 단일 HTML 파일 (`index.html`) — 백엔드 없음, 완전 클라이언트 사이드
 - **배포**: Netlify — 사이트 ID `e0cffbfc-1e10-477e-ba6c-13439f6a1b2c` / URL: `https://pickyourgoods-sticker-jiwoon.netlify.app`
 - **GitHub**: `https://github.com/dktex0514-pickyourgoods/JIWOON_STICKER`
-- **GitHub 연동 없음** — Netlify 사이트는 GitHub repo와 연결되어 있지 않음. `git push` 로는 배포되지 않고, ZIP 업로드(`POST /api/v1/sites/{id}/deploys`, Content-Type: application/zip)로 수동 배포해야 함.
+- **GitHub 연동 없음** — Netlify 사이트는 GitHub repo와 연결되어 있지 않음. `git push` 로는 배포되지 않음.
+- **배포 방법**: file-digest 방식 사용 (ZIP 업로드는 파일이 `/`로 저장돼 text/plain으로 서빙되는 버그 있음):
+  ```bash
+  TOKEN="<netlify token>"
+  SITE=e0cffbfc-1e10-477e-ba6c-13439f6a1b2c
+  SHA=$(python -c "import hashlib; print(hashlib.sha1(open('index.html','rb').read()).hexdigest())")
+  # 1) deploy 생성 (이미 업로드된 파일이면 required=[])
+  DEPLOY=$(curl -s -X POST "https://api.netlify.com/api/v1/sites/$SITE/deploys" \
+    -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+    -d "{\"files\":{\"/index.html\":\"$SHA\"}}" | python -c "import sys,json; print(json.load(sys.stdin)['id'])")
+  # 2) required에 SHA가 있으면 파일 업로드
+  # curl -X PUT "https://api.netlify.com/api/v1/deploys/$DEPLOY/files/index.html" \
+  #   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/octet-stream" \
+  #   --data-binary @index.html
+  # 3) ready 대기
+  until [ "$(curl -s "https://api.netlify.com/api/v1/deploys/$DEPLOY" -H "Authorization: Bearer $TOKEN" | python -c "import sys,json; print(json.load(sys.stdin)['state'])")" = "ready" ]; do sleep 3; done
+  ```
+- **Netlify 토큰 위치**: `C:/Users/soo62/AppData/Roaming/netlify/Config/config.json` → `users.*.auth.token`
 
 ## 핵심 기술 스택
 - **Fabric.js 5.3.1** — 캔버스 편집 엔진
