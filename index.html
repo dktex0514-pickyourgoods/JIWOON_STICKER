@@ -379,79 +379,6 @@
     .title-swatch:hover { transform: scale(1.15); }
     .title-swatch.active { border-color: #222; }
 
-    /* ── 누끼따기 툴팁 ── */
-    .nukki-wrap { position: relative; flex-shrink: 0; z-index: 200; }
-    .nukki-tooltip {
-      display: none;
-      position: fixed;
-      width: 220px;
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 14px 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
-      z-index: 9999;
-    }
-    .nukki-tooltip::before {
-      content: '';
-      position: absolute;
-      top: -6px;
-      left: 50%;
-      transform: translateX(-50%) rotate(45deg);
-      width: 10px; height: 10px;
-      background: #fff;
-      border-left: 1px solid #e0e0e0;
-      border-top: 1px solid #e0e0e0;
-    }
-    .nukki-tooltip-title {
-      font-size: 12px; font-weight: 700; color: #222;
-      margin-bottom: 10px; text-align: center;
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-    .nukki-tooltip-visual {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .nukki-before, .nukki-after {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      font-size: 9px;
-      color: #999;
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-    .nukki-img-box {
-      width: 52px; height: 52px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .nukki-margin-label {
-      position: absolute;
-      bottom: -2px; right: -2px;
-      font-size: 7px;
-      background: #e74c3c;
-      color: #fff;
-      padding: 1px 4px;
-      border-radius: 3px;
-      font-weight: 600;
-    }
-    .nukki-arrow { flex-shrink: 0; }
-    .nukki-tooltip-desc {
-      font-size: 10px;
-      color: #666;
-      line-height: 1.6;
-      text-align: center;
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-    .nukki-tooltip-desc strong { color: #e74c3c; }
-
     /* ── 안내 사항 섹션 ── */
     .guide-section {
       display: none;
@@ -1002,7 +929,7 @@
       border-bottom: none;
     }
 
-    .send-btn {
+    .download-btn {
       width: 100%;
       padding: 14px;
       background: #111;
@@ -1015,275 +942,7 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .send-btn:hover { background: #333; }
-
-    /* ── AI 스타일 변환 패널 ── */
-    .ai-style-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 9px;
-      margin-bottom: 16px;
-    }
-    .ai-style-card {
-      border: 2px solid #e8e8e8;
-      border-radius: 10px;
-      padding: 13px 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .ai-style-card:hover { border-color: #aaa; background: #fafafa; }
-    .ai-style-card.selected { border-color: #7c3aed; background: #f5f0ff; }
-    .ai-style-emoji { font-size: 26px; display: block; margin-bottom: 5px; }
-    .ai-style-name { font-size: 13px; font-weight: 700; color: #222; display: block; }
-    .ai-style-desc { font-size: 10px; color: #999; margin-top: 2px; display: block; line-height: 1.4; }
-    .ai-transform-btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #7c3aed, #c026d3);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      font-size: 14px;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-weight: 700;
-      cursor: pointer;
-      transition: opacity 0.15s;
-      margin-bottom: 10px;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
-    .ai-transform-btn:hover:not(:disabled) { opacity: 0.88; }
-    .ai-transform-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .ai-notice {
-      font-size: 11.5px; color: #aaa; text-align: center;
-      line-height: 1.65;
-    }
-    /* ── AI 변환 가이드 패널 ── */
-    .guide-intro-box {
-      background: linear-gradient(135deg, #f5f3ff, #fdf2f8);
-      border: 1.5px solid #e9d5ff; border-radius: 10px;
-      padding: 11px 13px; margin-bottom: 14px;
-      font-size: 11.5px; color: #555; line-height: 1.7;
-    }
-    .guide-intro-box strong { color: #7c3aed; }
-    .guide-step-title {
-      font-size: 13px; font-weight: 700; color: #333;
-      margin: 14px 0 8px;
-      display: flex; align-items: center; gap: 7px;
-    }
-    .guide-step-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #c026d3);
-      color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0;
-    }
-    .guide-style-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 6px; margin-bottom: 10px;
-    }
-    .guide-style-card {
-      border: 2px solid #e5e7eb; border-radius: 9px;
-      padding: 8px 4px; text-align: center; cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      background: #fafafa;
-    }
-    .guide-style-card:hover { border-color: #a78bfa; background: #f5f3ff; }
-    .guide-style-card.selected { border-color: #7c3aed; background: #f5f3ff; }
-    .guide-style-card-emoji { font-size: 20px; display: block; }
-    .guide-style-card-name { font-size: 10.5px; font-weight: 700; color: #333; display: block; margin-top: 3px; }
-    .guide-prompt-box {
-      background: #f8f7ff; border: 1px solid #ddd6fe;
-      border-radius: 9px; padding: 10px 12px;
-      font-size: 11.5px; color: #444; line-height: 1.7;
-      margin-bottom: 8px; max-height: 130px; overflow-y: auto;
-      white-space: pre-wrap; word-break: break-word;
-    }
-    .guide-copy-btn {
-      width: 100%; padding: 9px 12px;
-      background: #7c3aed; color: #fff; border: none;
-      border-radius: 8px; font-size: 12.5px; font-weight: 700;
-      font-family: 'Noto Sans KR', sans-serif;
-      cursor: pointer; transition: opacity 0.15s, background 0.25s;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      margin-bottom: 12px;
-    }
-    .guide-copy-btn:hover { opacity: 0.88; }
-    .guide-copy-btn.copied { background: #16a34a; }
-    .guide-ai-links { display: flex; gap: 8px; margin-bottom: 12px; }
-    .guide-ai-link {
-      flex: 1; padding: 10px 4px;
-      border: 1.5px solid #e5e7eb; border-radius: 9px;
-      text-align: center; text-decoration: none;
-      font-size: 11.5px; font-weight: 700; color: #333;
-      background: #fff; transition: all 0.15s;
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-    }
-    .guide-ai-link:hover { border-color: #7c3aed; background: #f5f3ff; color: #7c3aed; }
-    .guide-ai-icon { font-size: 20px; }
-    .guide-upload-btn {
-      width: 100%; padding: 11px 12px;
-      background: linear-gradient(135deg, #0ea5e9, #6366f1);
-      color: #fff; border: none; border-radius: 9px;
-      font-size: 13px; font-weight: 700;
-      font-family: 'Noto Sans KR', sans-serif;
-      cursor: pointer; transition: opacity 0.15s;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      margin-bottom: 4px;
-    }
-    .guide-upload-btn:hover { opacity: 0.88; }
-    .guide-upload-sub { font-size: 11px; color: #aaa; text-align: center; margin-bottom: 14px; }
-    .guide-auto-btn {
-      width: 100%; padding: 13px 16px;
-      background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
-      color: #fff; border: none; border-radius: 10px;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      margin-bottom: 10px; transition: opacity 0.2s;
-      font-family: 'Noto Sans KR', sans-serif; line-height: 1.4;
-    }
-    .guide-auto-btn:hover { opacity: 0.88; }
-    .guide-auto-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-    .guide-auto-btn-sub { font-size: 11px; font-weight: 400; opacity: 0.82; }
-    .guide-or-divider {
-      display: flex; align-items: center; gap: 8px;
-      margin: 4px 0 14px; color: #bbb; font-size: 11px;
-    }
-    .guide-or-divider::before, .guide-or-divider::after {
-      content: ''; flex: 1; height: 1px; background: #ebebeb;
-    }
-    .guide-divider { border: none; border-top: 1px solid #f0f0f0; margin: 14px 0; }
-    .guide-gem-section {
-      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-      border: 1.5px solid #bbf7d0; border-radius: 10px;
-      padding: 12px 13px; margin-bottom: 12px;
-    }
-    .guide-gem-title {
-      font-size: 13px; font-weight: 700; color: #15803d;
-      margin-bottom: 7px; display: flex; align-items: center; gap: 5px;
-    }
-    .guide-gem-desc {
-      font-size: 11.5px; color: #555; line-height: 1.7; margin-bottom: 9px;
-    }
-    .guide-gem-prompt {
-      background: #fff; border: 1px solid #d1fae5;
-      border-radius: 7px; padding: 9px 11px;
-      font-size: 10.5px; color: #444; line-height: 1.6;
-      max-height: 100px; overflow-y: auto;
-      white-space: pre-wrap; word-break: break-word; margin-bottom: 8px;
-    }
-    .guide-gem-copy-btn {
-      width: 100%; padding: 8px 12px;
-      background: #16a34a; color: #fff; border: none;
-      border-radius: 7px; font-size: 12px; font-weight: 700;
-      font-family: 'Noto Sans KR', sans-serif;
-      cursor: pointer; transition: opacity 0.15s, background 0.25s;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      margin-bottom: 7px;
-    }
-    .guide-gem-copy-btn:hover { opacity: 0.88; }
-    .guide-gem-copy-btn.copied { background: #0f766e; }
-    .guide-gem-link {
-      display: block; text-align: center;
-      color: #16a34a; font-size: 11.5px; text-decoration: none; font-weight: 600;
-    }
-    .guide-gem-link:hover { text-decoration: underline; }
-    .guide-gem-steps {
-      font-size: 11px; color: #555; line-height: 1.8;
-      background: #f0fdf4; border-radius: 7px;
-      padding: 8px 10px; margin-top: 8px;
-    }
-    .guide-video-section {
-      background: #111827; border-radius: 10px;
-      overflow: hidden; margin-bottom: 10px;
-    }
-    .guide-video-iframe-wrap {
-      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
-    }
-    .guide-video-iframe-wrap iframe {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%; border: none;
-    }
-    .guide-video-placeholder {
-      aspect-ratio: 16/9; display: flex;
-      flex-direction: column; align-items: center; justify-content: center;
-      color: #666; gap: 7px; background: #111827;
-    }
-    .guide-video-placeholder-icon { font-size: 30px; }
-    .guide-video-placeholder-text { font-size: 11.5px; color: #888; text-align: center; line-height: 1.5; }
-    .guide-video-note {
-      font-size: 10.5px; color: #aaa; text-align: center;
-      padding: 5px 10px 10px; line-height: 1.5;
-    }
-
-    /* ── 스타일 미리보기 팝업 ── */
-    #style-preview-popup {
-      position: fixed;
-      z-index: 99999;
-      width: 320px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(80,40,160,0.15), 0 4px 16px rgba(0,0,0,0.10);
-      border: 1px solid #ede9fe;
-      padding: 12px 12px 16px;
-      pointer-events: none;
-      opacity: 0;
-      transform: translateX(10px) scale(0.96);
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-    #style-preview-popup.visible {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
-    .spp-img-wrap {
-      border-radius: 13px;
-      overflow: hidden;
-      height: 380px;
-      background: #f3f3f3;
-    }
-    .spp-img-wrap img {
-      width: 100%;
-      height: 112%;
-      object-fit: cover;
-      object-position: top center;
-      display: block;
-    }
-    .spp-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #7c3aed;
-      background: #f5f3ff;
-      border-radius: 20px;
-      padding: 4px 10px;
-      margin-top: 11px;
-      letter-spacing: -0.01em;
-    }
-    .spp-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: #111;
-      margin-top: 6px;
-      letter-spacing: -0.02em;
-    }
-    .spp-desc {
-      font-size: 12px;
-      color: #888;
-      margin-top: 4px;
-      line-height: 1.6;
-    }
-    .spp-arrow {
-      position: absolute;
-      right: -8px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0; height: 0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-left: 8px solid #fff;
-      filter: drop-shadow(2px 0 2px rgba(0,0,0,0.06));
-    }
+    .download-btn:hover { background: #333; }
 
     /* ── 정밀 위치/크기 입력 필드 ── */
     .prop-inputs {
@@ -1588,40 +1247,6 @@
 
   <div class="tb-divider"></div>
 
-  <div class="nukki-wrap">
-    <button class="tool-btn" id="btn-remove-bg" disabled title="이미지 배경 자동 제거 (누끼따기)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 6l3 1m0 0l-3 9a5 5 0 0 0 6.27 6.17M6 7l3.5 9M6 7l6-2m6 2l3-1m-3 1l-3.5 9M18 7l-3.5 9m0 0l-1.5.5m5-10l3 9a5 5 0 0 1-6.27 6.17M18 7l-6-2m0 0l-3.5 1.5"/>
-      </svg>
-      누끼따기
-    </button>
-    <div class="nukki-tooltip" id="nukki-tooltip">
-      <div class="nukki-tooltip-title">누끼따기란?</div>
-      <div class="nukki-tooltip-visual">
-        <div class="nukki-before">
-          <div class="nukki-img-box" style="background:#e8d4b8;">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a08060" stroke-width="1.5"><circle cx="12" cy="10" r="5"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-          </div>
-          <span>원본</span>
-        </div>
-        <svg class="nukki-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        <div class="nukki-after">
-          <div class="nukki-img-box" style="background:#fff;border:1.5px dashed #ddd;">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><circle cx="12" cy="10" r="5"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-            <div class="nukki-margin-label">2mm</div>
-          </div>
-          <span>누끼 완료</span>
-        </div>
-      </div>
-      <div class="nukki-tooltip-desc">
-        배경을 자동으로 제거합니다.<br>
-        테두리에서 <strong>2mm</strong> 여백이 흰색으로 유지됩니다.
-      </div>
-    </div>
-  </div>
-
-  <div class="tb-divider"></div>
-
   <!-- 이미지 업로드 + 툴팁 -->
   <div class="img-upload-wrap">
     <button class="tool-btn" id="btn-img">
@@ -1656,17 +1281,6 @@
       <rect x="1" y="1" width="28" height="16" rx="8" fill="#fff3c4"/>
     </svg>
     타이틀 색상
-  </button>
-
-  <div class="tb-divider" style="display:none"></div>
-
-  <button class="tool-btn" id="btn-ai" style="display:none;" title="AI 스타일 변환">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9.5 2l1.2 3.3L14 6.5l-3.3 1.2L9.5 11l-1.2-3.3L5 6.5l3.3-1.2z"/>
-      <path d="M19 12l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>
-      <path d="M4 17l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>
-    </svg>
-    AI 변환
   </button>
 
   <div class="tb-divider"></div>
@@ -1918,7 +1532,7 @@
     <div class="sidebar-hint">스티커는 같은 사이즈로 10매씩 만들어드려요</div>
 
     <div class="sidebar-bottom">
-      <button class="send-btn" id="btn-send">주문하기</button>
+      <button class="download-btn" id="btn-download">다운로드</button>
     </div>
 
   </div><!-- /right-sidebar -->
@@ -2027,212 +1641,6 @@
   <button class="add-text-btn" id="add-text">+ 텍스트 추가</button>
 </div>
 
-<!-- ════════════ AI 스타일 변환 패널 ════════════ -->
-<div class="side-panel" id="panel-ai">
-  <div class="panel-header">
-    <span class="panel-title" style="color:#7c3aed;">✨ AI 스타일 변환</span>
-    <span class="panel-close" id="close-ai">×</span>
-  </div>
-  <p style="font-size:12.5px;color:#555;margin-bottom:14px;line-height:1.65;">
-    캔버스의 이미지를 아래 스타일로 변환합니다.<br>
-    이미지를 먼저 캔버스에 올려주세요.
-  </p>
-  <div class="ai-style-grid" id="ai-style-grid">
-    <div class="ai-style-card selected"
-      data-prompt="Korean webtoon manhwa comic book illustration, bold black ink outlines, vibrant flat cel-shaded colors, clean digital art">
-      <span class="ai-style-emoji">🎨</span>
-      <span class="ai-style-name">웹툰</span>
-      <span class="ai-style-desc">만화 느낌, 선명한 라인</span>
-    </div>
-    <div class="ai-style-card"
-      data-prompt="pencil sketch illustration, graphite drawing, fine detailed pencil lines, cross-hatching texture, black and white monochrome art">
-      <span class="ai-style-emoji">✏️</span>
-      <span class="ai-style-name">연필 스케치</span>
-      <span class="ai-style-desc">흑백 연필화 스타일</span>
-    </div>
-    <div class="ai-style-card"
-      data-prompt="watercolor painting illustration, soft wet-on-wet watercolor technique, translucent color washes, pastel tones, delicate artistic brushstrokes">
-      <span class="ai-style-emoji">🖌️</span>
-      <span class="ai-style-name">수채화</span>
-      <span class="ai-style-desc">부드러운 수채화 느낌</span>
-    </div>
-    <div class="ai-style-card"
-      data-prompt="Korean pop-art comic illustration style, bold black outlines, flat color fills, cel-shading, white outline around subject, halftone dot texture, graphic clean bold style">
-      <span class="ai-style-emoji">💥</span>
-      <span class="ai-style-name">팝아트</span>
-      <span class="ai-style-desc">한국 팝아트 스타일</span>
-    </div>
-    <div class="ai-style-card"
-      data-prompt="minimal Korean line-art drawing illustration, clean thin black outlines, flat pale skin tone, flat muted colors, pure white background, simple couple portrait sticker art style">
-      <span class="ai-style-emoji">🖊️</span>
-      <span class="ai-style-name">드로잉</span>
-      <span class="ai-style-desc">미니멀 라인아트 드로잉</span>
-    </div>
-    <div class="ai-style-card"
-      data-prompt="Japanese anime illustration, clean smooth line art, vibrant anime colors, soft shading, kawaii character art style">
-      <span class="ai-style-emoji">🌸</span>
-      <span class="ai-style-name">애니메이션</span>
-      <span class="ai-style-desc">일본 애니 스타일</span>
-    </div>
-  </div>
-  <button class="ai-transform-btn" id="btn-ai-transform">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <path d="M9.5 2l1.2 3.3L14 6.5l-3.3 1.2L9.5 11l-1.2-3.3L5 6.5l3.3-1.2z"/>
-      <path d="M19 12l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>
-    </svg>
-    변환하기
-  </button>
-  <p class="ai-notice">변환에 10~30초 정도 소요됩니다<br>변환된 이미지는 캔버스에 새 레이어로 추가됩니다</p>
-</div>
-
-<!-- 스타일 미리보기 팝업 -->
-<div id="style-preview-popup">
-  <div class="spp-img-wrap">
-    <img id="spp-img" src="" alt="">
-  </div>
-  <div class="spp-badge">✦ 예시 이미지</div>
-  <div class="spp-title" id="spp-title"></div>
-  <div class="spp-desc" id="spp-desc"></div>
-  <div class="spp-arrow"></div>
-</div>
-
-<!-- ════════════ AI 변환 가이드 패널 ════════════ -->
-<div class="side-panel" id="panel-ai-guide">
-  <div class="panel-header">
-    <span class="panel-title" style="color:#7c3aed;">✨ AI 이미지 변환 가이드</span>
-    <span class="panel-close" id="close-ai-guide">×</span>
-  </div>
-
-  <div class="guide-intro-box">
-    원하는 스타일을 선택하고 이미지를 변환해보세요! 🎨<br>
-    <span style="font-size:12px;color:#888;line-height:1.8;display:block;margin-top:6px;">
-      💡 AI 특성상 변환할 때마다 결과가 조금씩 달라져요.<br>
-      <strong style="color:#7c3aed;">마음에 드는 결과가 나왔다면 바로 주문하기!</strong><br>
-      좋은 결과는 다음엔 안 나올 수도 있어요 🥹
-    </span>
-  </div>
-
-  <!-- STEP 1 -->
-  <div class="guide-step-title">
-    <span class="guide-step-badge">1</span>
-    스타일 선택하기
-  </div>
-  <div class="guide-style-grid" id="guide-style-grid">
-    <div class="guide-style-card selected" data-style="webtoon">
-      <span class="guide-style-card-emoji">🎨</span>
-      <span class="guide-style-card-name">웹툰</span>
-    </div>
-    <div class="guide-style-card" data-style="pencil">
-      <span class="guide-style-card-emoji">✏️</span>
-      <span class="guide-style-card-name">연필스케치</span>
-    </div>
-    <div class="guide-style-card" data-style="watercolor">
-      <span class="guide-style-card-emoji">🖌️</span>
-      <span class="guide-style-card-name">수채화</span>
-    </div>
-    <div class="guide-style-card" data-style="oil">
-      <span class="guide-style-card-emoji">💥</span>
-      <span class="guide-style-card-name">팝아트</span>
-    </div>
-    <div class="guide-style-card" data-style="caricature">
-      <span class="guide-style-card-emoji">🖊️</span>
-      <span class="guide-style-card-name">드로잉</span>
-    </div>
-    <div class="guide-style-card" data-style="anime">
-      <span class="guide-style-card-emoji">🌸</span>
-      <span class="guide-style-card-name">애니메이션</span>
-    </div>
-  </div>
-
-  <!-- 이미지 미선택 안내 메시지 (변환 버튼 클릭 시) -->
-  <div id="guide-no-image-hint" style="display:none;align-items:center;gap:8px;background:#fff3f3;border:1px solid #ffb3b3;border-radius:10px;padding:11px 15px;margin-bottom:10px;font-size:13px;color:#cc3333;font-weight:500;line-height:1.6;">
-    <span style="font-size:18px;">🖼️</span>
-    <span>캔버스에서 변환할 이미지를 먼저 클릭해주세요!<br><span style="font-weight:400;font-size:12px;color:#e06060;">이미지를 선택한 뒤 변환 버튼을 누르면 됩니다 😊</span></span>
-  </div>
-
-  <!-- 자동 변환 버튼 -->
-  <button class="guide-auto-btn" id="guide-auto-transform-btn">
-    ✨ 이 스타일로 바로 변환하기
-    <span class="guide-auto-btn-sub">클릭 한 번으로 뚝딱! 🪄</span>
-  </button>
-  <div class="guide-or-divider">또는 직접 진행하기</div>
-
-  <!-- STEP 2 (hidden) -->
-  <div style="display:none">
-  <div class="guide-step-title">
-    <span class="guide-step-badge">2</span>
-    프롬프트 복사하기
-    <span style="font-size:10.5px;font-weight:400;color:#999;margin-left:2px;">| 영어가 더 정확해요</span>
-  </div>
-  <div class="guide-prompt-box" id="guide-prompt-box">이 사진을 한국 웹툰/만화 스타일로 변환해줘.
-사진 속 주인공의 얼굴과 특징은 그대로 유지하면서,
-굵은 검은 선, 선명한 평면 색상, 만화 느낌으로 그려줘.
-배경도 웹툰 스타일로 어울리게 바꿔줘.</div>
-  <button class="guide-copy-btn" id="guide-copy-btn">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-    프롬프트 복사
-  </button>
-
-  <!-- STEP 3 -->
-  <div class="guide-step-title">
-    <span class="guide-step-badge">3</span>
-    AI 서비스에서 사진 변환하기
-  </div>
-  <div class="guide-ai-links">
-    <a class="guide-ai-link" href="https://chatgpt.com" target="_blank" rel="noopener">
-      <span class="guide-ai-icon">🤖</span>
-      ChatGPT
-    </a>
-    <a class="guide-ai-link" href="https://gemini.google.com" target="_blank" rel="noopener">
-      <span class="guide-ai-icon">✨</span>
-      Gemini
-    </a>
-  </div>
-  <div style="font-size:11px;color:#999;line-height:1.65;margin-bottom:12px;">
-    💡 사이트 접속 → 사진 업로드 → 복사한 프롬프트 붙여넣기 → 이미지 다운로드
-  </div>
-
-  <!-- STEP 4 -->
-  <div class="guide-step-title">
-    <span class="guide-step-badge">4</span>
-    변환된 이미지 업로드
-  </div>
-  <button class="guide-upload-btn" id="guide-upload-btn">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-    변환 이미지 업로드하기
-  </button>
-  <p class="guide-upload-sub">다운받은 AI 이미지를 캔버스에 올려주세요</p>
-  </div>
-
-  <hr class="guide-divider">
-
-  <!-- 영상 가이드 섹션 (영상 준비 시 data-video-id 값 채우면 자동 노출) -->
-  <div class="guide-step-title" style="margin-top:0; display:none;" id="guide-video-title">
-    <span style="font-size:16px;">🎬</span> 영상으로 보기
-  </div>
-  <div class="guide-video-section" id="guide-video-section" style="display:none;">
-    <div id="guide-video-inner" data-video-id=""></div>
-  </div>
-
-  <!-- 하단 닫기 버튼 -->
-  <div style="text-align:center; padding: 4px 0 8px;">
-    <button onclick="document.getElementById('close-ai-guide').click()" style="
-      background: none;
-      border: 1px solid #e0e0e0;
-      border-radius: 20px;
-      padding: 6px 20px;
-      font-size: 12px;
-      color: #999;
-      cursor: pointer;
-      transition: all 0.15s;
-    " onmouseover="this.style.borderColor='#bbb';this.style.color='#666'" onmouseout="this.style.borderColor='#e0e0e0';this.style.color='#999'">
-      ✕ 가이드 닫기
-    </button>
-  </div>
-
-</div>
-
-<!-- 해상도 부족 경고 팝업 -->
 <!-- 사이즈 비교 팝업 -->
 <div id="size-popup-overlay"></div>
 <div id="size-popup">
@@ -2250,26 +1658,6 @@
     <div style="font-size:16px;font-weight:700;color:#222;margin-bottom:10px;">이미지 해상도가 너무 낮습니다</div>
     <div id="res-error-msg" style="font-size:13px;color:#555;line-height:1.7;margin-bottom:20px;"></div>
     <button id="res-error-ok" style="background:#222;color:#fff;border:none;border-radius:8px;padding:10px 32px;font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">확인</button>
-  </div>
-</div>
-
-<!-- ════════════ 겹침 경고 팝업 (주문하기 차단) ════════════ -->
-<div id="overlap-block-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.22);text-align:center;">
-    <div style="display:flex;justify-content:center;margin-bottom:12px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4535a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-        <path d="M12 9v4"/>
-        <path d="M12 17h.01"/>
-      </svg>
-    </div>
-    <div style="font-size:16px;font-weight:700;color:#222;margin-bottom:12px;">스티커 간격을 조금 띄워주세요</div>
-    <div style="font-size:13px;color:#555;line-height:1.75;margin-bottom:22px;">
-      <b style="color:#d4535a;">빨간 칼선이 겹치는 스티커</b>가 있어요.<br>
-      재단 과정에서 스티커가 손상될 수 있으니<br>
-      간격을 조금 더 띄워주신 후 보내주세요.
-    </div>
-    <button id="overlap-block-ok" onclick="document.getElementById('overlap-block-modal').style.display='none'" style="background:#222;color:#fff;border:none;border-radius:8px;padding:10px 32px;font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;">확인했어요</button>
   </div>
 </div>
 
@@ -2298,11 +1686,6 @@
 
 <!-- ════════════ JavaScript ════════════ -->
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  ⚙️  설정: Google Apps Script 배포 URL을 아래에 붙여넣으세요
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwv6BIDiHwDeuq_mYDM0XVODXdtWrxGM8cye4Jlbh5JHTTm8CoQJm1eJ3wLsQm8YhrU/exec';
-
 // ─────────── 색상 팔레트 ───────────
 const COLORS = [
   '#0a2472','#6b21a8','#14532d','#1a1a1a','#ffffff',
@@ -3104,26 +2487,6 @@ document.body.addEventListener('click', function(e) {
   }
 });
 
-// ─────────── 누끼따기 툴팁 ───────────
-(function() {
-  var wrap = document.querySelector('.nukki-wrap');
-  var tt = document.getElementById('nukki-tooltip');
-  if (!wrap || !tt) return;
-  var hideTimer;
-  function show() {
-    clearTimeout(hideTimer);
-    var r = wrap.getBoundingClientRect();
-    tt.style.top = (r.bottom + 8) + 'px';
-    tt.style.left = Math.max(8, r.left + r.width / 2 - 110) + 'px';
-    tt.style.display = 'block';
-  }
-  function hide() { hideTimer = setTimeout(function() { tt.style.display = 'none'; }, 150); }
-  wrap.addEventListener('mouseenter', show);
-  wrap.addEventListener('mouseleave', hide);
-  tt.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
-  tt.addEventListener('mouseleave', hide);
-})();
-
 // ─────────── 동적 캔버스 추가 ───────────
 let cellCounter = 1;
 const allCanvases = [canvas];
@@ -3492,11 +2855,10 @@ function syncSelBtns(on) {
   ['btn-delete','btn-forward','btn-backward','btn-fliph','btn-flipv'].forEach(id => {
     document.getElementById(id).disabled = !on;
   });
-  // 자르기·누끼따기 버튼: 단일 이미지 선택 시만 활성화
+  // 자르기 버튼: 단일 이미지 선택 시만 활성화
   const obj = canvas.getActiveObject();
   const isSingleImage = on && obj && obj.type === 'image' && canvas.getActiveObjects().length === 1;
   document.getElementById('btn-crop').disabled = !isSingleImage;
-  document.getElementById('btn-remove-bg').disabled = !isSingleImage;
 }
 function showSelHint() {
   var el = document.getElementById('sel-hint');
@@ -3862,7 +3224,7 @@ document.getElementById('btn-crop').addEventListener('click', () => {
 
 // ─────────── 패널 열기/닫기 ───────────
 function openPanel(id) {
-  ['panel-img','panel-text','panel-ai','panel-ai-guide'].forEach(p => {
+  ['panel-img','panel-text'].forEach(p => {
     document.getElementById(p).classList.toggle('open', p === id);
   });
 }
@@ -4105,8 +3467,6 @@ document.addEventListener('click', e => {
   const triggers = {
     'panel-img': 'btn-img',
     'panel-text': 'btn-text',
-    'panel-ai': 'btn-ai',
-    // panel-ai-guide 는 X 버튼으로만 닫힘 (바깥 클릭으로 닫히지 않음)
   };
   Object.entries(triggers).forEach(([panelId, btnId]) => {
     const panel = document.getElementById(panelId);
@@ -4423,504 +3783,35 @@ document.getElementById('add-text').addEventListener('click', () => {
 });
 
 
-// ════════════════════════════════════════════════════
-//  🛒 주문하기 (아임웹 상품 페이지로 이동)
-// ════════════════════════════════════════════════════
-//
-//  아임웹에 상품 등록 후, 아래 IMWEB_PRODUCT_URL 값을
-//  해당 상품 상세 페이지 URL로 교체해주세요.
-//  예: 'https://pickyourgoods.imweb.me/shop/product.html?idx=12'
-//
-// ════════════════════════════════════════════════════
-const IMWEB_PRODUCT_URL = 'YOUR_IMWEB_PRODUCT_URL_HERE';
-
-document.getElementById('btn-send').addEventListener('click', () => {
-  // 겹침 경고가 하나라도 있으면 차단
-  const hasOverlap = Array.from(document.querySelectorAll('.overlap-warning')).some(w => w.classList.contains('visible'));
-  if (hasOverlap) {
-    document.getElementById('overlap-block-modal').style.display = 'flex';
-    return;
-  }
-  // 총 10매 체크 (셀별 매수 합)
-  if (typeof cellQtyGetTotal === 'function') {
-    const totalQty = cellQtyGetTotal();
-    if (totalQty !== 10) {
-      const short = 10 - totalQty;
-      alert('총 10매로 맞춰주세요.\n\n현재: ' + totalQty + '매\n' +
-            (short > 0 ? ('부족: ' + short + '매') : ('초과: ' + Math.abs(short) + '매')) +
-            '\n\n각 스티커의 +/− 버튼으로 조정해주세요.');
-      return;
-    }
-  }
-  // 빈 캔버스 체크
+document.getElementById('btn-download').addEventListener('click', () => {
   const hasUserContent = canvas.getObjects().some(o => !o.__guide && !o.__titlePart);
   if (!hasUserContent) {
     alert('스티커에 이미지나 텍스트를 추가해주세요.');
     return;
   }
 
-  // 아임웹 URL 설정 확인
-  if (!IMWEB_PRODUCT_URL || IMWEB_PRODUCT_URL === 'YOUR_IMWEB_PRODUCT_URL_HERE') {
-    alert('⚠️ 아임웹 상품 URL이 아직 설정되지 않았습니다.\n\n관리자에게 문의해주세요.');
-    return;
-  }
+  const targets = (typeof allCanvases !== 'undefined' && allCanvases.length) ? allCanvases : [canvas];
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 
-  // 아임웹 상품 상세 페이지로 이동
-  window.location.href = IMWEB_PRODUCT_URL;
-});
+  targets.forEach((c, idx) => {
+    const guides = c.getObjects().filter(o => o.__guide);
+    guides.forEach(g => g.set('visible', false));
+    c.renderAll();
 
+    const dataUrl = c.toDataURL({ format: 'png', multiplier: 2 });
 
-// ════════════════════════════════════════════════════
-//  ✨ AI 스타일 변환
-// ════════════════════════════════════════════════════
+    guides.forEach(g => g.set('visible', true));
+    c.renderAll();
 
-// 선택된 스타일 — 첫 번째 카드의 data-prompt 로 초기화
-const _firstCard = document.querySelector('.ai-style-card');
-let selectedAiPrompt = _firstCard ? _firstCard.dataset.prompt : 'webtoon comic style';
-
-// 스타일 카드 선택
-document.querySelectorAll('.ai-style-card').forEach(card => {
-  card.addEventListener('click', function() {
-    document.querySelectorAll('.ai-style-card').forEach(c => c.classList.remove('selected'));
-    this.classList.add('selected');
-    selectedAiPrompt = this.dataset.prompt;
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'sticker-' + stamp + (targets.length > 1 ? '-' + (idx + 1) : '') + '.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   });
 });
 
-// 툴바 버튼 → 패널 열기
-document.getElementById('btn-ai').addEventListener('click', () => {
-  openPanel('panel-ai');
-});
-document.getElementById('close-ai').addEventListener('click', () => closePanel('panel-ai'));
-
-// 변환하기 버튼
-document.getElementById('btn-ai-transform').addEventListener('click', async () => {
-  // 이미지 객체가 있는지 확인
-  const imageObj = canvas.getObjects().find(o => !o.__guide && o.type === 'image');
-  if (!imageObj) {
-    alert('캔버스에 이미지를 먼저 업로드해주세요.\n\n이미지 업로드 버튼 또는 캔버스에 드래그&드롭으로 추가하세요.');
-    return;
-  }
-
-  // GAS URL 설정 확인
-  const urlIsPlaceholder = !GAS_URL
-    || GAS_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
-    || !GAS_URL.startsWith('https://script.google.com/macros/s/')
-    || !GAS_URL.endsWith('/exec')
-    || GAS_URL.includes('ABCDEF')
-    || GAS_URL.includes('...');
-
-  if (urlIsPlaceholder) {
-    alert('⚠️ Google Apps Script URL이 설정되지 않았습니다.\nindex.html 상단의 GAS_URL을 올바르게 입력해주세요.');
-    return;
-  }
-
-  const btn = document.getElementById('btn-ai-transform');
-  btn.disabled = true;
-
-  const loadingEl  = document.getElementById('loading');
-  const loadingTxt = loadingEl.querySelector('span');
-  const origTxt    = loadingTxt.textContent;
-  loadingTxt.textContent = '✨ AI 스타일 변환 중... (10~30초 소요)';
-  loadingEl.classList.add('open');
-
-  try {
-    // ── 업로드된 원본 이미지만 추출 (캔버스 전체 X) ──
-    const imageObj = canvas.getObjects().find(o => !o.__guide && o.type === 'image');
-    const imgEl   = imageObj.getElement();
-
-    // 원본 크기 (최대 1024px로 제한 — API 안정성)
-    const origW = imgEl.naturalWidth  || imgEl.width;
-    const origH = imgEl.naturalHeight || imgEl.height;
-    const maxPx = 1024;
-    const ratio = Math.min(1, maxPx / Math.max(origW, origH));
-    const expW  = Math.round(origW * ratio);
-    const expH  = Math.round(origH * ratio);
-
-    const tempC = document.createElement('canvas');
-    tempC.width = expW; tempC.height = expH;
-    tempC.getContext('2d').drawImage(imgEl, 0, 0, expW, expH);
-    const imageData = tempC.toDataURL('image/png').split(',')[1];
-
-    // GAS 로 전송
-    const payload = {
-      action: 'ai_transform',
-      imageData,
-      prompt: selectedAiPrompt,
-    };
-
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 90000); // 90초 타임아웃
-
-    let res;
-    try {
-      res = await fetch(GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timer);
-    }
-
-    const result = await res.json();
-    loadingEl.classList.remove('open');
-
-    if (!result.success) {
-      throw new Error(result.error || 'AI 변환 실패');
-    }
-
-    // 변환된 이미지를 캔버스에 새 레이어로 추가
-    const dataUrl = 'data:image/png;base64,' + result.imageData;
-    fabric.Image.fromURL(dataUrl, img => {
-      if (!img || !img.width) {
-        alert('변환된 이미지를 불러오는 데 실패했습니다.\n다시 시도해주세요.');
-        return;
-      }
-      const scale = Math.min(CW / img.width, CH / img.height) * 0.6;
-      img.scale(scale);
-      img.set({
-        left: (CW - img.getScaledWidth())  / 2,
-        top:  (CH - img.getScaledHeight()) / 2,
-      });
-      canvas.add(img);
-      canvas.setActiveObject(img);
-      canvas.renderAll();
-      closePanel('panel-ai');
-      alert('✨ AI 변환 완료!\n\n변환된 이미지가 새 레이어로 추가되었어요.\n필요 없는 원본 이미지는 선택 후 삭제 버튼(🗑)을 눌러주세요.');
-    });
-
-  } catch (err) {
-    loadingEl.classList.remove('open');
-    if (err.name === 'AbortError') {
-      alert('AI 변환 시간이 초과되었습니다. (90초)\n잠시 후 다시 시도해주세요.');
-    } else {
-      alert('AI 변환 중 오류가 발생했습니다.\n\n' + err.message);
-    }
-  } finally {
-    btn.disabled = false;
-    loadingTxt.textContent = origTxt;
-  }
-});
-
-// ─────────── AI 변환 가이드 패널 ───────────
-(function() {
-
-  // 스타일별 고객용 프롬프트
-  const GUIDE_PROMPTS = {
-    webtoon:
-      'From now on, whenever I upload a photo, automatically convert it into a Korean webtoon-style portrait illustration following these permanent rules:\n\nSTYLE:\n- Korean webtoon / manhwa semi-realistic illustration style\n- Clean, consistent line art with smooth cel-shading\n- Skin: bright, porcelain-smooth with soft gradient shading, no texture\n- Eyes: enlarged and expressive, clear double eyelids, detailed iris with light reflection, dark defined lashes\n- Nose: simplified, small — just subtle shadow lines, no full nose bridge\n- Lips: soft and natural, slight pink or coral color accent only\n- Face shape: slim and oval, slightly idealized but recognizable\n- Hair: smooth with flowing highlight streaks, defined volume\n- Overall feel: clean, polished, professional webtoon character portrait\n\nSUBJECT ACCURACY:\n- Base the illustration on the uploaded photo\'s actual person\n- Reproduce: hair color, hair style, hair length, face shape tendency, eye shape, skin tone, and any accessories visible\n- Apply webtoon stylization but keep the subject recognizable\n- Do NOT change gender, age impression, or core facial structure\n- Expression: reproduce the same expression as in the photo\n\nBACKGROUND:\n- Solid single flat color background only (soft pastel or light blue)\n- No patterns, no gradients, no environment, no props\n- Simple and clean — webtoon profile card style\n\nCOMPOSITION:\n- Face and upper chest portrait crop only (from top of head to mid-chest)\n- Centered, straight-on or slight angle matching the original photo\n- Do NOT include full body, hands, or background elements\n- Square (1:1) or portrait (3:4) format\n\nOUTPUT:\n- High quality, finished webtoon illustration\n- No sketch lines, no rough draft feel — fully rendered final art\n- Style reference: Korean romance webtoon character profile portrait\n\nEVERY TIME I upload a photo, apply all of the above automatically.\nDo not ask for confirmation. Just generate the webtoon illustration immediately.',
-    pencil:
-      'From now on, whenever I upload a photo, automatically convert it into a pencil sketch portrait following these permanent rules:\n\nSTYLE:\n- Traditional hand-drawn graphite pencil sketch on sketchbook paper\n- Visible pencil strokes throughout: fine hatching on skin, bold strokes on hair and dark clothing\n- Monochrome grayscale only. Exception: if a single item has a strongly recognizable color (e.g. a colored hat), apply that color subtly\n- Off-white sketchbook paper texture as the only background\n- No digital smoothing, no painting, no anime, no illustration style\n\nSUBJECT ACCURACY (most important rule):\n- Reproduce the subject 100% faithfully from the uploaded photo\n- Same face, same expression, same pose, same angle — zero deviation\n- All clothing, accessories, hairstyle exactly as visible in the photo\n- Do NOT beautify, alter proportions, change expression, or add anything\n- If a detail is unclear or in shadow, suggest it with light pencil strokes — never guess or invent\n\nBACKGROUND:\n- Remove the entire original background completely\n- Replace with plain off-white sketchbook paper texture only\n- No shadows, no environment, no props behind the subject\n\nCOMPOSITION:\n- Keep the same framing and crop as the original photo\n- Do not zoom in or out\n- Match the original photo ratio (portrait / landscape / square)\n\nEVERY TIME I upload a photo, apply all of the above automatically.\nDo not ask for confirmation. Just generate the pencil sketch immediately.',
-    watercolor:
-      'From now on, whenever I upload a photo, automatically convert it into a traditional watercolor portrait painting following these permanent rules:\n\nSTYLE:\n- Traditional hand-painted watercolor portrait style\n- Visible watercolor characteristics: soft color bleeding, wet-on-wet blooming edges, natural paint pooling and texture\n- Warm, natural color palette — skin tones are soft peach/warm beige\n- Loose, impressionistic brushwork — not overly detailed or tight\n- White paper showing through in highlight areas (eyes, forehead, cheeks)\n- Clothing and hair: slightly more defined strokes than background, but still painterly and soft\n- Overall feel: fine art watercolor portrait, warm and emotional, reminiscent of Korean portrait illustration style\n\nSUBJECT ACCURACY:\n- Reproduce the subject faithfully from the uploaded photo\n- Keep: face structure, expression, pose, hair style, clothing, accessories, and number of people exactly as in the photo\n- If multiple people are in the photo, include ALL of them\n- Apply watercolor stylization but keep subjects clearly recognizable\n- Do NOT change age, gender, or core facial features\n- Expression must match the original photo exactly\n\nBACKGROUND:\n- Soft watercolor wash background — loose, abstract, minimal\n- Colors: very light and desaturated (pale blue-grey, off-white, or cream)\n- Background should NOT compete with the subject\n- Paint bleeds softly at the edges of the subject into the background\n- No sharp background elements, no environment details\n\nCOMPOSITION:\n- Match the original photo\'s framing and number of subjects\n- Single person photo: face and upper chest (head to mid-chest)\n- Multiple people photo: reproduce full composition as in the original\n- Do not crop out any people present in the original photo\n- Portrait or square format matching the original\n\nOUTPUT:\n- Fully rendered, finished watercolor painting — not a sketch\n- Warm, emotional, fine-art quality result\n- No digital-looking smoothness — preserve natural watercolor imperfection\n- Style reference: traditional Korean watercolor portrait commission art\n\nEVERY TIME I upload a photo, apply all of the above automatically.\nDo not ask for confirmation. Just generate the watercolor painting immediately.',
-    oil:
-      'From now on, whenever I upload a photo, automatically convert it into a Korean pop-art comic illustration style following these permanent rules:\n\nSTYLE:\n- Bold black outlines throughout — thick, clean, consistent stroke weight similar to comic book / manhwa pop-art illustration\n- Flat color fills with minimal shading — cel-shading style, not painterly\n- Skin: flat pale/peach tone, minimal highlight lines only, no texture\n- Hair: flat base color with a few bold highlight strokes, no gradients\n- Clothing: flat colored fills with simple shadow lines\n- Lips: single soft coral or pink flat color, no complex shading\n- Cheeks: optional subtle blush as a simple flat shape\n- White outline around the entire subject group to separate from background\n- Halftone dot texture may appear on darker areas (clothing, shadows)\n- Overall feel: clean, bold, graphic — Korean pop-art portrait style\n\nSUBJECT ACCURACY:\n- Reproduce all subjects faithfully from the uploaded photo\n- Keep: face structure, expression, hair color, hair style, clothing, accessories, and ALL people in the photo\n- If multiple people are in the photo, include ALL of them exactly\n- Apply pop-art stylization but keep each subject clearly recognizable\n- Do NOT change age, gender, or core facial structure\n- Expression must match the original photo exactly\n- Do NOT idealize or beautify beyond the style requirements\n\nBACKGROUND:\n- Single flat solid color only — use a soft pastel or muted pop color (e.g. dusty pink, sky blue, sage green, warm beige)\n- No patterns, no gradients, no environmental details\n- Clean and simple — the background exists only to frame the subjects\n- White outline border around subjects separating them from background\n\nCOMPOSITION:\n- Match the original photo\'s crop and framing exactly\n- Include all people present in the original photo\n- Face and upper body portrait (head to chest area)\n- Do not add or remove any people or objects\n- Match original photo ratio (landscape / portrait / square)\n\nOUTPUT:\n- Fully finished, clean illustration — not a sketch or rough draft\n- Bold graphic quality — high contrast between outlines and fills\n- No photorealistic elements, no watercolor, no pencil texture\n- Style reference: Korean pop-art couple/portrait commission illustration\n\nEVERY TIME I upload a photo, apply all of the above automatically.\nDo not ask for confirmation. Just generate the pop-art illustration immediately.',
-    caricature:
-      'From now on, whenever I upload a photo, automatically convert it into a minimal line-art drawing illustration style following these permanent rules:\n\nSTYLE:\n- Clean, thin black line art — minimal and simple, not bold or heavy\n- Near-monochrome color palette: white base + very limited flat color (skin tone as flat pale peach, hair as flat dark brown/black, clothing as flat grey or muted tones only — no vibrant colors)\n- Eyes: small round iris with clearly visible white sclera (whites of eyes) — iris is a small dark circle, NOT a full solid dot filling the eye — always leave white space around the iris to avoid a scary/dead look — add a tiny white highlight dot on the iris for natural appearance\n- Nose: single subtle line or minimally suggested — keep very simple\n- Mouth: simple short curved line only\n- No shading, no gradients, no textures — completely flat and clean\n- Occasional tiny accent elements allowed (small heart, blush dots)\n- Overall feel: minimal Korean aesthetic illustration, sticker/goods/couple art style — simple, cute, clean\n\nSUBJECT ACCURACY:\n- Reproduce all subjects faithfully from the uploaded photo\n- Keep: pose, body position, relative positioning of people, hair style, hair length, clothing silhouette and color tone, accessories (glasses, watch, phone, etc.) exactly as visible\n- Include ALL people present in the photo — do not remove anyone\n- Simplify facial features into the minimal style but keep each person distinguishable by hair and overall silhouette\n- Do NOT change pose, body language, or interaction between people\n- If subjects are holding objects or interacting, reproduce that exactly\n\nBACKGROUND:\n- Pure white background only\n- No background elements, no color wash, no shadows\n- Completely clean white — subjects floating on white\n\nCOMPOSITION:\n- Reproduce the FULL body or the full framing of the original photo\n- Do NOT crop to face only — include full figure if visible in photo\n- If photo shows full body: reproduce full body\n- If photo shows upper body: reproduce upper body\n- Match the relative size and positioning of all subjects\n- Portrait or square format\n\nOUTPUT:\n- Fully finished clean illustration — minimal and polished\n- Thin consistent line weight throughout\n- No rough sketch feel, no watercolor, no painterly texture\n- Style reference: Korean minimal couple line-art goods illustration, similar to custom sticker or acrylic keychain portrait art\n\nEVERY TIME I upload a photo, apply all of the above automatically.\nDo not ask for confirmation. Just generate the drawing immediately.',
-    anime:
-      '이 사진을 일본 애니메이션 스타일로 변환해줘.\n주인공의 특징은 유지하면서,\n깔끔한 라인아트, 선명한 애니 색상, 귀여운 캐릭터 느낌으로 그려줘.',
-  };
-
-  // Gemini Gem 시스템 프롬프트
-  const GEM_PROMPT = `당신은 픽유어굿즈 캔버스 인쇄용 이미지 변환 전문 어시스턴트입니다.
-
-사용자가 사진을 업로드하면 원하는 스타일을 물어보고, 선택한 스타일로 이미지를 생성해주세요.
-
-지원 스타일:
-• 웹툰 — 굵은 검은 선, 선명한 평면 색상, 한국 만화 스타일
-• 연필 스케치 — 흑백 연필 선, 해칭, 세밀한 표현
-• 수채화 — 부드러운 붓터치, 반투명 색상, 파스텔 톤
-• 팝아트 — 굵은 검은 외곽선, 플랫 컬러, 한국 팝아트 만화 스타일
-• 드로잉 — 얇은 선, 미니멀 플랫 컬러, 커플 굿즈 라인아트 스타일
-• 애니메이션 — 깔끔한 라인아트, 선명한 색, 일본 애니 스타일
-• 픽셀아트 — 레트로 픽셀 게임 캐릭터 스타일
-
-규칙:
-1. 사진 속 주인공(사람·동물·사물)의 특징과 정체성을 반드시 유지하세요.
-2. 고화질로 생성하여 캔버스 인쇄에 적합하게 만들어주세요.
-3. 스타일을 지정하지 않으면 어떤 스타일을 원하는지 먼저 물어보세요.
-4. 생성 후 pickyourgoods.netlify.app 에 업로드하도록 안내해주세요.`;
-
-  let selectedGuideStyle = 'webtoon';
-
-  // ── 스타일 카드 미리보기 팝업 ──
-  const SPP_DATA = {
-    webtoon:    { src: 'preview-webtoon.jpg',    title: '웹툰 스타일',  desc: '깔끔한 선, 선명한 색감의\n한국 웹툰 캐릭터 느낌' },
-    pencil:     { src: 'preview-pencil.jpg',     title: '연필스케치',   desc: '세밀한 연필 선과\n스케치북 질감의 흑백 드로잉' },
-    watercolor: { src: 'preview-watercolor.jpg', title: '수채화',       desc: '부드러운 붓터치와\n투명한 수채 물감 느낌' },
-    oil:        { src: 'preview-oil.jpg',        title: '팝아트',       desc: '굵은 외곽선과 플랫 컬러의\n한국 팝아트 만화 스타일' },
-    caricature: { src: 'preview-caricature.jpg', title: '드로잉',       desc: '얇은 선과 미니멀 컬러의\n커플 굿즈 라인아트 스타일' },
-  };
-
-  // 이미지 미리 로드 (hover 시 즉시 표시)
-  const sppCache = {};
-  Object.entries(SPP_DATA).forEach(([key, d]) => {
-    const img = new Image();
-    img.src = d.src;
-    sppCache[key] = img;
-  });
-
-  const sppEl    = document.getElementById('style-preview-popup');
-  const sppImg   = document.getElementById('spp-img');
-  const sppTitle = document.getElementById('spp-title');
-  const sppDesc  = document.getElementById('spp-desc');
-  let sppTimer   = null;
-
-  document.querySelectorAll('#guide-style-grid .guide-style-card').forEach(card => {
-    const styleKey = card.dataset.style;
-    const data = SPP_DATA[styleKey];
-    if (!data) return;
-
-    card.addEventListener('mouseenter', function() {
-      clearTimeout(sppTimer);
-
-      // 캐시된 이미지 src 사용
-      sppImg.src = sppCache[styleKey] ? sppCache[styleKey].src : data.src;
-      sppTitle.textContent = data.title;
-      sppDesc.innerHTML = data.desc.replace(/\n/g, '<br>');
-
-      const rect = this.getBoundingClientRect();
-      const popW = 320 + 16;
-      let left = rect.left - popW - 4;
-      if (left < 8) left = rect.right + 8;
-
-      const popH = 480;
-      let top = rect.top + rect.height / 2 - popH / 2;
-      top = Math.max(8, Math.min(top, window.innerHeight - popH - 8));
-
-      sppEl.style.left  = left + 'px';
-      sppEl.style.top   = top + 'px';
-      sppEl.style.right = 'auto';
-      sppEl.classList.add('visible');
-    });
-
-    card.addEventListener('mouseleave', function() {
-      sppTimer = setTimeout(() => sppEl.classList.remove('visible'), 80);
-    });
-  });
-
-  // ── 스타일 카드 클릭 (항상 선택 가능) ──
-  let _noImgHintTimer = null;
-  document.querySelectorAll('#guide-style-grid .guide-style-card').forEach(card => {
-    card.addEventListener('click', function() {
-      document.querySelectorAll('#guide-style-grid .guide-style-card').forEach(c => c.classList.remove('selected'));
-      this.classList.add('selected');
-      selectedGuideStyle = this.dataset.style;
-      const promptBox = document.getElementById('guide-prompt-box');
-      if (promptBox) promptBox.textContent = GUIDE_PROMPTS[selectedGuideStyle] || '';
-    });
-  });
-
-  // ── 프롬프트 복사 버튼 ──
-  const copyBtn = document.getElementById('guide-copy-btn');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', function() {
-      const text = GUIDE_PROMPTS[selectedGuideStyle] || '';
-      navigator.clipboard.writeText(text).then(() => {
-        copyBtn.classList.add('copied');
-        copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 복사 완료!';
-        setTimeout(() => {
-          copyBtn.classList.remove('copied');
-          copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 프롬프트 복사';
-        }, 2000);
-      }).catch(() => {
-        // 클립보드 API 실패 시 대체
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-        document.body.removeChild(ta);
-        copyBtn.classList.add('copied');
-        copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 복사 완료!';
-        setTimeout(() => {
-          copyBtn.classList.remove('copied');
-          copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 프롬프트 복사';
-        }, 2000);
-      });
-    });
-  }
-
-  // ── Gem 시스템 프롬프트 복사 ──
-  const gemCopyBtn = document.getElementById('guide-gem-copy-btn');
-  if (gemCopyBtn) {
-    gemCopyBtn.addEventListener('click', function() {
-      navigator.clipboard.writeText(GEM_PROMPT).then(() => {
-        gemCopyBtn.classList.add('copied');
-        gemCopyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 복사 완료!';
-        setTimeout(() => {
-          gemCopyBtn.classList.remove('copied');
-          gemCopyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Gem 시스템 프롬프트 복사';
-        }, 2000);
-      }).catch(() => {
-        const ta = document.createElement('textarea');
-        ta.value = GEM_PROMPT; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-        document.body.removeChild(ta);
-        gemCopyBtn.classList.add('copied');
-        gemCopyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 복사 완료!';
-        setTimeout(() => {
-          gemCopyBtn.classList.remove('copied');
-          gemCopyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Gem 시스템 프롬프트 복사';
-        }, 2000);
-      });
-    });
-  }
-
-  // ── Gemini 자동 변환 버튼 ──
-  const autoTransformBtn = document.getElementById('guide-auto-transform-btn');
-  if (autoTransformBtn) {
-    autoTransformBtn.addEventListener('click', async function() {
-      const activeObj = canvas.getActiveObject();
-      const hintEl = document.getElementById('guide-no-image-hint');
-      if (!activeObj) {
-        if (hintEl) {
-          hintEl.style.display = 'flex';
-          clearTimeout(_noImgHintTimer);
-          _noImgHintTimer = setTimeout(() => { hintEl.style.display = 'none'; }, 3000);
-        }
-        return;
-      }
-
-      const imgObjects = canvas.getObjects('image');
-      if (!imgObjects.length) {
-        if (hintEl) {
-          hintEl.style.display = 'flex';
-          clearTimeout(_noImgHintTimer);
-          _noImgHintTimer = setTimeout(() => { hintEl.style.display = 'none'; }, 3000);
-        }
-        return;
-      }
-
-      const imgObj = activeObj.type === 'image' ? activeObj : imgObjects[0];
-
-      // 원본 이미지를 base64 JPEG로 추출
-      const tempCanvas = document.createElement('canvas');
-      const el = imgObj._element;
-      tempCanvas.width = el.naturalWidth || el.width || imgObj.width;
-      tempCanvas.height = el.naturalHeight || el.height || imgObj.height;
-      tempCanvas.getContext('2d').drawImage(el, 0, 0);
-      const base64 = tempCanvas.toDataURL('image/jpeg', 0.92).split(',')[1];
-
-      const prompt = GUIDE_PROMPTS[selectedGuideStyle] || GUIDE_PROMPTS.webtoon;
-
-      const originalHTML = autoTransformBtn.innerHTML;
-      autoTransformBtn.disabled = true;
-      autoTransformBtn.innerHTML = '⏳ 변환 중... (15~30초 소요)';
-
-      try {
-        const res = await fetch(GAS_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({
-            action: 'gemini_transform',
-            imageData: base64,
-            mimeType: 'image/jpeg',
-            prompt: prompt,
-          })
-        });
-        const result = await res.json();
-
-        if (!result.success) {
-          alert('변환 실패:\n\n' + result.error);
-          return;
-        }
-
-        if (!result.imageData) {
-          alert('⚠️ GAS 스크립트가 구버전입니다.\n\nGAS 에디터 → 배포 → 배포 관리 → ✏️ → 새 버전 → 배포\n\n재배포 후 다시 시도해주세요.');
-          return;
-        }
-
-        const mimeType = result.mimeType || 'image/png';
-
-        // base64 → Blob URL (data URL보다 안정적, 공백/줄바꿈 문제 없음)
-        let blobUrl;
-        try {
-          const cleanB64 = result.imageData.replace(/[\s\r\n]/g, '');
-          const byteChars = atob(cleanB64);
-          const byteArr = new Uint8Array(byteChars.length);
-          for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
-          const blob = new Blob([byteArr], { type: mimeType });
-          blobUrl = URL.createObjectURL(blob);
-        } catch (decodeErr) {
-          alert('이미지 디코드 오류: ' + decodeErr.message + '\n다시 시도해주세요.');
-          return;
-        }
-
-        const imgEl = new Image();
-        imgEl.onload = function() {
-          const fabricImg = new fabric.Image(imgEl);
-          const scale = Math.min(CW / fabricImg.width, CH / fabricImg.height);
-          fabricImg.scale(scale);
-          fabricImg.set({
-            left: (CW - fabricImg.getScaledWidth()) / 2,
-            top:  (CH - fabricImg.getScaledHeight()) / 2,
-          });
-          canvas.remove(imgObj);
-          canvas.add(fabricImg);
-          canvas.setActiveObject(fabricImg);
-          canvas.renderAll();
-          URL.revokeObjectURL(blobUrl);
-          autoTransformBtn.disabled = false;
-          autoTransformBtn.innerHTML = originalHTML;
-          alert('✨ AI 변환 완료!\n변환된 이미지가 캔버스에 적용되었습니다.');
-        };
-        imgEl.onerror = function() {
-          URL.revokeObjectURL(blobUrl);
-          alert('이미지 로드에 실패했습니다.\n다시 시도해주세요.');
-          autoTransformBtn.disabled = false;
-          autoTransformBtn.innerHTML = originalHTML;
-        };
-        imgEl.src = blobUrl;
-        // Blob URL 방식은 finally에서 버튼 복구 안 함 (onload/onerror에서 처리)
-        return;
-
-      } catch (err) {
-        alert('오류가 발생했습니다:\n' + err.message);
-      } finally {
-        autoTransformBtn.disabled = false;
-        autoTransformBtn.innerHTML = originalHTML;
-      }
-    });
-  }
-
-  // ── 이미지 업로드 버튼 ──
-  const guideUploadBtn = document.getElementById('guide-upload-btn');
-  if (guideUploadBtn) {
-    guideUploadBtn.addEventListener('click', function() {
-      const fileInput = document.getElementById('file-input');
-      if (fileInput) fileInput.click();
-    });
-  }
-
-  // ── 툴바 버튼 ──
-  document.getElementById('btn-ai-guide').addEventListener('click', () => {
-    openPanel('panel-ai-guide');
-  });
-
-  document.getElementById('close-ai-guide').addEventListener('click', () => {
-    closePanel('panel-ai-guide');
-  });
-
-  // ── YouTube 영상 자동 삽입 ──
-  // data-video-id 값이 있을 때만 섹션을 노출 (기본은 숨김)
-  (function() {
-    const inner = document.getElementById('guide-video-inner');
-    if (!inner) return;
-    const videoId = inner.dataset.videoId;
-    if (videoId && videoId.trim() && videoId !== 'YOUTUBE_VIDEO_ID_HERE') {
-      inner.innerHTML =
-        '<div class="guide-video-iframe-wrap">' +
-        '<iframe src="https://www.youtube.com/embed/' + videoId.trim() +
-        '?rel=0" allowfullscreen></iframe></div>';
-      var section = document.getElementById('guide-video-section');
-      var title = document.getElementById('guide-video-title');
-      if (section) section.style.display = '';
-      if (title) title.style.display = '';
-    }
-  })();
-
-})();
 </script>
 
 <!-- 스포이드 색상 미리보기 원 -->
@@ -4991,111 +3882,6 @@ document.getElementById('btn-ai-transform').addEventListener('click', async () =
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && overlay.style.display === 'block') exit();
-  });
-
-  // ── 누끼따기 버튼 ──
-  document.getElementById('btn-remove-bg').addEventListener('click', async function() {
-    const imgObj = canvas.getActiveObject();
-    if (!imgObj || imgObj.type !== 'image') return;
-
-    const btn = this;
-    const originalHTML = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>처리 중...';
-
-    try {
-      const fabricEl    = canvas.getElement();
-      const retinaScale = (canvas.getRetinaScaling && canvas.getRetinaScaling()) || 1;
-
-      // ① bounding rect 저장
-      const b = imgObj.getBoundingRect(true);
-
-      const sx = Math.max(0, Math.round(b.left  * retinaScale));
-      const sy = Math.max(0, Math.round(b.top   * retinaScale));
-      const sw = Math.min(fabricEl.width  - sx, Math.round(b.width  * retinaScale));
-      const sh = Math.min(fabricEl.height - sy, Math.round(b.height * retinaScale));
-      if (sw < 4 || sh < 4) throw new Error('이미지가 너무 작거나 캔버스 밖에 있습니다.');
-
-      // ② 이미지만 남기고 나머지 숨김 → renderAll → 캡처 → 그 다음에 복구
-      const others = canvas.getObjects().filter(o => o !== imgObj);
-      const prevBg  = canvas.backgroundColor;
-      others.forEach(o => o.set('visible', false));
-      canvas.backgroundColor = '#ffffff';
-      canvas.renderAll();
-
-      const tmpC = document.createElement('canvas');
-      tmpC.width = sw; tmpC.height = sh;
-      tmpC.getContext('2d').drawImage(fabricEl, sx, sy, sw, sh, 0, 0, sw, sh);
-      const base64 = tmpC.toDataURL('image/png').split(',')[1];
-
-      // ③ 캡처 완료 후 복구
-      others.forEach(o => o.set('visible', true));
-      canvas.backgroundColor = prevBg;
-      canvas.renderAll();
-
-      // ④ GAS → Remove.bg API 호출
-      const res = await fetch(GAS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'remove_bg', imageData: base64 }),
-      });
-      const result = await res.json();
-
-      if (!result.success) {
-        alert('누끼따기 실패:\n\n' + result.error);
-        btn.disabled = false;
-        btn.innerHTML = originalHTML;
-        return;
-      }
-
-      // ⑤ 새 이미지 먼저 로드 확인 → 성공 시에만 기존 이미지 제거
-      // fabric.Image.fromURL은 data URL에서 CORS 간섭 문제가 있으므로
-      // 네이티브 Image 요소로 로드 후 fabric.Image로 감싸는 방식 사용
-      const dataUrl = 'data:image/png;base64,' + result.imageData;
-      const htmlImg = new Image();
-      htmlImg.onload = function() {
-        const newImg = new fabric.Image(htmlImg);
-        if (!newImg || !newImg.width || !newImg.height) {
-          alert('누끼따기 결과를 불러오지 못했습니다. 다시 시도해주세요.');
-          btn.disabled = false;
-          btn.innerHTML = originalHTML;
-          return;
-        }
-        // 새 이미지 크기(px)를 원본 표시 크기(CSS px)에 맞게 스케일 계산
-        const newScaleX = b.width  / newImg.width;
-        const newScaleY = b.height / newImg.height;
-        canvas.remove(imgObj); // 로드 성공 확인 후 제거
-        newImg.set({
-          left:    b.left,
-          top:     b.top,
-          scaleX:  newScaleX,
-          scaleY:  newScaleY,
-          angle:   0,
-          flipX:   false,
-          flipY:   false,
-          originX: 'left',
-          originY: 'top',
-        });
-        canvas.add(newImg);
-        canvas.setActiveObject(newImg);
-        bringGuidesToFront();
-        canvas.renderAll();
-        snap();
-        syncSelBtns(true);
-        btn.disabled = false;
-        btn.innerHTML = originalHTML;
-      };
-      htmlImg.onerror = function() {
-        alert('누끼따기 결과를 불러오지 못했습니다. 다시 시도해주세요.');
-        btn.disabled = false;
-        btn.innerHTML = originalHTML;
-      };
-      htmlImg.src = dataUrl;
-    } catch(e) {
-      alert('누끼따기 중 오류가 발생했습니다:\n' + e.message);
-      btn.disabled = false;
-      btn.innerHTML = originalHTML;
-    }
   });
 
   // 자동 배경채우기 버튼 (이미지 가장자리 픽셀 평균색)
